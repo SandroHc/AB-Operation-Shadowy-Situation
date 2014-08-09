@@ -28,7 +28,7 @@ public class DoorHandler : MonoBehaviour {
 			showTooltip = false; // Re-set to false, so this is only shown when the player can interact with the door
 
 			if(tooltipPosition.x == 0)
-				tooltipPosition = new Rect(10, Screen.height - 10 - GUI.skin.label.CalcSize(new GUIContent("A")).y, Screen.width - 20, 10);
+				tooltipPosition = new Rect(10, Screen.height - 40, Screen.width - 20, 25);
 
 			GUI.Label(tooltipPosition, "Click E to " + (isOpen ? "close" : "open") + " door.");
 		}
@@ -59,7 +59,7 @@ public class DoorHandler : MonoBehaviour {
 	void OnTriggerStay() {
 		showTooltip = true;
 
-		if(Input.GetButtonDown("Interact")) {
+		if(Input.GetButtonUp("Interact")) {
 			working = true;
 			isOpen = !isOpen;
 		}
