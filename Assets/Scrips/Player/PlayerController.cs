@@ -14,13 +14,19 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
+		if((!Network.isClient && !Network.isServer) || gameController.networkView.isMine) { // If we're not on a network OR we're on a network and it's our player
+			HandleMovement();
+		}
+	}
+
+	private void HandleMovement() {
 		if(!gameController.isPaused) {
 			float movementHorizontal = Input.GetAxis("Horizontal");
 			float movementVertical = Input.GetAxis("Vertical");
 			Vector3 movement = new Vector3(movementHorizontal, 0, movementVertical);
-
+			
 			rigidbody.AddRelativeForce(movement * movementSpeed * Time.deltaTime);
-
+			
 			if(!isJumping && Input.GetButton("Jump")) {
 				isJumping = true;
 				rigidbody.AddForce(Vector3.up * jumpSpeed * Time.deltaTime);
@@ -28,31 +34,16 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	public bool walking = true;
-	public bool running = false;
-	public bool jumping = false;
-
 	void OnGUI() {
-		bool walkToggle = GUI.Toggle(new Rect(10, 40, 120, 20), walking, "WALK");
-		bool runToggle = GUI.Toggle(new Rect(10, 60, 120, 20), running, "RUN");
-		bool jumpToggle = GUI.Toggle(new Rect(10, 80, 120, 20), jumping, "JUMP");
-
-		if (walkToggle != walking)	{
-			walkToggle = walking = true;
-			runToggle  = running = false;
-			jumpToggle = jumping = false;
-		}
-
-		if (runToggle != running) {
-			walkToggle = walking = false;
-			runToggle  = running = true;
-			jumpToggle = jumping = false;
-		}
-
-		if (jumpToggle != jumping) {
-			walkToggle = walking = false;
-			runToggle  = running = false;
-			jumpToggle = jumping = true;
+		if(Network.isServer) {
+			int i = 0;
+			while (i < Network.connections.Length) {
+				NetworkPlayer player = Network.connections[i];
+				GUILayout.Label(player + ": " + Network.GetAveragePing(player) + " ms");
+				i++;
+			}
+		} else if(Network.isClient) {
+			GUI.Label(new Rect(10, 10, 50, 20), Network.GetAveragePing(Network.player) + " ms");
 		}
 	}
 

@@ -42,9 +42,48 @@ public class MainMenu : MonoBehaviour {
 			Application.Quit();
 	}
 
+	private bool walking = true;
+	private bool running = false;
+	private bool jumping = false;
+
 	public void drawOptions() {
 		screenWidth = Screen.width / 2 - btnWidth / 2;
 		screenHeight = Screen.height / 3 * 2;
+
+		string[] names = QualitySettings.names;
+		int current = QualitySettings.GetQualityLevel();
+
+		GUILayout.BeginHorizontal();
+		for(int i = 0; i < names.Length; i++) {
+			GUI.enabled = (i != current);
+			if(GUILayout.Button(names[i])) QualitySettings.SetQualityLevel(i, true);
+		}
+		GUI.enabled = true;
+		GUILayout.EndHorizontal();
+
+
+		bool walkToggle = false; //GUI.Toggle(new Rect(10, 40, 120, 20), walking, "WALK");
+		bool runToggle = false; //GUI.Toggle(new Rect(10, 60, 120, 20), running, "RUN");
+		bool jumpToggle = false; //GUI.Toggle(new Rect(10, 80, 120, 20), jumping, "JUMP");
+		
+		if (walkToggle != walking)	{
+			walkToggle = walking = true;
+			runToggle  = running = false;
+			jumpToggle = jumping = false;
+		}
+		
+		if (runToggle != running) {
+			walkToggle = walking = false;
+			runToggle  = running = true;
+			jumpToggle = jumping = false;
+		}
+		
+		if (jumpToggle != jumping) {
+			walkToggle = walking = false;
+			runToggle  = running = false;
+			jumpToggle = jumping = true;
+		}
+
 
 		if(GUI.Button(new Rect(screenWidth - btnWidth, screenHeight + 120, btnWidth, btnHeight), "Cancel"))
 			resetChanges();
