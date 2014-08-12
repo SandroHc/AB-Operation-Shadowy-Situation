@@ -1,1 +1,1 @@
-xcopy /Y "D:\Desenvolvimento\C#\Unity\AB! Operation Shadowy Situation\3DS Projects\map.obj" "D:\Desenvolvimento\C#\Unity\AB! Operation Shadowy Situation\Assets\Models\map.obj"
+xcopy /Y "D:\Desenvolvimento\C#\Unity\AB! Operation Shadowy Situation\_Models\map.fbx" "D:\Desenvolvimento\C#\Unity\AB! Operation Shadowy Situation\Assets\Models\map.fbx"

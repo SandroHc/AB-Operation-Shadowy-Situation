@@ -14,7 +14,7 @@ public class NetworkManager : MonoBehaviour {
 	}
 	
 	private void StartServer(string name) {
-		// number players, port, 
+		// number players, listen port, use NAT
 		Network.InitializeServer(4, 25000, !Network.HavePublicAddress());
 		MasterServer.RegisterHost(uniqueName, name);
 	}

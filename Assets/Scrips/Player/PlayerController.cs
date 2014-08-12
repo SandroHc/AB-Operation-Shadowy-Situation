@@ -2,9 +2,8 @@
 using System.Collections;
 
 public class PlayerController : MonoBehaviour {
-	public float movementSpeed = 10;
-	public float jumpSpeed = 15000;
-
+	public float moveSpeed;
+	public float jumpSpeed;
 	private bool isJumping = false;
 
 	private GameController gameController;
@@ -21,26 +20,22 @@ public class PlayerController : MonoBehaviour {
 
 	private void HandleMovement() {
 		if(!gameController.isPaused) {
-			float movementHorizontal = Input.GetAxis("Horizontal");
-			float movementVertical = Input.GetAxis("Vertical");
-			Vector3 movement = new Vector3(movementHorizontal, 0, movementVertical);
+			Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 			
-			rigidbody.AddRelativeForce(movement * movementSpeed * Time.deltaTime);
+			rigidbody.AddRelativeForce(movement * moveSpeed);
 			
 			if(!isJumping && Input.GetButton("Jump")) {
 				isJumping = true;
-				rigidbody.AddForce(Vector3.up * jumpSpeed * Time.deltaTime);
+				rigidbody.AddForce(Vector3.up * jumpSpeed);
 			}
 		}
 	}
 
 	void OnGUI() {
 		if(Network.isServer) {
-			int i = 0;
-			while (i < Network.connections.Length) {
+			for(int i = 0; i < Network.connections.Length; i++) {
 				NetworkPlayer player = Network.connections[i];
 				GUILayout.Label(player + ": " + Network.GetAveragePing(player) + " ms");
-				i++;
 			}
 		} else if(Network.isClient) {
 			GUI.Label(new Rect(10, 10, 50, 20), Network.GetAveragePing(Network.player) + " ms");

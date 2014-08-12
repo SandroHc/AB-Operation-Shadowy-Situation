@@ -53,13 +53,13 @@ public class MainMenu : MonoBehaviour {
 		string[] names = QualitySettings.names;
 		int current = QualitySettings.GetQualityLevel();
 
-		GUILayout.BeginHorizontal();
+		Rect buttonRect = new Rect(Screen.width / 2 - (names.Length * 125) / 2, 250, 125, 35);
 		for(int i = 0; i < names.Length; i++) {
 			GUI.enabled = (i != current);
-			if(GUILayout.Button(names[i])) QualitySettings.SetQualityLevel(i, true);
+			if(GUI.Button(buttonRect, names[i])) QualitySettings.SetQualityLevel(i, true);
+			buttonRect.x += buttonRect.width;
 		}
 		GUI.enabled = true;
-		GUILayout.EndHorizontal();
 
 
 		bool walkToggle = false; //GUI.Toggle(new Rect(10, 40, 120, 20), walking, "WALK");
