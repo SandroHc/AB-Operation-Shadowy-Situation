@@ -12,7 +12,7 @@ public class GameController : MonoBehaviour {
 	void Awake() {
 		Screen.lockCursor = true;
 
-		// reset the fader
+		// Reset the fader
 		fade = true;
 		fadeIn = false;
 		guiTexture.color = Color.black;

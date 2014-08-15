@@ -13,6 +13,11 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
+		if(Input.GetKeyUp(KeyCode.R)) { // Reset the player when the key R is released
+			rigidbody.position = rigidbody.velocity = rigidbody.angularVelocity =Vector3.zero; // Kill previous momentum
+			rigidbody.rotation = Quaternion.Euler(Vector3.zero);
+		}
+
 		if((!Network.isClient && !Network.isServer) || gameController.networkView.isMine) { // If we're not on a network OR we're on a network and it's our player
 			HandleMovement();
 		}
@@ -21,7 +26,7 @@ public class PlayerController : MonoBehaviour {
 	private void HandleMovement() {
 		if(!gameController.isPaused) {
 			Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-			
+
 			rigidbody.AddRelativeForce(movement * moveSpeed);
 			
 			if(!isJumping && Input.GetButton("Jump")) {
