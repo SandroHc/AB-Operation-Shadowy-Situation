@@ -4,12 +4,14 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
 	public float moveSpeed;
 	public float jumpSpeed;
-	private bool isJumping = false;
+	public bool isJumping = false;
 
 	private GameController gameController;
+	private AudioManager audioManager;
 
 	void Start() {
 		gameController = GameObject.FindGameObjectWithTag(Tags.gameController).GetComponent<GameController>();
+		audioManager = gameController.GetComponent<AudioManager>();
 	}
 
 	void FixedUpdate() {
@@ -25,14 +27,17 @@ public class PlayerController : MonoBehaviour {
 
 	private void HandleMovement() {
 		if(!gameController.isPaused) {
-			Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-
-			rigidbody.AddRelativeForce(movement * moveSpeed);
-			
-			if(!isJumping && Input.GetButton("Jump")) {
+			// Jumping check
+			if(!isJumping && Input.GetButtonDown("Jump")) {
 				isJumping = true;
 				rigidbody.AddForce(Vector3.up * jumpSpeed);
 			}
+
+			// Movement calculations
+			Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+			if(Input.GetButton("Sprint")) movement *= 1.5f;
+
+			rigidbody.AddRelativeForce(movement * moveSpeed);
 		}
 	}
 
@@ -47,8 +52,25 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	void OnCollisionEnter(Collision other) {
-		if(other.gameObject.tag == Tags.ground)
+	void OnCollisionStay(Collision other) {
+		if(Tags.isGround(other.gameObject.tag))
 			isJumping = false;
+
+		checkFootsteps(other);
+	}
+
+	private void checkFootsteps(Collision other) {
+		if(audio.isPlaying) return; // If there is a footstep sound, let it finish before changing to a new one
+
+		if(Mathf.Round(Mathf.Abs(rigidbody.velocity.x + rigidbody.velocity.y + rigidbody.velocity.z)) > 0) { //Check if the player is walking...
+			// ... and then change the footstep sound according to the ground type
+			if(other.gameObject.tag == Tags.groundWood)
+				audio.clip = audioManager.footstepWood;
+			else if(other.gameObject.tag == Tags.groundGrass)
+				audio.clip = audioManager.footstepGrass;
+
+			// And play it
+			audio.Play();
+		}
 	}
 }
