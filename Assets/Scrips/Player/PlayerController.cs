@@ -15,18 +15,19 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
-		if(Input.GetKeyUp(KeyCode.R)) { // Reset the player when the key R is released
-			rigidbody.position = rigidbody.velocity = rigidbody.angularVelocity =Vector3.zero; // Kill previous momentum
-			rigidbody.rotation = Quaternion.Euler(Vector3.zero);
-		}
+		if(!gameController.stopMovement()) {
+			if(Input.GetKeyUp(KeyCode.R)) { // Reset the player when the key R is released
+				rigidbody.position = rigidbody.velocity = rigidbody.angularVelocity =Vector3.zero; // Kill previous momentum
+				rigidbody.rotation = Quaternion.Euler(Vector3.zero);
+			}
 
-		if((!Network.isClient && !Network.isServer) || gameController.networkView.isMine) { // If we're not on a network OR we're on a network and it's our player
-			HandleMovement();
+			if((!Network.isClient && !Network.isServer) || gameController.networkView.isMine) { // If we're not on a network OR we're on a network and it's our player
+				HandleMovement();
+			}
 		}
 	}
 
 	private void HandleMovement() {
-		if(!gameController.isPaused) {
 			// Jumping check
 			if(!isJumping && Input.GetButtonDown("Jump")) {
 				isJumping = true;
@@ -38,7 +39,6 @@ public class PlayerController : MonoBehaviour {
 			if(Input.GetButton("Sprint")) movement *= 1.5f;
 
 			rigidbody.AddRelativeForce(movement * moveSpeed);
-		}
 	}
 
 	void OnGUI() {
@@ -52,22 +52,26 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	void OnCollisionStay(Collision other) {
-		if(Tags.isGround(other.gameObject.tag))
+	void OnCollisionStay(Collision hit) {
+		if(Tags.isGround(hit.gameObject.tag)) {
 			isJumping = false;
+			//transform.parent = hit.transform;
+		} else {
+			//transform.parent = null;
+		}
 
-		checkFootsteps(other);
+			checkFootsteps(hit);
 	}
 
-	private void checkFootsteps(Collision other) {
+	private void checkFootsteps(Collision hit) {
 		if(audio.isPlaying) return; // If there is a footstep sound, let it finish before changing to a new one
 
 		if(Mathf.Round(Mathf.Abs(rigidbody.velocity.x + rigidbody.velocity.y + rigidbody.velocity.z)) > 0) { //Check if the player is walking...
 			// ... and then change the footstep sound according to the ground type
-			if(other.gameObject.tag == Tags.groundWood)
-				audio.clip = audioManager.footstepWood;
-			else if(other.gameObject.tag == Tags.groundGrass)
-				audio.clip = audioManager.footstepGrass;
+			switch(hit.gameObject.tag) {
+			case Tags.groundWood:	audio.clip = audioManager.footstepWood; break;
+			case Tags.groundGrass:	audio.clip = audioManager.footstepGrass; break;
+			}
 
 			// And play it
 			audio.Play();

@@ -15,12 +15,11 @@ public class CameraController : MonoBehaviour {
 
 	void Awake() {
 		// Reset those variables, to prevent the camera from spinning when the cursor is locked
-		Input.GetAxis("Mouse X");
-		Input.GetAxis("Mouse Y");
+		Input.ResetInputAxes();
 	}
 
 	void FixedUpdate() {
-		if(!gameController.isPaused) {
+		if(!gameController.stopMovement()) {
 			rotationY += Input.GetAxis("Mouse Y") * lookSpeed * Time.fixedDeltaTime;
 			rotationY = Mathf.Lerp(rotationY, Mathf.Clamp(rotationY, -90f, 90f), lookSpeed * Time.fixedDeltaTime);
 			transform.localRotation = Quaternion.AngleAxis(rotationY, Vector3.left);

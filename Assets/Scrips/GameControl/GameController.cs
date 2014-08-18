@@ -2,9 +2,11 @@
 using System.Collections;
 
 public class GameController : MonoBehaviour {
-	public bool isPaused = false;
-	public float playerHealth = 100f;
+	private float playerHealth = 100f;
 
+	public bool isPaused = false;
+	private bool isInteracting = false;
+	
 	public float fadeSpeed;
 	public bool fade = true;
 	private bool fadeIn = false; // Fade to black (true); or fade from black (false)
@@ -40,16 +42,11 @@ public class GameController : MonoBehaviour {
 			}
 		}
 
-		if(Input.GetKeyDown(KeyCode.Escape))
-			isPaused = !isPaused;
-
-		Screen.lockCursor = !isPaused;
+		handleEscapeKey();
 	}
 	
 	void OnGUI() {
-		if(!isPaused) return;
-
-		drawPauseGui();
+		if(isPaused) drawPauseGui();
 	}
 
 	private void drawPauseGui() {
@@ -67,5 +64,33 @@ public class GameController : MonoBehaviour {
 			fade = true;
 			Application.Quit();
 		}
+	}
+
+	public bool stopMovement() {
+		return isPaused || isInteracting;
+	}
+
+	private void handleEscapeKey() {
+		if(Input.GetKeyDown(KeyCode.Escape)) {
+			if(isInteracting) {
+				isInteracting = false;
+			} else {
+				isPaused = !isPaused;
+			}
+		}
+		
+		Screen.lockCursor = !stopMovement();
+	}
+
+	public void setInteracting(bool state) {
+		isInteracting = state;
+	}
+
+	public bool getInteracting() {
+		return isInteracting;
+	}
+
+	public void toggleInteracting() {
+		isInteracting = !isInteracting;
 	}
 }
