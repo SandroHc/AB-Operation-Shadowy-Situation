@@ -2,14 +2,20 @@
 using System.Collections;
 
 public class PlayerController : MonoBehaviour {
+	private float gravity = -9.81f;
+
 	public float moveSpeed;
 	public float jumpSpeed;
 	public bool isJumping = false;
 
+	private Vector3 spawnLocation = new Vector3(0, 1, 0);
+
+	private CharacterController controller;
 	private GameController gameController;
 	private AudioManager audioManager;
 
 	void Start() {
+		controller = GetComponent<CharacterController>();
 		gameController = GameObject.FindGameObjectWithTag(Tags.gameController).GetComponent<GameController>();
 		audioManager = gameController.GetComponent<AudioManager>();
 	}
@@ -17,28 +23,34 @@ public class PlayerController : MonoBehaviour {
 	void FixedUpdate() {
 		if(!gameController.stopMovement()) {
 			if(Input.GetKeyUp(KeyCode.R)) { // Reset the player when the key R is released
-				rigidbody.position = rigidbody.velocity = rigidbody.angularVelocity =Vector3.zero; // Kill previous momentum
-				rigidbody.rotation = Quaternion.Euler(Vector3.zero);
+				transform.position = spawnLocation;
+				transform.eulerAngles = Vector3.zero;
 			}
-
+			
 			if((!Network.isClient && !Network.isServer) || gameController.networkView.isMine) { // If we're not on a network OR we're on a network and it's our player
 				HandleMovement();
 			}
 		}
 	}
-
+	
 	private void HandleMovement() {
-			// Jumping check
-			if(!isJumping && Input.GetButtonDown("Jump")) {
+		// Jumping check
+		if(!isJumping) {
+			if(Input.GetButtonDown("Jump")) {
 				isJumping = true;
-				rigidbody.AddForce(Vector3.up * jumpSpeed);
+				controller.Move(Vector3.up * jumpSpeed);
 			}
+		} else if(controller.isGrounded)
+			isJumping = false; // Reset jumping when the player is touching the ground
 
-			// Movement calculations
-			Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-			if(Input.GetButton("Sprint")) movement *= 1.5f;
+		// Movement calculations
+		Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+		if(Input.GetButton("Sprint")) movement *= 2f;
+		movement *= moveSpeed;
+		movement = transform.TransformDirection(movement); // Transforms local coords intro global ones
+		movement.y += gravity; // Add the gravity
 
-			rigidbody.AddRelativeForce(movement * moveSpeed);
+		controller.Move(movement * Time.fixedDeltaTime);
 	}
 
 	void OnGUI() {
@@ -53,14 +65,9 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void OnCollisionStay(Collision hit) {
-		if(Tags.isGround(hit.gameObject.tag)) {
-			isJumping = false;
-			//transform.parent = hit.transform;
-		} else {
-			//transform.parent = null;
-		}
+		Debug.Log("COLLISION! " + hit.gameObject.ToString());
 
-			checkFootsteps(hit);
+		checkFootsteps(hit);
 	}
 
 	private void checkFootsteps(Collision hit) {
