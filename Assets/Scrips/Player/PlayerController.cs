@@ -7,8 +7,11 @@ public class PlayerController : MonoBehaviour {
 	public float moveSpeed;
 	public float jumpSpeed;
 	public bool isJumping = false;
+	public bool isSprinting = false;
+	public bool isCrouching = false;
 
 	private Vector3 spawnLocation = new Vector3(0, 1, 0);
+	private float cameraY = 0f;
 
 	private CharacterController controller;
 	private GameController gameController;
@@ -18,6 +21,19 @@ public class PlayerController : MonoBehaviour {
 		controller = GetComponent<CharacterController>();
 		gameController = GameObject.FindGameObjectWithTag(Tags.gameController).GetComponent<GameController>();
 		audioManager = gameController.GetComponent<AudioManager>();
+	}
+
+	void Update() {
+		isSprinting = Input.GetButton("Sprint");
+		isCrouching = Input.GetButton("Crouch");
+
+		// Update the camera position based on the crouching state
+		Vector3 cameraPos = Camera.main.transform.position;
+		cameraY = Mathf.Lerp(Camera.main.transform.position.y, isCrouching ? -.5f : 0, moveSpeed * Time.deltaTime);
+		cameraPos.y += cameraY;
+		Camera.main.transform.position = cameraPos; 
+
+		playFootstepSound();
 	}
 
 	void FixedUpdate() {
@@ -45,9 +61,20 @@ public class PlayerController : MonoBehaviour {
 
 		// Movement calculations
 		Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-		if(controller.isGrounded && Input.GetButton("Sprint")) movement *= 2f;
+
+		if(controller.isGrounded && isCrouching)
+			movement *= .5f;
+
+		if(movement.z > 0) { // If the movement is forward
+			if(controller.isGrounded && (isSprinting && !isCrouching)) // Only sprint if not crouching
+				movement.z *= 2f; // Double forward movement speed
+		} else if(movement.z < 0) { // If the movement is backward, slow down
+			movement.z *= .5f;
+		}
+
 		movement *= moveSpeed;
 		movement = transform.TransformDirection(movement); // Transforms local coords intro global ones
+
 		movement.y += gravity; // Add the gravity
 
 		controller.Move(movement * Time.fixedDeltaTime);
@@ -64,22 +91,23 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	void OnCollisionStay(Collision hit) {
-		Debug.Log("COLLISION! " + hit.gameObject.ToString());
-
-		checkFootsteps(hit);
+	void OnControllerColliderHit(ControllerColliderHit hit) {
+		updateCurrentFootsteps(hit.collider);
 	}
 
-	private void checkFootsteps(Collision hit) {
-		if(audio.isPlaying) return; // If there is a footstep sound, let it finish before changing to a new one
-
-		if(Mathf.Round(Mathf.Abs(rigidbody.velocity.x + rigidbody.velocity.y + rigidbody.velocity.z)) > 0) { //Check if the player is walking...
+	private void updateCurrentFootsteps(Collider hit) {
 			// ... and then change the footstep sound according to the ground type
 			switch(hit.gameObject.tag) {
 			case Tags.groundWood:	audio.clip = audioManager.footstepWood; break;
 			case Tags.groundGrass:	audio.clip = audioManager.footstepGrass; break;
 			}
+	}
 
+	private void playFootstepSound() {
+		if(audio.isPlaying) return; // If there is a footstep sound playing, let it finish before changing to a new one
+	
+		//Check if the player is moving and touching the ground...
+		if(controller.isGrounded && Mathf.Round(Mathf.Abs(controller.velocity.x + controller.velocity.y + controller.velocity.z)) > 2) {
 			// And play it
 			audio.Play();
 		}
