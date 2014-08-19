@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour {
 
 		// Movement calculations
 		Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-		if(Input.GetButton("Sprint")) movement *= 2f;
+		if(controller.isGrounded && Input.GetButton("Sprint")) movement *= 2f;
 		movement *= moveSpeed;
 		movement = transform.TransformDirection(movement); // Transforms local coords intro global ones
 		movement.y += gravity; // Add the gravity

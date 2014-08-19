@@ -11,6 +11,8 @@ ModelImporter:
     100010: school_ground_001
     100012: school_walls_001
     100014: teacher_building_001
+    100016: director_building_001
+    100018: school_ground_000
     400000: Camera
     400002: //RootNode
     400004: school
@@ -19,24 +21,32 @@ ModelImporter:
     400010: school_ground_001
     400012: school_walls_001
     400014: teacher_building_001
+    400016: director_building_001
+    400018: school_ground_000
     2300000: school
     2300002: teacher_zone
     2300004: walkroad
     2300006: school_ground_001
     2300008: school_walls_001
     2300010: teacher_building_001
+    2300012: director_building_001
+    2300014: school_ground_000
     3300000: school
     3300002: teacher_zone
     3300004: walkroad
     3300006: school_ground_001
     3300008: school_walls_001
     3300010: teacher_building_001
+    3300012: director_building_001
+    3300014: school_ground_000
     4300000: teacher_zone
     4300002: walkroad
     4300004: school
     4300006: school_ground_001
     4300008: teacher_building_001
     4300010: school_walls_001
+    4300012: director_building_001
+    4300014: school_ground_000
     7400000: Default Take
     9500000: //RootNode
   materials:
