@@ -28,10 +28,10 @@ public class PlayerController : MonoBehaviour {
 		isCrouching = Input.GetButton("Crouch");
 
 		// Update the camera position based on the crouching state
-		Vector3 cameraPos = Camera.main.transform.position;
-		cameraY = Mathf.Lerp(Camera.main.transform.position.y, isCrouching ? -.5f : 0, moveSpeed * Time.deltaTime);
-		cameraPos.y += cameraY;
-		Camera.main.transform.position = cameraPos; 
+		//Vector3 cameraPos = Camera.main.transform.position;
+		//cameraY = Mathf.Lerp(Camera.main.transform.position.y, isCrouching ? -.5f : 0, moveSpeed * Time.deltaTime);
+		//cameraPos.y += cameraY;
+		//Camera.main.transform.position = cameraPos; 
 
 		playFootstepSound();
 	}
