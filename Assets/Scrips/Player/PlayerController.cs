@@ -6,9 +6,12 @@ public class PlayerController : MonoBehaviour {
 
 	public float moveSpeed;
 	public float jumpSpeed;
-	public bool isJumping = false;
+	public bool isFlying = false;
 	public bool isSprinting = false;
 	public bool isCrouching = false;
+	public bool isJumping = false;
+	private float jumpCurrent;
+	private float jumpFinish;
 
 	private Vector3 spawnLocation = new Vector3(0, 1, 0);
 	private float charHeight;
@@ -29,13 +32,22 @@ public class PlayerController : MonoBehaviour {
 		isSprinting = Input.GetButton("Sprint");
 		isCrouching = Input.GetButton("Crouch");
 
+		// Jumping check
+		if(!isJumping) {
+			if(Input.GetButtonDown("Jump")) {
+				isJumping = true;
+				
+				jumpFinish = jumpSpeed;
+				//movement.y += jumpSpeed;
+			}
+		} else if(controller.isGrounded)
+			isJumping = false; // Reset jumping when the player is touching the ground
+
 		// Update the camera position based on the crouching state
 		float lastHeight = controller.height;
-		float newHeight = charHeight;
-		if(isCrouching) newHeight *= .5f;
+		float newHeight = isCrouching ? charHeight * .5f : charHeight;
 		controller.height = Mathf.Lerp(controller.height, newHeight, 5 * Time.deltaTime);
-		// Fix vertical position; else, the player with fall though the ground
-		Vector3 newPosition = transform.position;
+		Vector3 newPosition = transform.position; // Fix vertical position; else, the player with fall though the ground
 		newPosition.y += (controller.height - lastHeight) / 2;
 		transform.position = newPosition;
 
@@ -56,15 +68,6 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	private void HandleMovement() {
-		// Jumping check
-		if(!isJumping) {
-			if(Input.GetButtonDown("Jump")) {
-				isJumping = true;
-				controller.Move(Vector3.up * jumpSpeed);
-			}
-		} else if(controller.isGrounded)
-			isJumping = false; // Reset jumping when the player is touching the ground
-
 		// Movement calculations
 		Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
@@ -78,10 +81,16 @@ public class PlayerController : MonoBehaviour {
 			movement.z *= .5f;
 		}
 
-		movement *= moveSpeed;
-		movement = transform.TransformDirection(movement); // Transforms local coords intro global ones
+		movement *= moveSpeed; // Ajust movement
 
-		movement.y += gravity; // Add the gravity
+		if(jumpCurrent + .05f < jumpFinish) {
+			jumpCurrent = Mathf.Lerp(jumpCurrent, jumpFinish, 20 * Time.fixedDeltaTime);
+			movement.y += jumpCurrent;
+		} else
+			jumpCurrent = jumpFinish = 0;
+
+		movement = transform.TransformDirection(movement); // Transforms local coords intro global ones
+		if(!isFlying) movement.y += gravity; // Add the gravity, if not flying
 
 		controller.Move(movement * Time.fixedDeltaTime);
 	}
