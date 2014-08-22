@@ -10,6 +10,15 @@ public class MainMenu : MonoBehaviour {
 	private int screenWidth;
 	private int screenHeight;
 
+	void Start() {
+		int savedSettings = PlayerPrefs.GetInt("QualitySettings", -1);
+		int currentSettings = QualitySettings.GetQualityLevel();
+		if(savedSettings == -1)
+			PlayerPrefs.SetInt("QualitySettings", currentSettings);
+		else if(savedSettings != currentSettings)
+			updateQualitySettings(savedSettings, false);
+	}
+
 	void OnGUI() {
 		if(currentGui == 0) // Main Menu
 			drawMainMenu();
@@ -56,7 +65,7 @@ public class MainMenu : MonoBehaviour {
 		Rect buttonRect = new Rect(Screen.width / 2 - (names.Length * 125) / 2, 250, 125, 35);
 		for(int i = 0; i < names.Length; i++) {
 			GUI.enabled = (i != current);
-			if(GUI.Button(buttonRect, names[i])) QualitySettings.SetQualityLevel(i, true);
+			if(GUI.Button(buttonRect, names[i])) updateQualitySettings(i);
 			buttonRect.x += buttonRect.width;
 		}
 		GUI.enabled = true;
@@ -92,11 +101,17 @@ public class MainMenu : MonoBehaviour {
 			applyChanges();
 	}
 
+	private void updateQualitySettings(int newSettings, bool applyExpensiveChanges = true) {
+		QualitySettings.SetQualityLevel(newSettings, applyExpensiveChanges);
+		PlayerPrefs.SetInt("QualitySettings", newSettings);
+	}
+
 	private void resetChanges() {
 		currentGui = 0;
 	}
 
 	private void applyChanges() {
+		PlayerPrefs.Save();
 		currentGui = 0;
 	}
 }

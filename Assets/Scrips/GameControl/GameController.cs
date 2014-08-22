@@ -2,8 +2,6 @@
 using System.Collections;
 
 public class GameController : MonoBehaviour {
-	private float playerHealth = 100f;
-
 	public bool isPaused = false;
 	private bool isInteracting = false;
 	
@@ -18,7 +16,7 @@ public class GameController : MonoBehaviour {
 		fade = true;
 		fadeIn = false;
 		guiTexture.color = Color.black;
-		guiTexture.pixelInset = new Rect (0f, 0f, Screen.width, Screen.height);
+		guiTexture.pixelInset = new Rect(0f, 0f, Screen.width, Screen.height);
 	}
 
 	void Update() {

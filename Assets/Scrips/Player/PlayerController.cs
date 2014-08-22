@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour {
 	public bool isCrouching = false;
 
 	private Vector3 spawnLocation = new Vector3(0, 1, 0);
-	private float cameraY = 0f;
+	private float charHeight;
 
 	private CharacterController controller;
 	private GameController gameController;
@@ -21,6 +21,8 @@ public class PlayerController : MonoBehaviour {
 		controller = GetComponent<CharacterController>();
 		gameController = GameObject.FindGameObjectWithTag(Tags.gameController).GetComponent<GameController>();
 		audioManager = gameController.GetComponent<AudioManager>();
+
+		charHeight = controller.height;
 	}
 
 	void Update() {
@@ -28,10 +30,14 @@ public class PlayerController : MonoBehaviour {
 		isCrouching = Input.GetButton("Crouch");
 
 		// Update the camera position based on the crouching state
-		//Vector3 cameraPos = Camera.main.transform.position;
-		//cameraY = Mathf.Lerp(Camera.main.transform.position.y, isCrouching ? -.5f : 0, moveSpeed * Time.deltaTime);
-		//cameraPos.y += cameraY;
-		//Camera.main.transform.position = cameraPos; 
+		float lastHeight = controller.height;
+		float newHeight = charHeight;
+		if(isCrouching) newHeight *= .5f;
+		controller.height = Mathf.Lerp(controller.height, newHeight, 5 * Time.deltaTime);
+		// Fix vertical position; else, the player with fall though the ground
+		Vector3 newPosition = transform.position;
+		newPosition.y += (controller.height - lastHeight) / 2;
+		transform.position = newPosition;
 
 		playFootstepSound();
 	}
@@ -104,7 +110,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	private void playFootstepSound() {
-		if(audio.isPlaying) return; // If there is a footstep sound playing, let it finish before changing to a new one
+		if(audio.isPlaying || gameController.stopMovement()) return; // If there is a footstep sound playing, let it finish before changing to a new one
 	
 		//Check if the player is moving and touching the ground...
 		if(controller.isGrounded && Mathf.Round(Mathf.Abs(controller.velocity.x + controller.velocity.y + controller.velocity.z)) > 2) {

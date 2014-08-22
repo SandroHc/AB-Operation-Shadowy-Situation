@@ -72,6 +72,7 @@
      <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\Tonemapping.js" />
      <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\Triangles.js" />
      <Compile Include="Assets\Standard Assets\Image Effects (Pro Only)\Vignetting.js" />
+     <None Include="Assets\Standard Assets\Glass Refraction (Pro Only)\Sources\Shaders\Glass-Stained-BumpDistort.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\BlendOneOne.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\NoiseEffectShaderRGB.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_DepthOfField\SeparableWeightedBlurDof34.shader" />
