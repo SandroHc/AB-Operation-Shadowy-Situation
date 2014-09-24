@@ -19,6 +19,9 @@ ModelImporter:
     100026: teacher_building
     100028: school_glass_001
     100030: school_glass_002
+    100032: school_door_001
+    100034: school_door_002
+    100036: school_door_glass
     400000: Camera
     400002: //RootNode
     400004: school
@@ -35,6 +38,9 @@ ModelImporter:
     400026: teacher_building
     400028: school_glass_001
     400030: school_glass_002
+    400032: school_door_001
+    400034: school_door_002
+    400036: school_door_glass
     2300000: school
     2300002: teacher_zone
     2300004: walkroad
@@ -49,6 +55,9 @@ ModelImporter:
     2300022: teacher_building
     2300024: school_glass_001
     2300026: school_glass_002
+    2300028: school_door_001
+    2300030: school_door_002
+    2300032: school_door_glass
     3300000: school
     3300002: teacher_zone
     3300004: walkroad
@@ -63,6 +72,9 @@ ModelImporter:
     3300022: teacher_building
     3300024: school_glass_001
     3300026: school_glass_002
+    3300028: school_door_001
+    3300030: school_door_002
+    3300032: school_door_glass
     4300000: teacher_zone
     4300002: walkroad
     4300004: school
@@ -77,6 +89,9 @@ ModelImporter:
     4300022: teacher_building
     4300024: school_glass_001
     4300026: school_glass_002
+    4300028: school_door_002
+    4300030: school_door_001
+    4300032: school_door_glass
     7400000: Default Take
     9500000: //RootNode
   materials:

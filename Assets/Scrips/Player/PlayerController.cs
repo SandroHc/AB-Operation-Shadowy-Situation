@@ -77,8 +77,6 @@ public class PlayerController : MonoBehaviour {
 		if(movement.z > 0) { // If the movement is forward
 			if(controller.isGrounded && (isSprinting && !isCrouching)) // Only sprint if not crouching
 				movement.z *= 2f; // Double forward movement speed
-		} else if(movement.z < 0) { // If the movement is backward, slow down
-			movement.z *= .5f;
 		}
 
 		movement *= moveSpeed; // Ajust movement
