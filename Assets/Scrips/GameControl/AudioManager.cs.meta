@@ -1,0 +1,10 @@
+fileFormatVersion: 2
+guid: 031cd237c79cba64b8b2de80665a2954
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - footstepWood: {fileID: 8300000, guid: 45cc1cddb9d00a244b4c432ab63830d2, type: 3}
+  - footstepGrass: {fileID: 8300000, guid: 912cfbab911600842b7e4cc4239993b9, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
