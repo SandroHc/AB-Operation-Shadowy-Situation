@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{87FB10F8-C2F6-FEFC-1663-10B54FC29B92}</ProjectGuid>
+	<ProjectGuid>{5F8E6B40-5314-ACC8-BCD3-3296AC959B63}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -151,7 +151,7 @@
      <None Include="Assets\Scrips\MMD\Resources\PMDMaterial\Shaders\MeshPmdMaterial-Trans-CullBack.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\BlendForBloom.shader" />
  <Reference Include="Assembly-UnityScript-firstpass">
- <HintPath>D:/Desenvolvimento/C#/Unity/AB! Operation Shadowy Situation/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
+ <HintPath>D:/Desenvolvimento/C#/Unity/AB/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>
@@ -159,9 +159,9 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass-vs.csproj">
-      <Project>{08DADFBA-6C6B-F883-2B1E-7B46BE8B3A9E}</Project>      <Name>Assembly-CSharp-firstpass-vs</Name>    </ProjectReference>
+      <Project>{973A9463-D1CB-8460-8646-6C0D63FD3650}</Project>      <Name>Assembly-CSharp-firstpass-vs</Name>    </ProjectReference>
     <ProjectReference Include="Assembly-CSharp-vs.csproj">
-      <Project>{AC4636D2-1D45-9251-9BED-185D73A7C15A}</Project>      <Name>Assembly-CSharp-vs</Name>    </ProjectReference>
+      <Project>{4C2D2CBB-0DB5-4147-0289-EFC939168E0B}</Project>      <Name>Assembly-CSharp-vs</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
