@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 
 public class NPCController : MonoBehaviour {
-	private string npcName;
+	private GameController gameController;
+	private string name;
 	
 	public List<Collider> playersNearby;
 	
@@ -10,15 +11,13 @@ public class NPCController : MonoBehaviour {
 	
 	public bool toggle = false;
 	public float hSliderValue = 0;
-	
-	private GameController gameController;
 
 	public GameObject textMeshPrefab;
-	public TextMesh textMesh;
+	private TextMesh textMesh;
 
 	void Start() {
 		gameController = GameObject.FindGameObjectWithTag(Tags.gameController).GetComponent<GameController>();
-		npcName = "NPC Test";
+		name = "NPC Test";
 
 		// Create a clone of the TextMesh prefab
 		GameObject obj = GameObject.Instantiate(textMeshPrefab) as GameObject;
@@ -27,7 +26,7 @@ public class NPCController : MonoBehaviour {
 
 		// Setup the TextMesh component
 		textMesh = obj.GetComponent<TextMesh>(); 
-		textMesh.text = npcName;
+		textMesh.text = name;
 		textMesh.characterSize = 0.025f;
 		textMesh.alignment = TextAlignment.Center;
 		textMesh.anchor = TextAnchor.MiddleCenter;
@@ -59,7 +58,7 @@ public class NPCController : MonoBehaviour {
 			//toggle = GUI.Toggle(new Rect(20, 40, 100, 20), toggle, "A Toggle text");
 			//hSliderValue = GUI.HorizontalSlider(new Rect(20, 60, 100, 20), hSliderValue, 0, 10);
 			
-			string text = gameController.getInteracting() ? npcName : "Press E to talk.";
+			string text = gameController.getInteracting() ? name : "Press E to talk.";
 			GUI.Box(new Rect(0, Screen.height - 75, Screen.width, 75), text);
 		}
 	}

@@ -18,12 +18,20 @@ public class PlayerController : MonoBehaviour {
 
 	private CharacterController controller;
 	private GameController gameController;
+	private Animator animator;
+
+	private Vector3 lastPos; // Used by the animator to get the speed
 
 	void Start() {
 		controller = GetComponent<CharacterController>();
 		gameController = GameObject.FindGameObjectWithTag(Tags.gameController).GetComponent<GameController>();
+		animator = GetComponent<Animator>();
 
 		charHeight = controller.height;
+	}
+
+	void Awake() {
+		lastPos = transform.position;
 	}
 
 	void Update() {
@@ -50,6 +58,11 @@ public class PlayerController : MonoBehaviour {
 		transform.position = newPosition;
 
 		playFootstepSound();
+
+
+
+		// Set the sneaking parameter to the sneak input.
+		animator.SetBool("Sneaking", isCrouching);
 	}
 
 	void FixedUpdate() {
@@ -63,6 +76,9 @@ public class PlayerController : MonoBehaviour {
 				HandleMovement();
 			}
 		}
+
+		animator.SetFloat("Speed", Vector3.Distance(lastPos, transform.position) * 4);
+		lastPos = transform.position;
 	}
 	
 	private void HandleMovement() {
