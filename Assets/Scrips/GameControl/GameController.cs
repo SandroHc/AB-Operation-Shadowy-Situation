@@ -2,6 +2,9 @@
 using System.Collections;
 
 public class GameController : MonoBehaviour {
+	public static AudioManager audioManager;
+	public static TextManager textManager;
+
 	public bool isPaused = false;
 	private bool isInteracting = false;
 	
@@ -17,6 +20,9 @@ public class GameController : MonoBehaviour {
 		fadeIn = false;
 		guiTexture.color = Color.black;
 		guiTexture.pixelInset = new Rect(0f, 0f, Screen.width, Screen.height);
+
+		audioManager = gameObject.GetComponent<AudioManager>();
+		textManager = gameObject.GetComponent<TextManager>();
 	}
 
 	void Update() {

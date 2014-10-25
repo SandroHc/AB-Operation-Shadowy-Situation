@@ -11,8 +11,8 @@ FBXHeaderExtension:  {
 		Year: 2014
 		Month: 10
 		Day: 24
-		Hour: 22
-		Minute: 45
+		Hour: 23
+		Minute: 23
 		Second: 42
 		Millisecond: 0
 	}
@@ -21,7 +21,7 @@ FBXHeaderExtension:  {
 		FlagPLE: 0
 	}
 }
-CreationTime: "2014-10-24 22:45:42:000"
+CreationTime: "2014-10-24 23:23:42:000"
 Creator: "Blender version 2.70 (sub 0)"
 
 ; Object definitions
@@ -29,7 +29,7 @@ Creator: "Blender version 2.70 (sub 0)"
 
 Definitions:  {
 	Version: 100
-	Count: 41
+	Count: 42
 	ObjectType: "Model" {
 		Count: 18
 	}
@@ -37,7 +37,7 @@ Definitions:  {
 		Count: 10
 	}
 	ObjectType: "Material" {
-		Count: 16
+		Count: 17
 	}
 	ObjectType: "Texture" {
 		Count: 3
@@ -1035,7 +1035,7 @@ Objects:  {
 		Shading: Y
 		Culling: "CullingOff"
 		Vertices: 0.092106,-3.025906,-2.500001,0.092106,-3.018634,-2.500001,0.182222,-3.018634,-2.500001,0.182222,-3.025906,-2.500001,
-		          0.092106,-3.025906,6.499999,0.092106,-3.018634,10.757325,0.182222,-3.018634,10.757325,0.182222,-3.025906,6.499999,
+		          0.092106,-3.025906,6.499999,0.092106,-3.018634,6.500000,0.182222,-3.018634,6.500000,0.182222,-3.025906,6.499999,
 		          -0.154987,-3.025906,-2.500001,-0.154987,-3.018634,-2.500001,-0.064868,-3.018634,-2.500001,-0.064868,-3.025906,-2.500001,
 		          -0.154987,-3.025906,6.499999,-0.154987,-3.018634,6.499999,-0.064868,-3.018634,6.499999,-0.064868,-3.025906,6.499999,
 		          0.088617,-3.025906,-2.500001,0.088617,-3.018634,-2.500001,0.088617,-3.025906,6.499999,0.088617,-3.018634,6.499999,
@@ -1054,7 +1054,7 @@ Objects:  {
 			         0.000000,-1.000000,0.000000,0.000000,-1.000000,0.000000,0.000000,-1.000000,0.000000,0.000000,-1.000000,0.000000,
 			         -1.000000,0.000000,0.000000,-1.000000,0.000000,0.000000,-1.000000,0.000000,0.000000,-1.000000,0.000000,0.000000,
 			         0.000000,1.000000,0.000000,0.000000,1.000000,0.000000,0.000000,1.000000,0.000000,0.000000,1.000000,0.000000,
-			         -0.901639,-0.432487,0.001478,-0.901639,-0.432487,0.001478,-0.901639,-0.432487,0.001478,-0.901639,-0.432487,0.001478,
+			         -0.000147,-0.000066,1.000000,-0.000147,-0.000066,1.000000,-0.000147,-0.000066,1.000000,-0.000147,-0.000066,1.000000,
 			         0.000000,-1.000000,0.000000,0.000000,-1.000000,0.000000,0.000000,-1.000000,0.000000,0.000000,-1.000000,0.000000,
 			         1.000000,0.000000,0.000000,1.000000,0.000000,0.000000,1.000000,0.000000,0.000000,1.000000,0.000000,0.000000,
 			         -0.000034,-1.000000,0.000000,-0.000034,-1.000000,0.000000,-0.000034,-1.000000,0.000000,-0.000034,-1.000000,0.000000,
@@ -6288,6 +6288,36 @@ Objects:  {
 			Property: "Reflectivity", "double", "",0
 		}
 	}
+	Material: "Material::Terrain", "" {
+		Version: 102
+		ShadingModel: "lambert"
+		MultiLayer: 0
+		Properties60:  {
+			Property: "ShadingModel", "KString", "", "Lambert"
+			Property: "MultiLayer", "bool", "",0
+			Property: "EmissiveColor", "ColorRGB", "",0.8000,0.8000,0.8000
+			Property: "EmissiveFactor", "double", "",0.0000
+			Property: "AmbientColor", "ColorRGB", "",1.0000,1.0000,1.0000
+			Property: "AmbientFactor", "double", "",1.0000
+			Property: "DiffuseColor", "ColorRGB", "",0.8000,0.8000,0.8000
+			Property: "DiffuseFactor", "double", "",0.8000
+			Property: "Bump", "Vector3D", "",0,0,0
+			Property: "TransparentColor", "ColorRGB", "",1,1,1
+			Property: "TransparencyFactor", "double", "",0.0000
+			Property: "SpecularColor", "ColorRGB", "",1.0000,1.0000,1.0000
+			Property: "SpecularFactor", "double", "",0.0000
+			Property: "ShininessExponent", "double", "",12.3
+			Property: "ReflectionColor", "ColorRGB", "",0,0,0
+			Property: "ReflectionFactor", "double", "",1
+			Property: "Emissive", "ColorRGB", "",0,0,0
+			Property: "Ambient", "ColorRGB", "",1.0,1.0,1.0
+			Property: "Diffuse", "ColorRGB", "",0.8,0.8,0.8
+			Property: "Specular", "ColorRGB", "",1.0,1.0,1.0
+			Property: "Shininess", "double", "",12.3
+			Property: "Opacity", "double", "",1.0
+			Property: "Reflectivity", "double", "",0
+		}
+	}
 	Material: "Material::bricks", "" {
 		Version: 102
 		ShadingModel: "lambert"
@@ -6991,6 +7021,8 @@ Relations:  {
 	}
 	Material: "Material::None__test_uv", "" {
 	}
+	Material: "Material::Terrain", "" {
+	}
 	Material: "Material::bricks", "" {
 	}
 	Material: "Material::bricks__BrickWall_02_png", "" {
@@ -7049,7 +7081,7 @@ Connections:  {
 	Connect: "OO", "Model::school_walls", "Model::Scene"
 	Connect: "OO", "Model::teacher_building", "Model::Scene"
 	Connect: "OO", "Model::walkroad", "Model::Scene"
-	Connect: "OO", "Material::unnamed", "Model::terrain"
+	Connect: "OO", "Material::Terrain", "Model::terrain"
 	Connect: "OO", "Material::glass", "Model::school_door_002"
 	Connect: "OO", "Material::glass", "Model::school_door_001"
 	Connect: "OO", "Material::bricks", "Model::school_door_glass"

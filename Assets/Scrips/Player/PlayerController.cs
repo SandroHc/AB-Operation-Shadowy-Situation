@@ -18,12 +18,10 @@ public class PlayerController : MonoBehaviour {
 
 	private CharacterController controller;
 	private GameController gameController;
-	private AudioManager audioManager;
 
 	void Start() {
 		controller = GetComponent<CharacterController>();
 		gameController = GameObject.FindGameObjectWithTag(Tags.gameController).GetComponent<GameController>();
-		audioManager = gameController.GetComponent<AudioManager>();
 
 		charHeight = controller.height;
 	}
@@ -85,7 +83,7 @@ public class PlayerController : MonoBehaviour {
 			jumpCurrent = Mathf.Lerp(jumpCurrent, jumpFinish, 20 * Time.fixedDeltaTime);
 			movement.y += jumpCurrent;
 		} else
-			jumpCurrent = jumpFinish = 0;
+			jumpCurrent = jumpFinish = 0; // Reset jump
 
 		movement = transform.TransformDirection(movement); // Transforms local coords intro global ones
 		if(!isFlying) movement.y += gravity; // Add the gravity, if not flying
@@ -111,8 +109,8 @@ public class PlayerController : MonoBehaviour {
 	private void updateCurrentFootsteps(Collider hit) {
 			// ... and then change the footstep sound according to the ground type
 			switch(hit.gameObject.tag) {
-			case Tags.groundWood:	audio.clip = audioManager.footstepWood; break;
-			case Tags.groundGrass:	audio.clip = audioManager.footstepGrass; break;
+			case Tags.groundWood:	audio.clip = GameController.audioManager.footstepWood; break;
+			case Tags.groundGrass:	audio.clip = GameController.audioManager.footstepGrass; break;
 			}
 	}
 

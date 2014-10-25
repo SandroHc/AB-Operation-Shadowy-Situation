@@ -12,29 +12,46 @@ public class NPCController : MonoBehaviour {
 	public float hSliderValue = 0;
 	
 	private GameController gameController;
-	
+
+	public GameObject textMeshPrefab;
+	public TextMesh textMesh;
+
 	void Start() {
 		gameController = GameObject.FindGameObjectWithTag(Tags.gameController).GetComponent<GameController>();
 		npcName = "NPC Test";
+
+		// Create a clone of the TextMesh prefab
+		GameObject obj = GameObject.Instantiate(textMeshPrefab) as GameObject;
+		// Set the prefab as a child of this GO
+		obj.transform.parent = gameObject.transform;
+
+		// Setup the TextMesh component
+		textMesh = obj.GetComponent<TextMesh>(); 
+		textMesh.text = npcName;
+		textMesh.characterSize = 0.025f;
+		textMesh.alignment = TextAlignment.Center;
+		textMesh.anchor = TextAnchor.MiddleCenter;
+
+		// Setup the clone position
+		obj.transform.localPosition = new Vector3(0, 1.3f, 0);
 	}
-	
+
 	void Update() {
 		if(playersNearby.Count > 0 && Input.GetButtonDown("Interact"))
 			gameController.toggleInteracting();
-	}
-	
-	void FixedUpdate() {
+
 		if(gameController.getInteracting())
 			playersNearby.ForEach(updateLookingRotation);
+
+
+		if(Camera.main.transform.hasChanged)
+			textMesh.transform.forward = Camera.main.transform.forward; // Keeps the TextMesh facing the player
 	}
-	
+
 	private void updateLookingRotation(Collider collider) {
-		Vector3 dir = transform.position - collider.transform.position;
-		Quaternion look = Quaternion.LookRotation(dir);
-		//collider.transform.LookAt(Quaternion.Quaternion.Lerp(collider.transform.rotation, look, lookSpeed * Time.fixedDeltaTime));
-		collider.transform.rotation = Quaternion.Lerp(transform.rotation, look, lookSpeed * Time.fixedDeltaTime);
-		
-		//collider.transform.LookAt(transform.position);
+		Quaternion targetRotation = Quaternion.LookRotation(transform.position - collider.transform.position);
+		// Smoothly rotate towards the target point
+		collider.transform.rotation = Quaternion.Slerp(collider.transform.rotation, targetRotation, lookSpeed * Time.deltaTime);
 	}
 	
 	void OnGUI() {
