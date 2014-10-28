@@ -10,6 +10,8 @@ public class MainMenu : MonoBehaviour {
 	private int screenWidth;
 	private int screenHeight;
 
+	private AsyncOperation ao;
+
 	void Start() {
 		int savedSettings = PlayerPrefs.GetInt("QualitySettings", -1);
 		int currentSettings = QualitySettings.GetQualityLevel();
@@ -35,8 +37,10 @@ public class MainMenu : MonoBehaviour {
 		// Draw the game logo
 		GUI.DrawTexture(new Rect(Screen.width / 2 - 219, screenHeight - 190, 437, 163), logoTexture);
 
-		if(Input.GetKeyDown(KeyCode.Return) || GUI.Button(new Rect(screenWidth, screenHeight, btnWidth, btnHeight), "Play"))
-			Application.LoadLevel(1);
+		if(Input.GetKeyDown(KeyCode.Return) || GUI.Button(new Rect(screenWidth, screenHeight, btnWidth, btnHeight), "Play")) {
+			//Application.LoadLevel(1);
+			ao = Application.LoadLevelAsync(1);
+		}
 		
 		GUI.Button(new Rect(screenWidth, screenHeight + 40, btnWidth, btnHeight), new GUIContent("Multiplayer", "The multiplayer is not yet implemented!"));
 		GUI.Label(new Rect(screenWidth + btnWidth + 10, screenHeight + 45, btnWidth * 2, btnHeight), GUI.tooltip);
@@ -49,6 +53,13 @@ public class MainMenu : MonoBehaviour {
 		
 		if(GUI.Button(new Rect(screenWidth, screenHeight + 160, btnWidth, btnHeight), "Exit"))
 			Application.Quit();
+
+		if(ao != null) {
+			if(ao.isDone)
+				ao = null;
+			else
+				GUI.Box(new Rect(0, 40, ao.progress * Screen.width, 40), "Loading");
+		}
 	}
 
 	private bool walking = true;
