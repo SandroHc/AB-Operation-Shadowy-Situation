@@ -12,6 +12,8 @@ public class GameController : MonoBehaviour {
 	public bool fade = true;
 	private bool fadeIn = false; // Fade to black (true); or fade from black (false)
 
+	public GameObject uiPause;
+
 	void Awake() {
 		Screen.lockCursor = true;
 
@@ -46,40 +48,30 @@ public class GameController : MonoBehaviour {
 			}
 		}
 
-		handleEscapeKey();
+		handleCancelInput();
 	}
 	
-	void OnGUI() {
-		if(isPaused) drawPauseGui();
+	public void btnClickedMainMenu() {
+		fade = true;
+		Application.LoadLevel(0);
 	}
 
-	private void drawPauseGui() {
-		int btnWidth = 150;
-		int btnHeight = 30;
-		int screenWidth = Screen.width / 2 - btnWidth / 2;
-		int screenHeight = Screen.height / 2 - (2 * btnHeight + 10 /* spacers */) / 2;
-		
-		if(GUI.Button(new Rect(screenWidth, screenHeight, btnWidth, btnHeight), "Main Menu")) {
-			fade = true;
-			Application.LoadLevel(0);
-		}
-		
-		if(GUI.Button(new Rect(screenWidth, screenHeight + 40, btnWidth, btnHeight), "Exit")) {
-			fade = true;
-			Application.Quit();
-		}
+	public void btnClickedExit() {
+		fade = true;
+		Application.Quit();
 	}
 
 	public bool stopMovement() {
 		return isPaused || isInteracting;
 	}
 
-	private void handleEscapeKey() {
-		if(Input.GetKeyDown(KeyCode.Escape)) {
+	private void handleCancelInput() {
+		if(Input.GetButtonDown("Cancel")) {
 			if(isInteracting) {
 				isInteracting = false;
 			} else {
 				isPaused = !isPaused;
+				OpenPauseUI();
 			}
 		}
 		
@@ -96,5 +88,9 @@ public class GameController : MonoBehaviour {
 
 	public void toggleInteracting() {
 		isInteracting = !isInteracting;
+	}
+
+	public void OpenPauseUI() {
+		uiPause.SetActive(isPaused);
 	}
 }

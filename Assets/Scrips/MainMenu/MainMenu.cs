@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class MainMenu : MonoBehaviour {
 	public Texture logoTexture;
-	public int currentGui = 0;
+
+	public GameObject[] panelList;
+	public int currentPanel = 0;
 
 	private int btnWidth = 150;
 	private int btnHeight = 35;
@@ -22,44 +25,42 @@ public class MainMenu : MonoBehaviour {
 	}
 
 	void OnGUI() {
-		if(currentGui == 0) // Main Menu
-			drawMainMenu();
-		else if(currentGui == 1) // Options
-			drawOptions();
-		else
-			currentGui = 0;
-	}
-
-	public void drawMainMenu() {
-		screenWidth = Screen.width / 2 - btnWidth / 2;
-		screenHeight = Screen.height / 2 - (5 * btnHeight + 40 /* spacers */) / 2;
-
-		// Draw the game logo
-		GUI.DrawTexture(new Rect(Screen.width / 2 - 219, screenHeight - 190, 437, 163), logoTexture);
-
-		if(Input.GetKeyDown(KeyCode.Return) || GUI.Button(new Rect(screenWidth, screenHeight, btnWidth, btnHeight), "Play")) {
-			//Application.LoadLevel(1);
-			ao = Application.LoadLevelAsync(1);
-		}
-		
-		GUI.Button(new Rect(screenWidth, screenHeight + 40, btnWidth, btnHeight), new GUIContent("Multiplayer", "The multiplayer is not yet implemented!"));
-		GUI.Label(new Rect(screenWidth + btnWidth + 10, screenHeight + 45, btnWidth * 2, btnHeight), GUI.tooltip);
-		
-		if(GUI.Button(new Rect(screenWidth, screenHeight + 80, btnWidth, btnHeight), "Hiscores"))
-			Application.OpenURL("http://sandrohc.co.nf/ab/hiscores.php");
-		
-		if(GUI.Button(new Rect(screenWidth, screenHeight + 120, btnWidth, btnHeight), "Options"))
-			currentGui = 1;
-		
-		if(GUI.Button(new Rect(screenWidth, screenHeight + 160, btnWidth, btnHeight), "Exit"))
-			Application.Quit();
-
 		if(ao != null) {
 			if(ao.isDone)
 				ao = null;
 			else
 				GUI.Box(new Rect(0, 40, ao.progress * Screen.width, 40), "Loading");
 		}
+	}
+
+	private void updatePanel(int newPanel) {
+		if(newPanel < 0 || newPanel > panelList.Length - 1)
+			return;
+
+		for(int i=0; i < panelList.Length; i++)
+			panelList[i].SetActive(i == newPanel);
+
+		currentPanel = newPanel;
+	}
+
+	public void btnClickPlay() {
+		ao = Application.LoadLevelAsync(1);ao = Application.LoadLevelAsync(1);
+	}
+
+	public void btnClickMultiplayer() {
+
+	}
+
+	public void btnClickHiscores() {
+		Application.OpenURL("http://sandrohc.co.nf/ab/hiscores.php");
+	}
+
+	public void btnClickOptions() {
+		updatePanel(1);
+	}
+
+	public void btnClickExit() {
+		Application.Quit();
 	}
 
 	private bool walking = true;
@@ -81,30 +82,6 @@ public class MainMenu : MonoBehaviour {
 		}
 		GUI.enabled = true;
 
-
-		bool walkToggle = false; //GUI.Toggle(new Rect(10, 40, 120, 20), walking, "WALK");
-		bool runToggle = false; //GUI.Toggle(new Rect(10, 60, 120, 20), running, "RUN");
-		bool jumpToggle = false; //GUI.Toggle(new Rect(10, 80, 120, 20), jumping, "JUMP");
-		
-		if (walkToggle != walking)	{
-			walkToggle = walking = true;
-			runToggle  = running = false;
-			jumpToggle = jumping = false;
-		}
-		
-		if (runToggle != running) {
-			walkToggle = walking = false;
-			runToggle  = running = true;
-			jumpToggle = jumping = false;
-		}
-		
-		if (jumpToggle != jumping) {
-			walkToggle = walking = false;
-			runToggle  = running = false;
-			jumpToggle = jumping = true;
-		}
-
-
 		if(GUI.Button(new Rect(screenWidth - btnWidth, screenHeight + 120, btnWidth, btnHeight), "Cancel"))
 			resetChanges();
 
@@ -118,11 +95,11 @@ public class MainMenu : MonoBehaviour {
 	}
 
 	private void resetChanges() {
-		currentGui = 0;
+		updatePanel(0);
 	}
 
 	private void applyChanges() {
 		PlayerPrefs.Save();
-		currentGui = 0;
+		updatePanel(0);
 	}
 }
