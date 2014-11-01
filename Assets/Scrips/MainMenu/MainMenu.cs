@@ -3,15 +3,11 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class MainMenu : MonoBehaviour {
-	public Texture logoTexture;
-
 	public GameObject[] panelList;
 	public int currentPanel = 0;
 
-	private int btnWidth = 150;
-	private int btnHeight = 35;
-	private int screenWidth;
-	private int screenHeight;
+	public Slider loadingBar;
+	public Text loadingBarText;
 
 	private AsyncOperation ao;
 
@@ -26,11 +22,18 @@ public class MainMenu : MonoBehaviour {
 
 	void OnGUI() {
 		if(ao != null) {
-			if(ao.isDone)
+			if(ao.isDone) {
+				loadingBar.gameObject.SetActive(false);
 				ao = null;
-			else
-				GUI.Box(new Rect(0, 40, ao.progress * Screen.width, 40), "Loading");
+			} else {
+				loadingBar.gameObject.SetActive(true);
+				loadingBar.value = ao.progress;
+				loadingBarText.text = (ao.progress * 100).ToString("0") + "%";
+			}
 		}
+
+		if(currentPanel == 1)
+			drawOptions();
 	}
 
 	private void updatePanel(int newPanel) {
@@ -44,7 +47,8 @@ public class MainMenu : MonoBehaviour {
 	}
 
 	public void btnClickPlay() {
-		ao = Application.LoadLevelAsync(1);ao = Application.LoadLevelAsync(1);
+		ao = Application.LoadLevelAsync(1);
+		ao.priority = 10;
 	}
 
 	public void btnClickMultiplayer() {
@@ -63,14 +67,7 @@ public class MainMenu : MonoBehaviour {
 		Application.Quit();
 	}
 
-	private bool walking = true;
-	private bool running = false;
-	private bool jumping = false;
-
 	public void drawOptions() {
-		screenWidth = Screen.width / 2 - btnWidth / 2;
-		screenHeight = Screen.height / 3 * 2;
-
 		string[] names = QualitySettings.names;
 		int current = QualitySettings.GetQualityLevel();
 
@@ -81,12 +78,6 @@ public class MainMenu : MonoBehaviour {
 			buttonRect.x += buttonRect.width;
 		}
 		GUI.enabled = true;
-
-		if(GUI.Button(new Rect(screenWidth - btnWidth, screenHeight + 120, btnWidth, btnHeight), "Cancel"))
-			resetChanges();
-
-		if(GUI.Button(new Rect(screenWidth + btnWidth, screenHeight + 120, btnWidth, btnHeight), "Apply"))
-			applyChanges();
 	}
 
 	private void updateQualitySettings(int newSettings, bool applyExpensiveChanges = true) {
@@ -94,11 +85,11 @@ public class MainMenu : MonoBehaviour {
 		PlayerPrefs.SetInt("QualitySettings", newSettings);
 	}
 
-	private void resetChanges() {
+	public void resetChanges() {
 		updatePanel(0);
 	}
 
-	private void applyChanges() {
+	public void applyChanges() {
 		PlayerPrefs.Save();
 		updatePanel(0);
 	}
