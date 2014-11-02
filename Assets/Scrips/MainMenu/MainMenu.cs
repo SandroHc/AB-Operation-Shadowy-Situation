@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class MainMenu : MonoBehaviour {
+	public NetworkManager network;
+
 	public GameObject[] panelList;
 	public int currentPanel = 0;
 
@@ -12,6 +14,8 @@ public class MainMenu : MonoBehaviour {
 	private AsyncOperation ao;
 
 	void Start() {
+		network = GetComponent<NetworkManager>();
+
 		int savedSettings = PlayerPrefs.GetInt("QualitySettings", -1);
 		int currentSettings = QualitySettings.GetQualityLevel();
 		if(savedSettings == -1)
@@ -46,13 +50,17 @@ public class MainMenu : MonoBehaviour {
 		currentPanel = newPanel;
 	}
 
+	public void goToMainScreen() {
+		updatePanel(0);
+	}
+
 	public void btnClickPlay() {
 		ao = Application.LoadLevelAsync(1);
 		ao.priority = 10;
 	}
 
 	public void btnClickMultiplayer() {
-
+		updatePanel(2);
 	}
 
 	public void btnClickHiscores() {
@@ -67,6 +75,7 @@ public class MainMenu : MonoBehaviour {
 		Application.Quit();
 	}
 
+	/*		OPTIONS		*/
 	public void drawOptions() {
 		string[] names = QualitySettings.names;
 		int current = QualitySettings.GetQualityLevel();
@@ -93,4 +102,35 @@ public class MainMenu : MonoBehaviour {
 		PlayerPrefs.Save();
 		updatePanel(0);
 	}
+
+	/*		MULTIPLAYER		*/
+	public Text multiplayerList;
+
+	public void btnClickStartServer() {
+		network.StartServer("Test");
+	}
+
+	public void btnClickJoinServer() {
+		network.JoinServer(network.hostList[0]);
+	}
+
+	public void btnClickRefreshList() {
+		network.RefreshHostList();
+
+		repopulateMultiplayerList();
+	}
+
+	private void repopulateMultiplayerList() {
+		if(network.hostList == null || network.hostList.Length < 0) {
+			multiplayerList.text = "There are no available servers.";
+			return;
+		}
+
+		multiplayerList.text = "";
+
+		for(int i=0; i < network.hostList.Length; i++) {
+			multiplayerList.text += network.hostList[i].gameName + " - " + network.hostList[i].comment + " (" + network.hostList[i].connectedPlayers + "/" + network.hostList[i].playerLimit + " players)\n";
+		}
+	}
+
 }

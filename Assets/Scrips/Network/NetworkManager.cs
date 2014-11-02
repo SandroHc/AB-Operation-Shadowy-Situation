@@ -5,7 +5,7 @@ public class NetworkManager : MonoBehaviour {
 	public GameObject playerPrefab;
 
 	private const string uniqueName = "ABOperationShadowySituation";
-	private HostData[] hostList;
+	public HostData[] hostList;
 
 	void OnMasterServerEvent(MasterServerEvent msEvent) {
 		if(msEvent == MasterServerEvent.HostListReceived) {
@@ -13,17 +13,17 @@ public class NetworkManager : MonoBehaviour {
 		}
 	}
 	
-	private void StartServer(string name) {
+	public void StartServer(string name) {
 		// number players, listen port, use NAT
 		Network.InitializeServer(4, 25000, !Network.HavePublicAddress());
 		MasterServer.RegisterHost(uniqueName, name);
 	}
 
-	private void JoinServer(HostData hostData) {
+	public void JoinServer(HostData hostData) {
 		Network.Connect(hostData);
 	}
 	
-	private void RefreshHostList() {
+	public void RefreshHostList() {
 		MasterServer.RequestHostList(uniqueName);
 	}
 
@@ -33,11 +33,12 @@ public class NetworkManager : MonoBehaviour {
 
 	void OnServerInitialized() {
 		Debug.Log("Server Initializied");
-		SpawnPlayer();
+		//SpawnPlayer();
 	}
 
 	void OnConnectedToServer() {
 		Debug.Log("Server Joined");
+		Application.LoadLevel(1); // Load main scene
 		SpawnPlayer();
 	}
 }

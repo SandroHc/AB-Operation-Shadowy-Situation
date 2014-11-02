@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerController : MonoBehaviour {
@@ -21,6 +22,9 @@ public class PlayerController : MonoBehaviour {
 	private Animator animator;
 
 	private Vector3 lastPos; // Used by the animator to get the speed
+
+	public int currentScore;
+	public Text scoreUiText;
 
 	void Start() {
 		controller = GetComponent<CharacterController>();
@@ -71,7 +75,7 @@ public class PlayerController : MonoBehaviour {
 				transform.position = spawnLocation;
 				transform.eulerAngles = Vector3.zero;
 			}
-			
+		
 			if((!Network.isClient && !Network.isServer) || gameController.networkView.isMine) { // If we're not on a network OR we're on a network and it's our player
 				HandleMovement();
 			}
@@ -79,6 +83,10 @@ public class PlayerController : MonoBehaviour {
 
 		animator.SetFloat("Speed", Vector3.Distance(lastPos, transform.position) * 4);
 		lastPos = transform.position;
+	}
+
+	void LateUpdate() {
+		scoreUiText.text = currentScore.ToString();
 	}
 	
 	private void HandleMovement() {
