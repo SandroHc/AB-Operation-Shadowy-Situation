@@ -3,15 +3,22 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class MainMenu : MonoBehaviour {
-	public NetworkManager network;
+	private NetworkManager network;
 
 	public GameObject[] panelList;
 	public int currentPanel = 0;
 
+	public Image bgImg;
+	public Sprite[] bgTextures;
+	public Image logoImg;
 	public Slider loadingBar;
 	public Text loadingBarText;
 
 	private AsyncOperation ao;
+
+	void Awake() {
+		bgImg.sprite = bgTextures[Random.Range(0, bgTextures.Length)];
+	}
 
 	void Start() {
 		network = GetComponent<NetworkManager>();
@@ -22,6 +29,24 @@ public class MainMenu : MonoBehaviour {
 			PlayerPrefs.SetInt("QualitySettings", currentSettings);
 		else if(savedSettings != currentSettings)
 			updateQualitySettings(savedSettings, false);
+	}
+
+	private float minScale = 1f;
+	private float maxScale = 1.1f;
+	private float currentScale = 1f;
+	private bool increaseScale = false;
+
+	void Update() {
+		if(increaseScale) {
+			currentScale += Time.deltaTime / 5;
+			if(currentScale >= maxScale) increaseScale = false;
+		} else {
+			currentScale -= Time.deltaTime * 2;
+			if(currentScale <= minScale) increaseScale = true;
+		}
+
+		RectTransform rectTransform = logoImg.GetComponent<RectTransform>();
+		rectTransform.localScale = new Vector3(currentScale, currentScale, currentScale);
 	}
 
 	void OnGUI() {
