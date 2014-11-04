@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour {
 
 	void FixedUpdate() {
 		if(!gameController.stopMovement()) {
-			if(Input.GetKeyUp(KeyCode.R)) { // Reset the player when the key R is released
+			if(Input.GetKeyUp(KeyCode.Home)) { // Reset the player when the key R is released
 				transform.position = spawnLocation;
 				transform.eulerAngles = Vector3.zero;
 			}
