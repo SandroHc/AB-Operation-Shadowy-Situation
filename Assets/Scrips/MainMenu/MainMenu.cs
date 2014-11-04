@@ -10,9 +10,14 @@ public class MainMenu : MonoBehaviour {
 
 	public Image bgImg;
 	public Sprite[] bgTextures;
+
 	public Image logoImg;
-	public Slider loadingBar;
-	public Text loadingBarText;
+	public Image logoImgOver;
+	private RectTransform logoImgOverTransform;
+	public float logoImgIn = 2;
+	public float logoImgOut = 5;
+
+	private bool loading = false;
 
 	private AsyncOperation ao;
 
@@ -22,6 +27,8 @@ public class MainMenu : MonoBehaviour {
 
 	void Start() {
 		network = GetComponent<NetworkManager>();
+
+		logoImgOverTransform = logoImgOver.GetComponent<RectTransform>();;
 
 		int savedSettings = PlayerPrefs.GetInt("QualitySettings", -1);
 		int currentSettings = QualitySettings.GetQualityLevel();
@@ -37,27 +44,26 @@ public class MainMenu : MonoBehaviour {
 	private bool increaseScale = false;
 
 	void Update() {
-		if(increaseScale) {
-			currentScale += Time.deltaTime / 5;
-			if(currentScale >= maxScale) increaseScale = false;
-		} else {
-			currentScale -= Time.deltaTime * 2;
-			if(currentScale <= minScale) increaseScale = true;
-		}
+		if(!loading) {
+			if(increaseScale) {
+				currentScale += Time.deltaTime / logoImgOut;
+				if(currentScale >= maxScale) increaseScale = false;
+			} else {
+				currentScale -= Time.deltaTime * logoImgIn;
+				if(currentScale <= minScale) increaseScale = true;
+			}
 
-		RectTransform rectTransform = logoImg.GetComponent<RectTransform>();
-		rectTransform.localScale = new Vector3(currentScale, currentScale, currentScale);
+			logoImgOverTransform.localScale = new Vector3(currentScale, currentScale, currentScale);
+		}
 	}
 
 	void OnGUI() {
 		if(ao != null) {
 			if(ao.isDone) {
-				loadingBar.gameObject.SetActive(false);
 				ao = null;
+				loading = false;
 			} else {
-				loadingBar.gameObject.SetActive(true);
-				loadingBar.value = ao.progress;
-				loadingBarText.text = (ao.progress * 100).ToString("0") + "%";
+				logoImgOver.fillAmount = Mathf.Lerp(logoImgOver.fillAmount, 1 - ao.progress, Time.deltaTime * 1.6f);
 			}
 		}
 
@@ -80,12 +86,20 @@ public class MainMenu : MonoBehaviour {
 	}
 
 	public void btnClickPlay() {
-		ao = Application.LoadLevelAsync(1);
-		ao.priority = 10;
+		if(ao == null) {
+			ao = Application.LoadLevelAsync(1);
+			ao.priority = 10;
+
+			logoImgOver.fillAmount = 1;
+			logoImgOver.color = Color.gray;
+			logoImgOverTransform.localScale = new Vector2(1,1);
+			loading = true;
+		}
 	}
 
 	public void btnClickMultiplayer() {
 		updatePanel(2);
+		populateMultiplayerList();
 	}
 
 	public void btnClickHiscores() {
@@ -142,10 +156,10 @@ public class MainMenu : MonoBehaviour {
 	public void btnClickRefreshList() {
 		network.RefreshHostList();
 
-		repopulateMultiplayerList();
+		populateMultiplayerList();
 	}
 
-	private void repopulateMultiplayerList() {
+	private void populateMultiplayerList() {
 		if(network.hostList == null || network.hostList.Length < 0) {
 			multiplayerList.text = "There are no available servers.";
 			return;
