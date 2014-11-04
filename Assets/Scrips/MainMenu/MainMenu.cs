@@ -19,6 +19,8 @@ public class MainMenu : MonoBehaviour {
 
 	private bool loading = false;
 
+	public Button[] btnList;
+
 	private AsyncOperation ao;
 
 	void Awake() {
@@ -94,6 +96,9 @@ public class MainMenu : MonoBehaviour {
 			logoImgOver.color = Color.gray;
 			logoImgOverTransform.localScale = new Vector2(1,1);
 			loading = true;
+
+			foreach(Button btn in btnList)
+				btn.gameObject.SetActive(false);
 		}
 	}
 
