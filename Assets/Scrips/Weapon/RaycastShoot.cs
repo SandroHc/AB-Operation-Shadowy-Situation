@@ -10,7 +10,8 @@ public class RaycastShoot : MonoBehaviour {
 	public int ammoPerMagazine = 10;
 	public int ammoRemaining;
 
-	public float range = 20f;
+	public float range = 50f;
+	public float damage = 1f;
 
 	public float cooldownShoot = .3f;
 	public float cooldownReload = 1f;
@@ -30,7 +31,7 @@ public class RaycastShoot : MonoBehaviour {
 		if(cooldown > 0)
 			cooldown -= Time.deltaTime;
 
-		if(Input.GetKeyUp(KeyCode.R))
+		if(Input.GetKeyUp(KeyCode.R) && ammoRemaining < ammoPerMagazine) // Only reload if the magazine is not full
 			reload();
 		
 		if(Input.GetButtonDown("Fire1") && cooldown <= 0) {
@@ -48,6 +49,8 @@ public class RaycastShoot : MonoBehaviour {
 		if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, range)){
 			GameObject obj = Instantiate(bulletTex[Random.Range(0, bulletTex.Length)], hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal)) as GameObject; // Then we'll instantiate a random bullet hole texture from our array and apply it where we click and adjust the position and rotation of textures to match the object being hit
 			Destroy(obj, 10);
+
+			hit.transform.gameObject.SendMessage("receiveDamage", damage, SendMessageOptions.DontRequireReceiver);
 		}
 
 		ammoRemaining--;
