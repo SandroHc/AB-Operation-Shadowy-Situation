@@ -46,10 +46,13 @@ public class RaycastShoot : MonoBehaviour {
 		RaycastHit hit;
 
 		// When we left click and our raycast hits something
-		if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, range)){
-			GameObject obj = Instantiate(bulletTex[Random.Range(0, bulletTex.Length)], hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal)) as GameObject; // Then we'll instantiate a random bullet hole texture from our array and apply it where we click and adjust the position and rotation of textures to match the object being hit
-			obj.transform.parent = hit.transform;
-			Destroy(obj, 10);
+		if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, range)) {
+			// Do not render bullet holes on enemies (because the bullet will be shown on the capsule collider, not the mesh)
+			if(hit.transform.gameObject.tag != Tags.enemy) {
+				GameObject obj = Instantiate(bulletTex[Random.Range(0, bulletTex.Length)], hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal)) as GameObject; // Then we'll instantiate a random bullet hole texture from our array and apply it where we click and adjust the position and rotation of textures to match the object being hit
+				obj.transform.parent = hit.transform;
+				Destroy(obj, 10);
+			}
 
 			hit.transform.gameObject.SendMessage("takeDamage", damage, SendMessageOptions.DontRequireReceiver);
 		}

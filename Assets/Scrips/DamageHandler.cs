@@ -2,7 +2,12 @@
 using System.Collections;
 
 public class DamageHandler : MonoBehaviour {
-	void takeDamage(float damage) {
-		Destroy(gameObject);
+	public float damage = 1f;
+
+	void takeDamage(float dmg) {
+		damage -= dmg;
+
+		if(damage <= 0)
+			Destroy(gameObject);
 	}
 }
