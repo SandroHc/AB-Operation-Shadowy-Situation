@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class DamageHandler : MonoBehaviour {
-	void receiveDamage(float damage) {
+	void takeDamage(float damage) {
 		Destroy(gameObject);
 	}
 }
