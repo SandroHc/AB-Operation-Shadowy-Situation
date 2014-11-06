@@ -67,11 +67,17 @@ public class PlayerController : MonoBehaviour {
 
 		// Set the sneaking parameter to the sneak input.
 		animator.SetBool("Sneaking", isCrouching);
+
+
+		// Will be used to zoom in when aiming
+		if(Input.GetButton("Fire2")) {
+			Camera.main.fieldOfView -= .5f;
+		}
 	}
 
 	void FixedUpdate() {
 		if(!gameController.stopMovement()) {
-			if(Input.GetKeyUp(KeyCode.R)) { // Reset the player when the key R is released
+			if(Input.GetKeyUp(KeyCode.Home)) { // Reset the player when the key R is released
 				transform.position = spawnLocation;
 				transform.eulerAngles = Vector3.zero;
 			}
