@@ -8,16 +8,20 @@ public class RaycastShoot : MonoBehaviour {
 
 	public int magazines = 2;
 	public int ammoPerMagazine = 10;
-	public int ammoRemaining;
+	private int ammoRemaining;
 
 	public float range = 50f;
 	public float damage = 1f;
 
 	public float cooldownShoot = .3f;
 	public float cooldownReload = 1f;
-	public float cooldown = 0f;
+	private float cooldown = 0f;
 
 	public Text bulletUI;
+
+	// Variables used when aiming
+	private float currentFOV = 60f;
+	private float dampVelocity = 0.4f;
 
 	void Awake() {
 		ammoRemaining = ammoPerMagazine;
@@ -40,6 +44,13 @@ public class RaycastShoot : MonoBehaviour {
 			else
 				playAudio(1); // No ammo sound
 		}
+
+
+		// Change the camera FOV smoothly
+		Camera.main.fieldOfView = Mathf.SmoothDamp(Camera.main.fieldOfView, currentFOV, ref dampVelocity, .3f);
+
+		bool isAiming = Input.GetButton("Fire2"); // Right-click by default
+		currentFOV = isAiming ? 40 : 60;
 	}
 
 	void shoot() {

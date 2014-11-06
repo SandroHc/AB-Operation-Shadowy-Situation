@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour {
 	private float jumpCurrent;
 	private float jumpFinish;
 
-	private Vector3 spawnLocation = new Vector3(0, 1, 0);
+	private Vector3 spawnLocation = new Vector3(0, 1.1f, 0);
 	private float charHeight;
 
 	private CharacterController controller;
@@ -67,12 +67,6 @@ public class PlayerController : MonoBehaviour {
 
 		// Set the sneaking parameter to the sneak input.
 		animator.SetBool("Sneaking", isCrouching);
-
-
-		// Will be used to zoom in when aiming
-		if(Input.GetButton("Fire2")) {
-			Camera.main.fieldOfView -= .5f;
-		}
 	}
 
 	void FixedUpdate() {
