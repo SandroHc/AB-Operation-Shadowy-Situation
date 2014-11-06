@@ -67,6 +67,12 @@ public class PlayerController : MonoBehaviour {
 
 		// Set the sneaking parameter to the sneak input.
 		animator.SetBool("Sneaking", isCrouching);
+
+
+		// Will be used to zoom in when aiming
+		if(Input.GetButton("Fire2")) {
+			Camera.main.fieldOfView -= .5f;
+		}
 	}
 
 	void FixedUpdate() {
