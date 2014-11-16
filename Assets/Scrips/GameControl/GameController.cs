@@ -2,8 +2,9 @@
 using System.Collections;
 
 public class GameController : MonoBehaviour {
-	public static AudioManager audioManager;
 	public static TextManager textManager;
+	public static AudioManager audioManager;
+	public static SpriteManager spriteManager;
 
 	public bool isPaused = false;
 	private bool isInteracting = false;
@@ -14,17 +15,21 @@ public class GameController : MonoBehaviour {
 
 	public GameObject uiPause;
 
+	void Start() {
+		textManager = gameObject.GetComponent<TextManager>();
+		audioManager = gameObject.GetComponent<AudioManager>();
+		spriteManager = gameObject.GetComponent<SpriteManager>();
+
+		guiTexture.color = Color.black;
+		guiTexture.pixelInset = new Rect(0f, 0f, Screen.width, Screen.height);
+	}
+
 	void Awake() {
 		Screen.lockCursor = true;
 
 		// Reset the fader
 		fade = true;
 		fadeIn = false;
-		guiTexture.color = Color.black;
-		guiTexture.pixelInset = new Rect(0f, 0f, Screen.width, Screen.height);
-
-		audioManager = gameObject.GetComponent<AudioManager>();
-		textManager = gameObject.GetComponent<TextManager>();
 	}
 
 	void Update() {

@@ -5,10 +5,10 @@ using System.Collections;
 public class EnemyHP : MonoBehaviour {
 	public float maxHealth = 100f;
 	private float currHealth;
-
+	
 	public Image hpBarImg;
 	private bool updateBar = false;
-		
+	
 	void Awake() {
 		currHealth = maxHealth;
 	}
