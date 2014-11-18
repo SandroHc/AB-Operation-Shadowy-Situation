@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MainMenu : MonoBehaviour {
 	private NetworkManager network;
@@ -120,7 +121,26 @@ public class MainMenu : MonoBehaviour {
 	}
 
 	/*		OPTIONS		*/
+	List<Resolution> resolutionList;
+	object currentSelection;
+
+	private bool OnCheckboxItemGUI(object item, bool selected, ICollection list) {
+		IList temp = (IList) list;
+		GUI.enabled = !selected;
+		return GUI.Button(new Rect(10, 25 * temp.IndexOf(item) + 5
+
+		                           * temp.IndexOf(item), 200, 25), (item.GetType() == typeof(Resolution)) ? ((Resolution) item).width.ToString() + "x" + ((Resolution) item).height.ToString() + " (" + ((Resolution) item).refreshRate.ToString()  + "Hz)" : item.ToString());
+	}
+
 	public void drawOptions() {
+		resolutionList = new List<Resolution>();
+		foreach(Resolution res in Screen.resolutions) {
+			resolutionList.Add(res);
+		}
+
+		currentSelection = SelectList(resolutionList, currentSelection, OnCheckboxItemGUI);
+
+		// Quality settings
 		string[] names = QualitySettings.names;
 		int current = QualitySettings.GetQualityLevel();
 
@@ -177,4 +197,36 @@ public class MainMenu : MonoBehaviour {
 		}
 	}
 
+
+
+
+	public static object SelectList(ICollection list, object selected, GUIStyle defaultStyle, GUIStyle selectedStyle) {			
+		foreach(object item in list) {
+			if(GUILayout.Button(item.ToString(), (selected == item) ? selectedStyle : defaultStyle)) {
+				if(selected == item) { // Clicked an already selected item. Deselect.
+					selected = null;
+				} else {
+					selected = item;
+				}
+			}
+		}
+		
+		return selected;
+	}
+	
+	public delegate bool OnListItemGUI(object item, bool selected, ICollection list);
+	
+	public static object SelectList(ICollection list, object selected, OnListItemGUI itemHandler) {
+		ArrayList itemList = new ArrayList(list);
+		
+		foreach(object item in itemList) {
+			if(itemHandler(item, item == selected, list)) {
+				selected = item;
+			} else if(selected == item) { // If we *were* selected, but aren't any more then deselect
+				selected = null;
+			}
+		}
+		
+		return selected;
+	}
 }
