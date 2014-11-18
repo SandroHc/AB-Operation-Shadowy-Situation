@@ -9,6 +9,8 @@ public class MainMenu : MonoBehaviour {
 	public GameObject[] panelList;
 	public int currentPanel = 0;
 
+	public RectTransform optionsPanel;
+
 	public Image bgImg;
 	public Sprite[] bgTextures;
 
@@ -31,8 +33,12 @@ public class MainMenu : MonoBehaviour {
 	void Start() {
 		network = GetComponent<NetworkManager>();
 
-		logoImgOverTransform = logoImgOver.GetComponent<RectTransform>();;
+		logoImgOverTransform = logoImgOver.GetComponent<RectTransform>();
 
+		// Load screen settings
+		//Screen.fullScreen = PlayerPrefs.GetInt("screen_fullscreen", 1) != 0;
+
+		// Load quality settings
 		int savedSettings = PlayerPrefs.GetInt("QualitySettings", -1);
 		int currentSettings = QualitySettings.GetQualityLevel();
 		if(savedSettings == -1)
@@ -124,12 +130,19 @@ public class MainMenu : MonoBehaviour {
 	List<Resolution> resolutionList;
 	object currentSelection;
 
-	private bool OnCheckboxItemGUI(object item, bool selected, ICollection list) {
-		IList temp = (IList) list;
+	private bool resolutionListGUI(object item, bool selected, ICollection list) {
+		int index = ((IList) list).IndexOf(item);
+		string text =  (item.GetType() == typeof(Resolution)) ? ((Resolution) item).width.ToString() + "x" + ((Resolution) item).height.ToString() + " (" + ((Resolution) item).refreshRate.ToString()  + "Hz)" : item.ToString();
 		GUI.enabled = !selected;
-		return GUI.Button(new Rect(10, 25 * temp.IndexOf(item) + 5
+		return GUI.Button(new Rect(100, 100 + 30 * index, 200, 25), text);
+	}
 
-		                           * temp.IndexOf(item), 200, 25), (item.GetType() == typeof(Resolution)) ? ((Resolution) item).width.ToString() + "x" + ((Resolution) item).height.ToString() + " (" + ((Resolution) item).refreshRate.ToString()  + "Hz)" : item.ToString());
+	private void resolutionListClick(object item, ICollection list) {
+		if(item.GetType() == typeof(Resolution)) {
+			Resolution res = (Resolution) item;
+
+			Screen.SetResolution(res.width, res.height, Screen.fullScreen);
+		}
 	}
 
 	public void drawOptions() {
@@ -138,7 +151,14 @@ public class MainMenu : MonoBehaviour {
 			resolutionList.Add(res);
 		}
 
-		currentSelection = SelectList(resolutionList, currentSelection, OnCheckboxItemGUI);
+		currentSelection = SelectList(resolutionList, currentSelection, resolutionListGUI, resolutionListClick);
+
+		bool fullscreen = GUI.Toggle(new Rect(350, 100, 200, 25), Screen.fullScreen, "Set fullscreen");
+		if(fullscreen != Screen.fullScreen) {
+			PlayerPrefs.SetInt("screen_fullscreen", fullscreen ? 1 : 0);
+			Screen.fullScreen = fullscreen;
+
+		}
 
 		// Quality settings
 		string[] names = QualitySettings.names;
@@ -215,13 +235,15 @@ public class MainMenu : MonoBehaviour {
 	}
 	
 	public delegate bool OnListItemGUI(object item, bool selected, ICollection list);
+	public delegate void OnListItemClicked(object item, ICollection list);
 	
-	public static object SelectList(ICollection list, object selected, OnListItemGUI itemHandler) {
+	public static object SelectList(ICollection list, object selected, OnListItemGUI itemHandler, OnListItemClicked clickHandler) {
 		ArrayList itemList = new ArrayList(list);
 		
 		foreach(object item in itemList) {
 			if(itemHandler(item, item == selected, list)) {
 				selected = item;
+				clickHandler(item, list);
 			} else if(selected == item) { // If we *were* selected, but aren't any more then deselect
 				selected = null;
 			}
