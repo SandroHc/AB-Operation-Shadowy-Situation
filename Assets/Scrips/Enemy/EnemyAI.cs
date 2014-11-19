@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class EnemyAI : MonoBehaviour {
-	public Transform target;
+	public Transform player;
 	float moveSpeed = 4;
 	float rotationSpeed = 4;
 	float followDist = 10;
@@ -19,27 +19,26 @@ public class EnemyAI : MonoBehaviour {
 		hpBarCanvas = transform.Find("default_hp_bar").GetComponent<RectTransform>();
 	}
 
+	void Awake() {
+		//player = GameObject.FindGameObjectWithTag(Tags.player).transform;
+	}
+
 	void Update() {
 		if(cooldown >= 0) cooldown -= Time.deltaTime;
 
 		// Make the canvas look athe the player (the canvas local rotation is set to 180º for this to work, as the canvas will be flipped horizontally)
-		hpBarCanvas.rotation = target.rotation;
+		hpBarCanvas.rotation = player.rotation;
 
 		//transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(target.position - transform.position), rotationSpeed * Time.deltaTime);
 
-		if(Vector3.Distance(transform.position, target.position) <= followDist) {
-			//Debug.Log("Following!");
-			rigidbody.AddRelativeForce(transform.forward * moveSpeed * Time.deltaTime); // TODO Should be doing this at FixedUpdate()
-
-			if(Vector3.Distance(transform.position, target.position) <= attackDist)
-				attack();
-		}
+		if(Vector3.Distance(transform.position, player.position) <= attackDist)
+			attack();
 	}
 
 	void attack() {
 		if(cooldown <= 0) {
 			//Debug.Log("Attacking!");
-			target.gameObject.SendMessage("takeDamage", damage, SendMessageOptions.RequireReceiver);
+			player.gameObject.SendMessage("takeDamage", damage, SendMessageOptions.RequireReceiver);
 			cooldown = cooldownAttack;
 		}
 	}
