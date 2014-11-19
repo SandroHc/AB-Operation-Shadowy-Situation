@@ -36,7 +36,29 @@ public class MainMenu : MonoBehaviour {
 		logoImgOverTransform = logoImgOver.GetComponent<RectTransform>();
 
 		// Load screen settings
-		//Screen.fullScreen = PlayerPrefs.GetInt("screen_fullscreen", 1) != 0;
+		resolutionList = new List<Resolution>();
+		resolutionComboBox = new GUIContent[Screen.resolutions.Length];
+		for(int i=0; i < Screen.resolutions.Length; i++) {
+			Resolution res = Screen.resolutions[i];
+			resolutionList.Add(res);
+			resolutionComboBox[i] = new GUIContent(res.width + "x" + res.height);
+		}
+
+		settingsList = new List<string>();
+		settingsComboBox = new GUIContent[QualitySettings.names.Length];
+		for(int i=0; i < QualitySettings.names.Length; i++) {
+			string name = QualitySettings.names[i];
+			settingsList.Add(name);
+			settingsComboBox[i] = new GUIContent(name);
+		}
+
+		listStyle.normal.textColor = Color.white; 
+		listStyle.onHover.background = Texture2D.whiteTexture;
+		listStyle.hover.background = new Texture2D(2, 2);
+		listStyle.padding.left = 10;
+		listStyle.padding.right = 10;
+		listStyle.padding.top = 2;
+		listStyle.padding.bottom = 2;
 
 		// Load quality settings
 		int savedSettings = PlayerPrefs.GetInt("QualitySettings", -1);
@@ -128,49 +150,45 @@ public class MainMenu : MonoBehaviour {
 
 	/*		OPTIONS		*/
 	List<Resolution> resolutionList;
-	object currentSelection;
+	List<string> settingsList;
 
-	private bool resolutionListGUI(object item, bool selected, ICollection list) {
-		int index = ((IList) list).IndexOf(item);
-		string text =  (item.GetType() == typeof(Resolution)) ? ((Resolution) item).width.ToString() + "x" + ((Resolution) item).height.ToString() + " (" + ((Resolution) item).refreshRate.ToString()  + "Hz)" : item.ToString();
-		GUI.enabled = !selected;
-		return GUI.Button(new Rect(100, 100 + 30 * index, 200, 25), text);
-	}
+	private GUIContent[] resolutionComboBox;
+	private GUIContent[] settingsComboBox;
 
-	private void resolutionListClick(object item, ICollection list) {
-		if(item.GetType() == typeof(Resolution)) {
-			Resolution res = (Resolution) item;
-
-			Screen.SetResolution(res.width, res.height, Screen.fullScreen);
-		}
-	}
+	private ComboBox comboBoxControl = new ComboBox();
+	private GUIStyle listStyle = new GUIStyle();
 
 	public void drawOptions() {
-		resolutionList = new List<Resolution>();
-		foreach(Resolution res in Screen.resolutions) {
-			resolutionList.Add(res);
-		}
+		int selectedItemIndex = resolutionList.IndexOf(Screen.currentResolution);
+		Debug.Log (resolutionList.Count + "   " + selectedItemIndex);
+		selectedItemIndex = comboBoxControl.List(new Rect(110, 110, 150, 25), resolutionComboBox[selectedItemIndex].text, resolutionComboBox, listStyle);
 
-		currentSelection = SelectList(resolutionList, currentSelection, resolutionListGUI, resolutionListClick);
+		Resolution selectedRes = resolutionList[selectedItemIndex];
+		if(!Screen.currentResolution.Equals(selectedRes))
+			Screen.SetResolution(selectedRes.width, selectedRes.height, Screen.fullScreen);
 
-		bool fullscreen = GUI.Toggle(new Rect(350, 100, 200, 25), Screen.fullScreen, "Set fullscreen");
-		if(fullscreen != Screen.fullScreen) {
-			PlayerPrefs.SetInt("screen_fullscreen", fullscreen ? 1 : 0);
+		bool fullscreen = GUI.Toggle(new Rect(275, 110, 150, 25), Screen.fullScreen, "Set fullscreen");
+		if(fullscreen != Screen.fullScreen)
 			Screen.fullScreen = fullscreen;
 
-		}
-
 		// Quality settings
-		string[] names = QualitySettings.names;
-		int current = QualitySettings.GetQualityLevel();
+	//	selectedItemIndex = QualitySettings.GetQualityLevel(); // TODO Temp code
+	//	selectedItemIndex = comboBoxControl.List(new Rect(110, 110, 150, 25), settingsComboBox[selectedItemIndex].text, settingsComboBox, listStyle);
+		
+		//string selectedSetting = settingsList[selectedItemIndex];
+	//	if(!QualitySettings.GetQualityLevel().Equals(selectedItemIndex)) // TODO Temp code
+	//		QualitySettings.SetQualityLevel(selectedItemIndex, true);
 
-		Rect buttonRect = new Rect(Screen.width / 2 - (names.Length * 125) / 2, 250, 125, 35);
-		for(int i = 0; i < names.Length; i++) {
-			GUI.enabled = (i != current);
-			if(GUI.Button(buttonRect, names[i])) updateQualitySettings(i);
-			buttonRect.x += buttonRect.width;
-		}
-		GUI.enabled = true;
+		//string[] names = QualitySettings.names;
+		//int current = QualitySettings.GetQualityLevel();
+
+		//Rect buttonRect = new Rect(Screen.width / 2 - (names.Length * 125) / 2, 250, 125, 35);
+		//for(int i = 0; i < names.Length; i++) {
+		//	GUI.enabled = (i != current);
+		//	if(GUI.Button(buttonRect, names[i])) updateQualitySettings(i);
+		//	buttonRect.x += buttonRect.width;
+		//}
+		//GUI.enabled = true;
 	}
 
 	private void updateQualitySettings(int newSettings, bool applyExpensiveChanges = true) {
@@ -215,40 +233,5 @@ public class MainMenu : MonoBehaviour {
 		for(int i=0; i < network.hostList.Length; i++) {
 			multiplayerList.text += network.hostList[i].gameName + " - " + network.hostList[i].comment + " (" + network.hostList[i].connectedPlayers + "/" + network.hostList[i].playerLimit + " players)\n";
 		}
-	}
-
-
-
-
-	public static object SelectList(ICollection list, object selected, GUIStyle defaultStyle, GUIStyle selectedStyle) {			
-		foreach(object item in list) {
-			if(GUILayout.Button(item.ToString(), (selected == item) ? selectedStyle : defaultStyle)) {
-				if(selected == item) { // Clicked an already selected item. Deselect.
-					selected = null;
-				} else {
-					selected = item;
-				}
-			}
-		}
-		
-		return selected;
-	}
-	
-	public delegate bool OnListItemGUI(object item, bool selected, ICollection list);
-	public delegate void OnListItemClicked(object item, ICollection list);
-	
-	public static object SelectList(ICollection list, object selected, OnListItemGUI itemHandler, OnListItemClicked clickHandler) {
-		ArrayList itemList = new ArrayList(list);
-		
-		foreach(object item in itemList) {
-			if(itemHandler(item, item == selected, list)) {
-				selected = item;
-				clickHandler(item, list);
-			} else if(selected == item) { // If we *were* selected, but aren't any more then deselect
-				selected = null;
-			}
-		}
-		
-		return selected;
 	}
 }
