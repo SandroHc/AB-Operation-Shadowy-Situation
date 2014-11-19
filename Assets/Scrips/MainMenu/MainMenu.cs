@@ -36,20 +36,20 @@ public class MainMenu : MonoBehaviour {
 		logoImgOverTransform = logoImgOver.GetComponent<RectTransform>();
 
 		// Load screen settings
-		resolutionList = new List<Resolution>();
-		resolutionComboBox = new GUIContent[Screen.resolutions.Length];
-		for(int i=0; i < Screen.resolutions.Length; i++) {
+		int size = Screen.resolutions.Length;
+		resolutionList = new List<Resolution>(size);
+		resolutionComboBox = new GUIContent[size];
+		for(int i=0; i < size; i++) {
 			Resolution res = Screen.resolutions[i];
 			resolutionList.Add(res);
 			resolutionComboBox[i] = new GUIContent(res.width + "x" + res.height);
+
 		}
 
-		settingsList = new List<string>();
-		settingsComboBox = new GUIContent[QualitySettings.names.Length];
-		for(int i=0; i < QualitySettings.names.Length; i++) {
-			string name = QualitySettings.names[i];
-			settingsList.Add(name);
-			settingsComboBox[i] = new GUIContent(name);
+		size = QualitySettings.names.Length;
+		qualityComboBox = new GUIContent[size];
+		for(int i=0; i < size; i++) {
+			qualityComboBox[i] = new GUIContent(QualitySettings.names[i]);
 		}
 
 		listStyle.normal.textColor = Color.white; 
@@ -61,12 +61,12 @@ public class MainMenu : MonoBehaviour {
 		listStyle.padding.bottom = 2;
 
 		// Load quality settings
-		int savedSettings = PlayerPrefs.GetInt("QualitySettings", -1);
-		int currentSettings = QualitySettings.GetQualityLevel();
-		if(savedSettings == -1)
-			PlayerPrefs.SetInt("QualitySettings", currentSettings);
-		else if(savedSettings != currentSettings)
-			updateQualitySettings(savedSettings, false);
+	//	int savedSettings = PlayerPrefs.GetInt("QualitySettings", -1);
+	//	int currentSettings = QualitySettings.GetQualityLevel();
+	//	if(savedSettings == -1)
+	//		PlayerPrefs.SetInt("QualitySettings", currentSettings);
+	//	else if(savedSettings != currentSettings)
+	//		updateQualitySettings(savedSettings, false);
 	}
 
 	private float minScale = 1f;
@@ -150,18 +150,22 @@ public class MainMenu : MonoBehaviour {
 
 	/*		OPTIONS		*/
 	List<Resolution> resolutionList;
-	List<string> settingsList;
 
 	private GUIContent[] resolutionComboBox;
-	private GUIContent[] settingsComboBox;
+	private GUIContent[] qualityComboBox;
 
-	private ComboBox comboBoxControl = new ComboBox();
+	private ComboBox resolutionControl = new ComboBox();
+	private ComboBox qualityControl = new ComboBox();
 	private GUIStyle listStyle = new GUIStyle();
 
 	public void drawOptions() {
+		// Screen settings
 		int selectedItemIndex = resolutionList.IndexOf(Screen.currentResolution);
-		Debug.Log (resolutionList.Count + "   " + selectedItemIndex);
-		selectedItemIndex = comboBoxControl.List(new Rect(110, 110, 150, 25), resolutionComboBox[selectedItemIndex].text, resolutionComboBox, listStyle);
+		if(selectedItemIndex < 0) { // If the resolution loaded is nor valid, change to a valid resolution
+			selectedItemIndex = 0;
+			Screen.SetResolution(resolutionList[0].width, resolutionList[0].height, Screen.fullScreen);
+		}
+		selectedItemIndex = resolutionControl.List(new Rect(110, 110, 150, 25), resolutionComboBox[selectedItemIndex].text, resolutionComboBox, listStyle);
 
 		Resolution selectedRes = resolutionList[selectedItemIndex];
 		if(!Screen.currentResolution.Equals(selectedRes))
@@ -172,23 +176,12 @@ public class MainMenu : MonoBehaviour {
 			Screen.fullScreen = fullscreen;
 
 		// Quality settings
-	//	selectedItemIndex = QualitySettings.GetQualityLevel(); // TODO Temp code
-	//	selectedItemIndex = comboBoxControl.List(new Rect(110, 110, 150, 25), settingsComboBox[selectedItemIndex].text, settingsComboBox, listStyle);
-		
-		//string selectedSetting = settingsList[selectedItemIndex];
-	//	if(!QualitySettings.GetQualityLevel().Equals(selectedItemIndex)) // TODO Temp code
-	//		QualitySettings.SetQualityLevel(selectedItemIndex, true);
+		Debug.Log ("Current quality: " + QualitySettings.GetQualityLevel());
+		selectedItemIndex = QualitySettings.GetQualityLevel();
+		selectedItemIndex = qualityControl.List(new Rect(110, 150, 150, 25), qualityComboBox[selectedItemIndex].text, qualityComboBox, listStyle);
 
-		//string[] names = QualitySettings.names;
-		//int current = QualitySettings.GetQualityLevel();
-
-		//Rect buttonRect = new Rect(Screen.width / 2 - (names.Length * 125) / 2, 250, 125, 35);
-		//for(int i = 0; i < names.Length; i++) {
-		//	GUI.enabled = (i != current);
-		//	if(GUI.Button(buttonRect, names[i])) updateQualitySettings(i);
-		//	buttonRect.x += buttonRect.width;
-		//}
-		//GUI.enabled = true;
+		if(!QualitySettings.GetQualityLevel().Equals(selectedItemIndex))
+			QualitySettings.SetQualityLevel(selectedItemIndex, true);
 	}
 
 	private void updateQualitySettings(int newSettings, bool applyExpensiveChanges = true) {
