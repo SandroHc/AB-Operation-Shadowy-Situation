@@ -35,7 +35,7 @@ public class MainMenu : MonoBehaviour {
 
 		logoImgOverTransform = logoImgOver.GetComponent<RectTransform>();
 
-		// Load screen settings
+		// Populate resolution settings list
 		int size = Screen.resolutions.Length;
 		resolutionList = new List<Resolution>(size);
 		resolutionComboBox = new GUIContent[size];
@@ -43,30 +43,35 @@ public class MainMenu : MonoBehaviour {
 			Resolution res = Screen.resolutions[i];
 			resolutionList.Add(res);
 			resolutionComboBox[i] = new GUIContent(res.width + "x" + res.height);
-
 		}
 
+		int index = resolutionList.IndexOf(Screen.currentResolution);
+		if(index > 0) // Prevent invalid index to be set
+			resolutionControl.SetSelectedItemIndex(index);
+
+		// Populate quality settings list
 		size = QualitySettings.names.Length;
 		qualityComboBox = new GUIContent[size];
 		for(int i=0; i < size; i++) {
 			qualityComboBox[i] = new GUIContent(QualitySettings.names[i]);
 		}
 
+		// Load the saved quality from PlayerPrefs
+		int qualitySettings = PlayerPrefs.GetInt("QualitySettings", QualitySettings.GetQualityLevel());
+		if(qualitySettings != QualitySettings.GetQualityLevel())
+			setQuality(qualitySettings, false);
+
+		// And set the current quality on the ComboBox
+		qualityControl.SetSelectedItemIndex(QualitySettings.GetQualityLevel());
+
+		// Create a style to be used by the ComboBoxes
 		listStyle.normal.textColor = Color.white; 
-		listStyle.onHover.background = Texture2D.whiteTexture;
+		listStyle.onHover.background = Texture2D.blackTexture;
 		listStyle.hover.background = new Texture2D(2, 2);
 		listStyle.padding.left = 10;
 		listStyle.padding.right = 10;
 		listStyle.padding.top = 2;
 		listStyle.padding.bottom = 2;
-
-		// Load quality settings
-	//	int savedSettings = PlayerPrefs.GetInt("QualitySettings", -1);
-	//	int currentSettings = QualitySettings.GetQualityLevel();
-	//	if(savedSettings == -1)
-	//		PlayerPrefs.SetInt("QualitySettings", currentSettings);
-	//	else if(savedSettings != currentSettings)
-	//		updateQualitySettings(savedSettings, false);
 	}
 
 	private float minScale = 1f;
@@ -137,7 +142,7 @@ public class MainMenu : MonoBehaviour {
 	}
 
 	public void btnClickHiscores() {
-		Application.OpenURL("http://sandrohc.co.nf/ab/hiscores.php");
+		Application.OpenURL("http://sandrohc.lixter.com/ab");
 	}
 
 	public void btnClickOptions() {
@@ -160,31 +165,33 @@ public class MainMenu : MonoBehaviour {
 
 	public void drawOptions() {
 		// Screen settings
-		int selectedItemIndex = resolutionList.IndexOf(Screen.currentResolution);
-		if(selectedItemIndex < 0) { // If the resolution loaded is nor valid, change to a valid resolution
-			selectedItemIndex = 0;
-			Screen.SetResolution(resolutionList[0].width, resolutionList[0].height, Screen.fullScreen);
-		}
-		selectedItemIndex = resolutionControl.List(new Rect(110, 110, 150, 25), resolutionComboBox[selectedItemIndex].text, resolutionComboBox, listStyle);
+		resolutionControl.SetSelectedItemIndex(resolutionControl.List(new Rect(110, 110, 150, 25), resolutionComboBox[resolutionControl.GetSelectedItemIndex()], resolutionComboBox, listStyle));
 
-		Resolution selectedRes = resolutionList[selectedItemIndex];
+		Resolution selectedRes = resolutionList[resolutionControl.GetSelectedItemIndex()];
 		if(!Screen.currentResolution.Equals(selectedRes))
-			Screen.SetResolution(selectedRes.width, selectedRes.height, Screen.fullScreen);
+			setResolution(selectedRes);
 
 		bool fullscreen = GUI.Toggle(new Rect(275, 110, 150, 25), Screen.fullScreen, "Set fullscreen");
+		DebugConsole.Log(fullscreen + " vs " + Screen.fullScreen);
 		if(fullscreen != Screen.fullScreen)
 			Screen.fullScreen = fullscreen;
 
 		// Quality settings
-		Debug.Log ("Current quality: " + QualitySettings.GetQualityLevel());
-		selectedItemIndex = QualitySettings.GetQualityLevel();
-		selectedItemIndex = qualityControl.List(new Rect(110, 150, 150, 25), qualityComboBox[selectedItemIndex].text, qualityComboBox, listStyle);
+		qualityControl.SetSelectedItemIndex(qualityControl.List(new Rect(110, 150, 150, 25), qualityComboBox[qualityControl.GetSelectedItemIndex()], qualityComboBox, listStyle));
 
-		if(!QualitySettings.GetQualityLevel().Equals(selectedItemIndex))
-			QualitySettings.SetQualityLevel(selectedItemIndex, true);
+		if(!QualitySettings.GetQualityLevel().Equals(qualityControl.GetSelectedItemIndex()))
+			setQuality(qualityControl.GetSelectedItemIndex(), false);
 	}
 
-	private void updateQualitySettings(int newSettings, bool applyExpensiveChanges = true) {
+	private void setResolution(Resolution res) {
+		setResolution(res.width, res.height);
+	}
+
+	private void setResolution(int width, int height) {
+		Screen.SetResolution(width, height, Screen.fullScreen);
+	}
+
+	private void setQuality(int newSettings, bool applyExpensiveChanges = true) {
 		QualitySettings.SetQualityLevel(newSettings, applyExpensiveChanges);
 		PlayerPrefs.SetInt("QualitySettings", newSettings);
 	}

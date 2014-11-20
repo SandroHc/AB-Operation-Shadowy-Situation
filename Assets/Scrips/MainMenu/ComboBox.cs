@@ -51,17 +51,17 @@ public class ComboBox {
 	private bool isClickedComboButton = false;	
 	
 	private int selectedItemIndex = 0;	
-	
-	public int List(Rect rect, string buttonText, GUIContent[] listContent, GUIStyle listStyle) {
-		return List(rect, new GUIContent( buttonText ), listContent, "button", "box", listStyle);
-	}
-	
+
 	public int List(Rect rect, GUIContent buttonContent, GUIContent[] listContent, GUIStyle listStyle) {
 		return List(rect, buttonContent, listContent, "button", "box", listStyle);
 	}
+
+	public int List(Rect rect, string buttonText, GUIContent[] listContent, GUIStyle listStyle) {
+		return List(rect, new GUIContent(buttonText), listContent, "button", "box", listStyle);
+	}
 	
 	public int List(Rect rect, string buttonText, GUIContent[] listContent, GUIStyle buttonStyle, GUIStyle boxStyle, GUIStyle listStyle) {
-		return List(rect, new GUIContent( buttonText ), listContent, buttonStyle, boxStyle, listStyle);
+		return List(rect, new GUIContent(buttonText), listContent, buttonStyle, boxStyle, listStyle);
 	}
 	
 	public int List(Rect rect, GUIContent buttonContent, GUIContent[] listContent, GUIStyle buttonStyle, GUIStyle boxStyle, GUIStyle listStyle) {
@@ -83,12 +83,12 @@ public class ComboBox {
 		}		
 		
 		if(GUI.Button(rect, buttonContent, buttonStyle)) {
-			if( useControlID == -1 ) {
+			if(useControlID == -1) {
 				useControlID = controlID;
 				isClickedComboButton = false;
 			}
 			
-			if( useControlID != controlID ) {
+			if(useControlID != controlID) {
 				forceToUnShow = true;
 				useControlID = controlID;
 			}
@@ -96,7 +96,7 @@ public class ComboBox {
 		}
 		
 		if(isClickedComboButton) {
-			Rect listRect = new Rect(rect.x, rect.y + listStyle.CalcHeight(listContent[0], 1.0f), rect.width, listStyle.CalcHeight(listContent[0], 1.0f) * listContent.Length);
+			Rect listRect = new Rect(rect.x, rect.y + 5/* prevent button overlapping */ + listStyle.CalcHeight(listContent[0], 1f), rect.width, listStyle.CalcHeight(listContent[0], 1f) * listContent.Length);
 			
 			GUI.Box(listRect, "", boxStyle);
 			int newSelectedItemIndex = GUI.SelectionGrid(listRect, selectedItemIndex, listContent, 1, listStyle);
@@ -112,5 +112,9 @@ public class ComboBox {
 
 	public int GetSelectedItemIndex() {
 		return selectedItemIndex;
+	}
+
+	public void SetSelectedItemIndex(int index) {
+		selectedItemIndex = index;
 	}
 }
