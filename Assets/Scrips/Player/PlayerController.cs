@@ -42,6 +42,17 @@ public class PlayerController : MonoBehaviour {
 		isSprinting = Input.GetButton("Sprint");
 		isCrouching = Input.GetButton("Crouch");
 
+		if(!gameController.stopMovement()) {
+			if(Input.GetKeyUp(KeyCode.Home)) { // Reset the player when the key R is released
+				transform.position = spawnLocation;
+				transform.eulerAngles = Vector3.zero;
+			}
+			
+			if((!Network.isClient && !Network.isServer) || gameController.networkView.isMine) { // If we're not on a network OR we're on a network and it's our player
+				HandleMovement();
+			}
+		}
+
 		// Jumping check
 		if(!isJumping) {
 			if(Input.GetButtonDown("Jump")) {
@@ -63,26 +74,12 @@ public class PlayerController : MonoBehaviour {
 
 		playFootstepSound();
 
+		animator.SetFloat("Speed", Vector3.Distance(lastPos, transform.position) * 4);
+		lastPos = transform.position;
 
 
 		// Set the sneaking parameter to the sneak input.
 		animator.SetBool("Sneaking", isCrouching);
-	}
-
-	void FixedUpdate() {
-		if(!gameController.stopMovement()) {
-			if(Input.GetKeyUp(KeyCode.Home)) { // Reset the player when the key R is released
-				transform.position = spawnLocation;
-				transform.eulerAngles = Vector3.zero;
-			}
-		
-			if((!Network.isClient && !Network.isServer) || gameController.networkView.isMine) { // If we're not on a network OR we're on a network and it's our player
-				HandleMovement();
-			}
-		}
-
-		animator.SetFloat("Speed", Vector3.Distance(lastPos, transform.position) * 4);
-		lastPos = transform.position;
 	}
 
 	void LateUpdate() {
