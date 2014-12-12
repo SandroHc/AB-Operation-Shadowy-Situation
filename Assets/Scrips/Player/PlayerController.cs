@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerController : MonoBehaviour {
-	private float gravity = -9.81f;
+	public float gravity = 1f; // 9.81m/s in real world
 
 	public float moveSpeed;
 	public float jumpSpeed;
@@ -11,8 +11,8 @@ public class PlayerController : MonoBehaviour {
 	public bool isSprinting = false;
 	public bool isCrouching = false;
 	public bool isJumping = false;
-	private float jumpCurrent;
-	private float jumpFinish;
+
+	public bool isMidJump = false;
 
 	private Vector3 spawnLocation = new Vector3(0, 1.1f, 0);
 	private float charHeight;
@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour {
 	void Update() {
 		isSprinting = Input.GetButton("Sprint");
 		isCrouching = Input.GetButton("Crouch");
+		isJumping = Input.GetButton("Jump"); // Not using GetButtonDown allows bunnyhops... so, intented feature?
 
 		if(!gameController.stopMovement()) {
 			if(Input.GetKeyUp(KeyCode.Home)) { // Reset the player when the key R is released
@@ -52,17 +53,6 @@ public class PlayerController : MonoBehaviour {
 				HandleMovement();
 			}
 		}
-
-		// Jumping check
-		if(!isJumping) {
-			if(Input.GetButtonDown("Jump")) {
-				isJumping = true;
-				
-				jumpFinish = jumpSpeed;
-				//movement.y += jumpSpeed;
-			}
-		} else if(controller.isGrounded)
-			isJumping = false; // Reset jumping when the player is touching the ground
 
 		// Update the camera position based on the crouching state
 		float lastHeight = controller.height;
@@ -85,6 +75,8 @@ public class PlayerController : MonoBehaviour {
 	void LateUpdate() {
 		scoreUiText.text = currentScore.ToString();
 	}
+
+	public float movementY;
 	
 	private void HandleMovement() {
 		// Movement calculations
@@ -93,22 +85,30 @@ public class PlayerController : MonoBehaviour {
 		if(controller.isGrounded && isCrouching)
 			movement *= .5f;
 
-		if(movement.z > 0) { // If the movement is forward
+		if(movement.z > 0) { // Check if there is movement forward
 			if(controller.isGrounded && (isSprinting && !isCrouching)) // Only sprint if not crouching
-				movement.z *= 2f; // Double forward movement speed
+				movement.z *= 2f; // Double the movement speed forward
 		}
 
-		movement *= moveSpeed; // Ajust movement
+		// Ajust movement speed
+		movement *= moveSpeed;
 
-		if(jumpCurrent + .05f < jumpFinish) {
-			jumpCurrent = Mathf.Lerp(jumpCurrent, jumpFinish, 20 * Time.fixedDeltaTime);
-			movement.y += jumpCurrent;
+		// Transforms local coords intro global ones
+		movement = transform.TransformDirection(movement);
+
+		// Check if we should jump
+		if(isJumping && !isMidJump) {
+			movementY = jumpSpeed;
+			isMidJump = true;
+		}
+
+		if(controller.isGrounded) {
+			isMidJump = false; // Reset this variable every time we touch the ground
+			movementY = 0; // Reset Y, we don't need gravity when touching the ground
 		} else
-			jumpCurrent = jumpFinish = 0; // Reset jump
+			movementY -= gravity; // Add gravity force
 
-		movement = transform.TransformDirection(movement); // Transforms local coords intro global ones
-		if(!isFlying) movement.y += gravity; // Add the gravity, if not flying
-
+		movement.y = movementY;
 		controller.Move(movement * Time.fixedDeltaTime);
 	}
 

@@ -22,6 +22,10 @@ public class RaycastShoot : MonoBehaviour {
 	private float currentFOV = 60f;
 	private float dampVelocity = 0.4f;
 
+	public float recoil = .1f;
+	// TODO Temporary reference
+	public GameObject camera; // Used to emulate the effect of recoil
+
 	void Awake() {
 		ammoRemaining = ammoPerMagazine;
 		updateUI();
@@ -41,7 +45,7 @@ public class RaycastShoot : MonoBehaviour {
 			if(ammoRemaining > 0)
 				shoot();
 			else
-				playAudio(1); // No ammo sound
+				audio.PlayOneShot(audioWeapon[1]); // No ammo sound
 		}
 
 
@@ -71,9 +75,11 @@ public class RaycastShoot : MonoBehaviour {
 		}
 
 		ammoRemaining--;
+		camera.SendMessage("addRecoid", recoil);
+		camera.SendMessage("doRecoid");
 
 		cooldown = cooldownShoot;
-		playAudio(0); // Shoot sound
+		audio.PlayOneShot(audioWeapon[0]); // Shoot sound
 
 		updateUI();
 	}
@@ -84,22 +90,10 @@ public class RaycastShoot : MonoBehaviour {
 			ammoRemaining = ammoPerMagazine;
 			cooldown = cooldownReload;
 
-			playAudio(2); // Reload sound
+			audio.PlayOneShot(audioWeapon[2]); // Reload sound
 		}
 
 		updateUI();
-	}
-
-	void playAudio(int index) {
-		if(index > audioWeapon.Length - 1)
-			return;
-
-		audio.clip = audioWeapon[index];
-
-		if(audio.clip == null)
-			return;
-
-		audio.Play();
 	}
 
 	void updateUI() {

@@ -17,6 +17,11 @@ public class CameraController : MonoBehaviour {
 	public float headbobAmountY;
 	public float eyeHeightRacio;
 	public float currentAimRacio = 1; // Used when aiming weapons to define "aim level"
+
+	public float maxRecoilX = -20;
+	public float maxRecoilY = 20;
+	public float recoilSpeed = 10;
+	public float recoil = 0;
 	
 	void Start() {
 		gameController = GameObject.FindGameObjectWithTag(Tags.gameController).GetComponent<GameController>();
@@ -49,5 +54,30 @@ public class CameraController : MonoBehaviour {
 			
 			target.transform.Rotate(0, Input.GetAxis("Mouse X") * lookSpeed * Time.fixedDeltaTime, 0);
 		}
+
+		// TODO Very hacky
+		if(Input.GetButtonDown("Fire1"))
+			doRecoil();
+	}
+
+	void addRecoil(float value) {
+		recoil += value;
+	}
+
+	void doRecoil() {
+		Debug.Log("RECOILING");
+
+		if (recoil > 0) {
+			var maxRecoil = Quaternion.Euler(maxRecoilX + Random.Range(-10, 10), maxRecoilY + Random.Range(-10, 10), 0);
+			transform.localRotation = Quaternion.Slerp(transform.localRotation, maxRecoil, recoilSpeed * Time.deltaTime); // This controls the actual recoil
+		//	transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, transform.localEulerAngles.z); // This one also
+			//equippedGun.model.transform.position = Vector3.Slerp(equippedGun.model.transform.position, new Vector3(equippedGun.model.transform.position.x + equippedGun.maxRecoilX, equippedGun.model.transform.position.y,equippedGun.model.transform.position.z), Time.deltaTime * equippedGun.recoilSpeed);
+			// Don't you dare uncomment the above line!
+			recoil -= Time.deltaTime;
+		} else {
+			recoil = 0;
+			transform.localRotation = Quaternion.Slerp(transform.localRotation, Quaternion.identity, recoilSpeed / 2 * Time.deltaTime);
+		//	transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, transform.localEulerAngles.z);
+		} 
 	}
 }
