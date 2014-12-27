@@ -92,12 +92,9 @@ public class EnemySight : MonoBehaviour
 			// Store the name hashes of the current states.
 		//	int playerLayerZeroStateHash = playerAnim.GetCurrentAnimatorStateInfo(0).nameHash;
 		//	int playerLayerOneStateHash = playerAnim.GetCurrentAnimatorStateInfo(1).nameHash;
-			
-			// If the player is running or is attracting attention...
-		//	if(playerLayerZeroStateHash == hash.locomotionState || playerLayerOneStateHash == hash.shoutState) {
-				// ... and if the player is within hearing range...
-				if(CalculatePathLength(other.transform.position) <= col.radius)
-				{
+
+		//	if(playerLayerZeroStateHash == hash.locomotionState || playerLayerOneStateHash == hash.shoutState) { // If the player is running or is attracting attention...
+			if(CalculatePathLength(other.transform.position) <= col.radius) { // ... and if the player is within hearing range...
 					Debug.Log("INSIDE DISTANCE!!");
 					playerInSight = true; // TODO Temp var. The player is not yet in sight, the robot should check the zone and then may trigger the player sighting
 

@@ -109,7 +109,7 @@ public class PlayerController : MonoBehaviour {
 			movementY -= gravity; // Add gravity force
 
 		movement.y = movementY;
-		controller.Move(movement * Time.fixedDeltaTime);
+		controller.Move(movement * Time.deltaTime);
 	}
 
 	void OnGUI() {

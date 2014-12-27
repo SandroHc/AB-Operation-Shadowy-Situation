@@ -48,11 +48,11 @@ public class CameraController : MonoBehaviour {
 		parentLastPos = transform.parent.position;
 		
 		if(!gameController.stopMovement()) {
-			rotationY += Input.GetAxis("Mouse Y") * lookSpeed * Time.fixedDeltaTime;
-			rotationY = Mathf.Lerp(rotationY, Mathf.Clamp(rotationY, -90f, 90f), lookSpeed * Time.fixedDeltaTime);
+			rotationY += Input.GetAxis("Mouse Y") * lookSpeed * Time.deltaTime;
+			rotationY = Mathf.Lerp(rotationY, Mathf.Clamp(rotationY, -90f, 90f), lookSpeed * Time.deltaTime);
 			transform.localRotation = Quaternion.AngleAxis(rotationY, Vector3.left);
 			
-			target.transform.Rotate(0, Input.GetAxis("Mouse X") * lookSpeed * Time.fixedDeltaTime, 0);
+			target.transform.Rotate(0, Input.GetAxis("Mouse X") * lookSpeed * Time.deltaTime, 0);
 		}
 
 		// TODO Very hacky
