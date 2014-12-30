@@ -50,7 +50,8 @@ public class RaycastShoot : MonoBehaviour {
 
 
 		// Change the camera FOV smoothly
-		Camera.main.fieldOfView = Mathf.SmoothDamp(Camera.main.fieldOfView, currentFOV, ref dampVelocity, .3f);
+		if(Camera.main != null) // When in cutscenes, the main camera is disabled
+			Camera.main.fieldOfView = Mathf.SmoothDamp(Camera.main.fieldOfView, currentFOV, ref dampVelocity, .3f);
 
 		bool isAiming = Input.GetButton("Fire2"); // Right-click by default
 		currentFOV = isAiming ? 40 : 60;

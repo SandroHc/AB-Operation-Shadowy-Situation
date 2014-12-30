@@ -8,6 +8,8 @@ public class GameController : MonoBehaviour {
 
 	public bool isPaused = false;
 	private bool isInteracting = false;
+
+	public bool stopPlayerControls = false; // Not like the isPause variable. This variable is true when outside movement should be applied, but controls should be ignored.
 	
 	public float fadeSpeed;
 	public bool fade = true;

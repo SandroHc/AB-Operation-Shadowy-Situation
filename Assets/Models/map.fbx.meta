@@ -102,6 +102,17 @@ ModelImporter:
     4300032: school_door_glass
     4300034: terrain
     4300036: water
+    6400000: director_building
+    6400002: school_door_001
+    6400004: school_door_002
+    6400006: school_door_glass
+    6400008: school_glass_001
+    6400010: school_glass_002
+    6400012: school_walls
+    6400014: teacher_building
+    6400016: terrain
+    6400018: walkroad
+    6400020: water
     7400000: Default Take
     9500000: //RootNode
   materials:
@@ -125,7 +136,7 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: .00999999978
     meshCompression: 0
-    addColliders: 0
+    addColliders: 1
     importBlendShapes: 1
     swapUVChannels: 0
     generateSecondaryUV: 1

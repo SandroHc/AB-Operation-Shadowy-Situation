@@ -43,8 +43,9 @@ public class NPCController : MonoBehaviour {
 			playersNearby.ForEach(updateLookingRotation);
 
 
-		if(Camera.main.transform.hasChanged)
-			textMesh.transform.forward = Camera.main.transform.forward; // Keeps the TextMesh facing the player
+		if(Camera.main != null) // When in cutscenes, the main camera is disabled
+			if(Camera.main.transform.hasChanged)
+				textMesh.transform.forward = Camera.main.transform.forward; // Keeps the TextMesh facing the player
 	}
 
 	private void updateLookingRotation(Collider collider) {

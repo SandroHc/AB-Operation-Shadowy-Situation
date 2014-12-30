@@ -79,6 +79,17 @@ public class PlayerController : MonoBehaviour {
 	public float movementY;
 	
 	private void HandleMovement() {
+		// Calculate only gravity
+		if(gameController.stopPlayerControls) {
+			if(controller.isGrounded)
+				movementY = 0;
+			else
+				movementY -= gravity; // Add gravity force
+
+			controller.Move((new Vector3(0, movementY, 0)) * Time.deltaTime);
+			return;
+		}
+
 		// Movement calculations
 		Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
