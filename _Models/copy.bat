@@ -1,1 +1,1 @@
-xcopy /Y "D:\Desenvolvimento\C#\Unity\AB! Operation Shadowy Situation\_Models\map.fbx" "D:\Desenvolvimento\C#\Unity\AB! Operation Shadowy Situation\Assets\Models\map.fbx"
+xcopy /Y "map.fbx" "..\Assets\Models\map.fbx"
