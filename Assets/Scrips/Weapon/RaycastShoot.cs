@@ -24,7 +24,7 @@ public class RaycastShoot : MonoBehaviour {
 
 	public float recoil = .1f;
 	// TODO Temporary reference
-	public GameObject camera; // Used to emulate the effect of recoil
+	public CameraController cameraController; // Used to emulate the effect of recoil
 
 	void Awake() {
 		ammoRemaining = ammoPerMagazine;
@@ -50,8 +50,8 @@ public class RaycastShoot : MonoBehaviour {
 
 
 		// Change the camera FOV smoothly
-		if(Camera.main != null) // When in cutscenes, the main camera is disabled
-			Camera.main.fieldOfView = Mathf.SmoothDamp(Camera.main.fieldOfView, currentFOV, ref dampVelocity, .3f);
+		//	if(cameraController.camera != null) // When in cutscenes, the main camera is disabled
+			cameraController.camera.fieldOfView = Mathf.SmoothDamp(cameraController.camera.fieldOfView, currentFOV, ref dampVelocity, .3f);
 
 		bool isAiming = Input.GetButton("Fire2"); // Right-click by default
 		currentFOV = isAiming ? 40 : 60;
@@ -76,8 +76,8 @@ public class RaycastShoot : MonoBehaviour {
 		}
 
 		ammoRemaining--;
-		camera.SendMessage("addRecoid", recoil);
-		camera.SendMessage("doRecoid");
+		cameraController.addRecoil(recoil);
+		cameraController.doRecoil();
 
 		cooldown = cooldownShoot;
 		audio.PlayOneShot(audioWeapon[0]); // Shoot sound

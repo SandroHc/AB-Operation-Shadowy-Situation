@@ -36,9 +36,6 @@ public class NPCController : MonoBehaviour {
 	}
 
 	void Update() {
-		if(playersNearby.Count > 0 && Input.GetButtonDown("Interact"))
-			gameController.toggleInteracting();
-
 		if(gameController.getInteracting())
 			playersNearby.ForEach(updateLookingRotation);
 
@@ -52,23 +49,5 @@ public class NPCController : MonoBehaviour {
 		Quaternion targetRotation = Quaternion.LookRotation(transform.position - collider.transform.position);
 		// Smoothly rotate towards the target point
 		collider.transform.rotation = Quaternion.Slerp(collider.transform.rotation, targetRotation, lookSpeed * Time.deltaTime);
-	}
-	
-	void OnGUI() {
-		if(playersNearby.Count > 0) {
-			//toggle = GUI.Toggle(new Rect(20, 40, 100, 20), toggle, "A Toggle text");
-			//hSliderValue = GUI.HorizontalSlider(new Rect(20, 60, 100, 20), hSliderValue, 0, 10);
-			
-			string text = gameController.getInteracting() ? name : "Press E to talk.";
-			GUI.Box(new Rect(0, Screen.height - 75, Screen.width, 75), text);
-		}
-	}
-	
-	void OnTriggerEnter(Collider hit) {
-		if(!playersNearby.Contains(hit)) playersNearby.Add(hit);
-	}
-	
-	void OnTriggerExit(Collider hit) {
-		playersNearby.RemoveAll(collider => collider == hit);
 	}
 }

@@ -54,19 +54,13 @@ public class CameraController : MonoBehaviour {
 			
 			target.transform.Rotate(0, Input.GetAxis("Mouse X") * lookSpeed * Time.deltaTime, 0);
 		}
-
-		// TODO Very hacky
-		if(Input.GetButtonDown("Fire1"))
-			doRecoil();
 	}
 
-	void addRecoil(float value) {
+	public void addRecoil(float value) {
 		recoil += value;
 	}
 
-	void doRecoil() {
-		Debug.Log("RECOILING");
-
+	public void doRecoil() {
 		if (recoil > 0) {
 			var maxRecoil = Quaternion.Euler(maxRecoilX + Random.Range(-10, 10), maxRecoilY + Random.Range(-10, 10), 0);
 			transform.localRotation = Quaternion.Slerp(transform.localRotation, maxRecoil, recoilSpeed * Time.deltaTime); // This controls the actual recoil

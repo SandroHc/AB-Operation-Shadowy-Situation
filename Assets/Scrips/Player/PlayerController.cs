@@ -139,18 +139,18 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	private void updateCurrentFootsteps(Collider hit) {
-			// ... and then change the footstep sound according to the ground type
-			switch(hit.gameObject.tag) {
+		// ... and then change the footstep sound according to the ground type
+		switch(hit.gameObject.tag) {
 			case Tags.groundWood:	audio.clip = GameController.audioManager.footstepWood; break;
 			case Tags.groundGrass:	audio.clip = GameController.audioManager.footstepGrass; break;
-			}
+		}
 	}
 
 	private void playFootstepSound() {
 		if(audio.isPlaying || gameController.stopMovement()) return; // If there is a footstep sound playing, let it finish before changing to a new one
 	
-		//Check if the player is moving and touching the ground...
-		if(controller.isGrounded && Mathf.Round(Mathf.Abs(controller.velocity.x + controller.velocity.y + controller.velocity.z)) > 2) {
+		// Check if the player is moving and touching the ground...
+		if(controller.isGrounded && (Mathf.Abs(controller.velocity.x) + Mathf.Abs(controller.velocity.y) + Mathf.Abs(controller.velocity.z) > 2)) {
 			// And play it
 			audio.Play();
 		}
