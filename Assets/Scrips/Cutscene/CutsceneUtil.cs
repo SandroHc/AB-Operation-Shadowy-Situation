@@ -12,6 +12,14 @@ public class CutsceneUtil : MonoBehaviour {
 		playerController = GameObject.FindGameObjectWithTag(Tags.player).GetComponent<PlayerController>();
 	}
 
+	public void Update() {
+		if(gameObject.camera.animation.isPlaying && Input.GetButtonDown("Cancel")) {
+			Debug.Log("Cancelling cutscene");
+
+			finishCutscene();
+		}
+	}
+
 	public void startCutscene() {
 		Debug.Log ("Starting cutscene");
 
@@ -32,6 +40,9 @@ public class CutsceneUtil : MonoBehaviour {
 
 	public void finishCutscene() {
 		Debug.Log ("Finished cutscene");
+
+		if(gameObject.camera.animation.isPlaying)
+			gameObject.camera.animation.Stop();
 
 		gameController.stopPlayerControls = false;
 		playerController.enabled = true;
