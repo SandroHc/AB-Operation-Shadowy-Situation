@@ -3,9 +3,9 @@ using System.Collections;
 
 public class EnemyAI : MonoBehaviour {
 	public Transform player;
-	float moveSpeed = 4;
+	/*float moveSpeed = 4;
 	float rotationSpeed = 4;
-	float followDist = 10;
+	float followDist = 10;*/
 	float attackDist = 3;
 
 	private float cooldownAttack = .4f;

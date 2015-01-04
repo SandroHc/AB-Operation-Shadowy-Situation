@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class NPCController : MonoBehaviour {
 	private GameController gameController;
-	private string name;
+	private new string name;
 	
 	public List<Collider> playersNearby;
 	
