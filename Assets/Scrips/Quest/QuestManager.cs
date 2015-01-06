@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class QuestManager : MonoBehaviour {
-	public List<Quest> questList = new List<Quest>();
+	public IQuest[] questList;
 
 	private int activeQuestId;
 	public Quest activeQuest = null;
@@ -24,15 +24,16 @@ public class QuestManager : MonoBehaviour {
 
 	void Update() {
 		if(Input.GetKeyDown(KeyCode.Y)) {
+			Debug.Log("Enabling quest");
 			enableQuest(1);
 		} else if(Input.GetKeyDown(KeyCode.U)) {
-			if(activeQuest != null) {
+			Debug.Log("Sending str progress to " + activeQuest);
+			if(activeQuest != null)
 				activeQuest.progress(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setStr("Interacting!"));
-			}
 		} else if(Input.GetKeyDown(KeyCode.I)) {
-			if(activeQuest != null) {
+			Debug.Log("Sending int progress to " + activeQuest);
+			if(activeQuest != null)
 				activeQuest.progress(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setNumber(1337));
-			}
 		} 
 	}
 
@@ -42,9 +43,11 @@ public class QuestManager : MonoBehaviour {
 	bool enableQuest(int id) {
 		if(activeQuestId != id) {
 			foreach(Quest quest in questList) {
+				if(quest == null) continue;
+
 				if(quest.id == id) {
 					// Disable the currently active quest
-					activeQuest.disable();
+					if(activeQuest != null) activeQuest.disable();
 
 					// Switch quest ID
 					activeQuestId = id;

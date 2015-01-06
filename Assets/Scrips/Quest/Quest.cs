@@ -4,9 +4,9 @@ using System.Collections;
 /**
  * Utility class to store information related to any quest.
  */
-public abstract class Quest : MonoBehaviour {
+public abstract class Quest : IQuest {
 	public int id;
-	public new string name;
+	public string name;
 	public string description;
 
 	public Quest(int id, string name, string description) {
@@ -16,8 +16,6 @@ public abstract class Quest : MonoBehaviour {
 	}
 
 	abstract public void enable();
-
 	abstract public void disable();
-
 	abstract public void progress(QuestProgress progress);
 }
