@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class QuestProgress : MonoBehaviour {
+public class QuestProgress {
 	public enum ProgressType { MONSTER_KILL, INTERACTION };
 	public ProgressType type;
 

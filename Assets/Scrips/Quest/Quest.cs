@@ -4,7 +4,7 @@ using System.Collections;
 /**
  * Utility class to store information related to any quest.
  */
-public abstract class Quest : IQuest {
+public abstract class Quest {
 	public int id;
 	public string name;
 	public string description;

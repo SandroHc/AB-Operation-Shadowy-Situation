@@ -3,12 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class QuestManager : MonoBehaviour {
-	public IQuest[] questList;
+	private List<Quest> questList = new List<Quest>();
 
 	private int activeQuestId;
 	public Quest activeQuest = null;
 
 	void Awake() {
+		questList.Clear();
+		questList.Add(new QuestTest());
+
+
 		activeQuestId = PlayerPrefs.GetInt("active_quest", -1);
 
 		if(activeQuestId != -1) {
@@ -24,14 +28,11 @@ public class QuestManager : MonoBehaviour {
 
 	void Update() {
 		if(Input.GetKeyDown(KeyCode.Y)) {
-			Debug.Log("Enabling quest");
 			enableQuest(1);
 		} else if(Input.GetKeyDown(KeyCode.U)) {
-			Debug.Log("Sending str progress to " + activeQuest);
 			if(activeQuest != null)
 				activeQuest.progress(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setStr("Interacting!"));
 		} else if(Input.GetKeyDown(KeyCode.I)) {
-			Debug.Log("Sending int progress to " + activeQuest);
 			if(activeQuest != null)
 				activeQuest.progress(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setNumber(1337));
 		} 

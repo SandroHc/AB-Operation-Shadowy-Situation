@@ -16,6 +16,7 @@ public class QuestTest : Quest {
 	}
 	
 	public override void progress(QuestProgress progress) {
-		Debug.Log(name + " received progress call. " + progress);
+		string progressValue = progress.type == QuestProgress.ProgressType.INTERACTION ? progress.str : progress.number.ToString();
+		Debug.Log(name + " received progress call. Value: " + progressValue);
 	}
 }
