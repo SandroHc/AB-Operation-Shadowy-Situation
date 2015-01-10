@@ -27,11 +27,11 @@ public class CutsceneUtil : MonoBehaviour {
 		playerController.enabled = false;
 
 		old = Camera.main;
-		old.enabled = false;
+		if(old != null) old.enabled = false;
 		gameObject.camera.enabled = true;
 
 		gameObject.camera.animation.PlayQueued("CutsceneTest1");
-		gameObject.camera.animation.PlayQueued("CutsceneTest2");
+		//gameObject.camera.animation.PlayQueued("CutsceneTest2");
 	/*	foreach(AnimationState state in gameObject.camera.animation) {
 			Debug.Log("Playing section: " + state.name);
 			gameObject.camera.animation.PlayQueued(state.name);
@@ -47,7 +47,7 @@ public class CutsceneUtil : MonoBehaviour {
 		gameController.stopPlayerControls = false;
 		playerController.enabled = true;
 		
-		old.enabled = true;
+		if(old != null) old.enabled = true;
 		gameObject.camera.enabled = false;
 	}
 }
