@@ -143,6 +143,8 @@ public class PlayerController : MonoBehaviour {
 		switch(hit.gameObject.tag) {
 			case Tags.groundWood:	audio.clip = GameController.audioManager.footstepWood; break;
 			case Tags.groundGrass:	audio.clip = GameController.audioManager.footstepGrass; break;
+			case Tags.groundMetal:	audio.clip = GameController.audioManager.footstepMetal; break;
+			case Tags.groundWater:	audio.clip = GameController.audioManager.footstepWater; break;
 		}
 	}
 

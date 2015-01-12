@@ -10,6 +10,8 @@ public class Tags : MonoBehaviour {
 	// Ground types
 	public const string groundWood		= "groundWood";
 	public const string groundGrass		= "groundGrass";
+	public const string groundMetal		= "groundMetal";
+	public const string groundWater		= "groundWater";
 
 	// Tag to specify map objects not related to the ground
 	// Wall types (used to use dynamic bullet hole types depending on the wall)
@@ -21,6 +23,6 @@ public class Tags : MonoBehaviour {
 	public const string none = ""; // Untagged objects
 
 	public static bool isGround(string tag) {
-		return tag.Equals(groundWood) || tag.Equals(groundGrass);
+		return tag.Equals(groundWood) || tag.Equals(groundGrass) || tag.Equals(groundMetal) || tag.Equals(groundWater);
 	}
 }
