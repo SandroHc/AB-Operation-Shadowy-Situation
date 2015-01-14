@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class DialogueManager : MonoBehaviour {
-	public Dialogue currentDialogue;
+	public Dialogue currentDialogue = null;
 
 	public void Start() {
-		currentDialogue = new DialogueTest();
+		//currentDialogue = new DialogueTest();
 	}
 
 	public void Update() {

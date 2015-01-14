@@ -34,6 +34,10 @@ ModelImporter:
     100056: school_classroom_b1f1n4
     100058: water_stairs
     100060: gym
+    100062: school_door.001
+    100064: school_door.002
+    100066: school_glass.001
+    100068: school_glass.002
     400000: Camera
     400002: //RootNode
     400004: school
@@ -65,6 +69,10 @@ ModelImporter:
     400056: school_classroom_b1f1n4
     400058: water_stairs
     400060: gym
+    400062: school_door.001
+    400064: school_door.002
+    400066: school_glass.001
+    400068: school_glass.002
     2300000: school
     2300002: teacher_zone
     2300004: walkroad
@@ -94,6 +102,10 @@ ModelImporter:
     2300052: school_classroom_b1f1n4
     2300054: water_stairs
     2300056: gym
+    2300058: school_door.001
+    2300060: school_door.002
+    2300062: school_glass.001
+    2300064: school_glass.002
     3300000: school
     3300002: teacher_zone
     3300004: walkroad
@@ -123,6 +135,10 @@ ModelImporter:
     3300052: school_classroom_b1f1n4
     3300054: water_stairs
     3300056: gym
+    3300058: school_door.001
+    3300060: school_door.002
+    3300062: school_glass.001
+    3300064: school_glass.002
     4300000: teacher_zone
     4300002: walkroad
     4300004: school
@@ -152,6 +168,10 @@ ModelImporter:
     4300052: school_classroom_b1f1n2
     4300054: water_stairs
     4300056: gym
+    4300058: school_door.002
+    4300060: school_door.001
+    4300062: school_glass.001
+    4300064: school_glass.002
     6400000: director_building
     6400002: school_door_001
     6400004: school_door_002
@@ -173,6 +193,10 @@ ModelImporter:
     6400036: school_classroom_b1f1n4
     6400038: water_stairs
     6400040: gym
+    6400042: school_door.001
+    6400044: school_door.002
+    6400046: school_glass.001
+    6400048: school_glass.002
     7400000: Default Take
     9500000: //RootNode
   materials:
