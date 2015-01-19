@@ -23,10 +23,15 @@ public class RaycastShoot : MonoBehaviour {
 	private float dampVelocity = 0.4f;
 
 	public float recoil = .1f;
+
+	private GameController gameController;
+
 	// TODO Temporary reference
 	public CameraController cameraController; // Used to emulate the effect of recoil
 
 	void Awake() {
+		gameController = GameObject.FindGameObjectWithTag(Tags.gameController).GetComponent<GameController>();
+
 		ammoRemaining = ammoPerMagazine;
 		updateUI();
 	}
@@ -37,6 +42,10 @@ public class RaycastShoot : MonoBehaviour {
 
 		if(cooldown > 0)
 			cooldown -= Time.deltaTime;
+
+		// We don't want to be able to shoot in the Pause Menu, don't we?
+		if(gameController.isPausedOrFocused())
+			return;
 
 		if(Input.GetKeyUp(KeyCode.R) && ammoRemaining < ammoPerMagazine) // Only reload if the magazine is not full
 			reload();

@@ -12,7 +12,7 @@ public class InteractionDialogue : Interaction {
 	}
 
 	public override void doAction(GameObject player) {
-		gameController.toggleInteracting();
+		gameController.setFocused(true);
 
 		show = true;
 	}

@@ -6,16 +6,15 @@ public class GameController : MonoBehaviour {
 	public static AudioManager audioManager;
 	public static SpriteManager spriteManager;
 
-	public bool isPaused = false;
-	private bool isInteracting = false;
-
-	public bool stopPlayerControls = false; // Not like the isPause variable. This variable is true when outside movement should be applied, but controls should be ignored.
+	private bool isPaused = false;
+	private bool isFocused = false;
 	
 	public float fadeSpeed;
 	public bool fade = true;
 	private bool fadeIn = false; // Fade to black (true); or fade from black (false)
 
 	public GameObject uiPause;
+	public GameObject uiCrosshair;
 
 	void Start() {
 		textManager = gameObject.GetComponent<TextManager>();
@@ -54,8 +53,13 @@ public class GameController : MonoBehaviour {
 				}
 			}
 		}
-
+	
 		handleCancelInput();
+	}
+
+	void OnGUI() {
+		if(GUI.Button(new Rect(100, 100, 100, 25), "Lock cursor"))
+			Screen.lockCursor = true;
 	}
 	
 	public void btnClickedMainMenu() {
@@ -68,36 +72,72 @@ public class GameController : MonoBehaviour {
 		Application.Quit();
 	}
 
-	public bool stopMovement() {
-		return isPaused || isInteracting;
+	public bool getPaused() {
+		return isPaused;
+	}
+
+	private void setPaused(bool state) {
+		isPaused = state;
+		if(isPaused)
+			enterPause();
+		else
+			exitPause();
+	}
+
+
+	public bool getFocused() {
+		return isFocused;
+	}
+
+	public void setFocused(bool state) {
+		isFocused = state;
+		if(isFocused)
+			enterFocus();
+		else
+			exitFocus();
+	}
+
+	public bool isPausedOrFocused() {
+		return isPaused || isFocused;
 	}
 
 	private void handleCancelInput() {
-		if(Input.GetButtonDown("Cancel")) {
-			if(isInteracting) {
-				isInteracting = false;
-			} else {
-				isPaused = !isPaused;
-				OpenPauseUI();
-			}
+		if(!isFocused && Input.GetButtonDown("Cancel")) {
+			setPaused(!isPaused);
 		}
-		
-		Screen.lockCursor = !stopMovement();
 	}
 
-	public void setInteracting(bool state) {
-		isInteracting = state;
+	private void enterPause() {
+		Debug.Log("Pausing game");
+
+		isPaused = true;
+
+		uiPause.SetActive(true);
+		uiCrosshair.SetActive(false);
+		Screen.lockCursor = false;
 	}
 
-	public bool getInteracting() {
-		return isInteracting;
+	private void exitPause() {
+		Debug.Log("Resuming game");
+
+		isPaused = false;
+
+		uiPause.SetActive(false);
+		uiCrosshair.SetActive(true);
+		Screen.lockCursor = true;
 	}
 
-	public void toggleInteracting() {
-		isInteracting = !isInteracting;
+	private void enterFocus() {
+		Debug.Log("Entering in focus mode");
+
+		uiCrosshair.SetActive(false);
+		Screen.lockCursor = true;
 	}
 
-	public void OpenPauseUI() {
-		uiPause.SetActive(isPaused);
+	private void exitFocus() {
+		Debug.Log("Exiting focus mode");
+
+		uiCrosshair.SetActive(!isPaused);
+		Screen.lockCursor = !isPaused;
 	}
 }

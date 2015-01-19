@@ -23,7 +23,7 @@ public class CutsceneUtil : MonoBehaviour {
 	public void startCutscene() {
 		Debug.Log ("Starting cutscene");
 
-		gameController.stopPlayerControls = true;
+		gameController.setFocused(true);
 		playerController.enabled = false;
 
 		old = Camera.main;
@@ -44,7 +44,7 @@ public class CutsceneUtil : MonoBehaviour {
 		if(gameObject.camera.animation.isPlaying)
 			gameObject.camera.animation.Stop();
 
-		gameController.stopPlayerControls = false;
+		gameController.setFocused(false);
 		playerController.enabled = true;
 		
 		if(old != null) old.enabled = true;

@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour {
 		isCrouching = Input.GetButton("Crouch");
 		isJumping = Input.GetButton("Jump"); // Not using GetButtonDown allows bunnyhops... so, intented feature?
 
-		if(!gameController.stopMovement()) {
+		if(!gameController.isPausedOrFocused()) {
 			if(Input.GetKeyUp(KeyCode.Home)) { // Reset the player when the key R is released
 				transform.position = spawnLocation;
 				transform.eulerAngles = Vector3.zero;
@@ -80,7 +80,9 @@ public class PlayerController : MonoBehaviour {
 	
 	private void HandleMovement() {
 		// Calculate only gravity
-		if(gameController.stopPlayerControls) {
+		if(gameController.isPausedOrFocused()) {
+			return;
+
 			if(controller.isGrounded)
 				movementY = 0;
 			else
@@ -149,7 +151,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	private void playFootstepSound() {
-		if(audio.isPlaying || gameController.stopMovement()) return; // If there is a footstep sound playing, let it finish before changing to a new one
+		if(audio.isPlaying || gameController.getPaused()) return; // If there is a footstep sound playing, let it finish before changing to a new one
 	
 		// Check if the player is moving and touching the ground...
 		if(controller.isGrounded && (Mathf.Abs(controller.velocity.x) + Mathf.Abs(controller.velocity.y) + Mathf.Abs(controller.velocity.z) > 2)) {

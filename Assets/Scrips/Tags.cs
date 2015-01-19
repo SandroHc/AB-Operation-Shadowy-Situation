@@ -20,6 +20,8 @@ public class Tags : MonoBehaviour {
 	public const string wallMetal		= "wallMetal";
 	public const string wallWood		= "wallWood";
 
+	public const string rubbish			= "rubbish";
+
 	public const string none = ""; // Untagged objects
 
 	public static bool isGround(string tag) {

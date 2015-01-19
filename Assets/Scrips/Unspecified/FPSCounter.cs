@@ -33,7 +33,7 @@ public class FPSCounter : MonoBehaviour {
 		}
 		timeLeft = updateInterval;  
 	}
-	
+
 	void Update() {
 		timeLeft -= Time.deltaTime;
 		accum += Time.timeScale/Time.deltaTime;

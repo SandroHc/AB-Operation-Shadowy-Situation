@@ -36,7 +36,7 @@ public class NPCController : MonoBehaviour {
 	}
 
 	void Update() {
-		if(gameController.getInteracting())
+		if(gameController.getFocused())
 			playersNearby.ForEach(updateLookingRotation);
 
 
