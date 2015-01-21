@@ -12,12 +12,18 @@ public abstract class Dialogue {
 
 	abstract public void generate();
 
-	public void selected(int index) {
+	/**
+	 * Return value will decide if the dialogue is closed.
+	 * e.g. returning false will keep the dialogue (used to show more conversations, etc)
+	 */
+	public bool selected(int index) {
 		Debug.Log("Dialogue: selected " + index);
 
 		Conversation conv = getCurrentConversation();
 		if(conv != null)
-			conv.selected(index);
+			return conv.selected(index);
+
+		return true; // Default to returning true
 	}
 
 	public Conversation getCurrentConversation() {
@@ -27,6 +33,8 @@ public abstract class Dialogue {
 	protected void addConversation(Conversation conv) {
 		list.Add(conv);
 	}
+
+	public void closingDialogue() { }
 
 	public class Conversation {
 		private List<string> options = new List<string>();
@@ -43,6 +51,8 @@ public abstract class Dialogue {
 			return options.Count;
 		}
 
-		public void selected(int index) { }
+		public bool selected(int index) {
+			return true;
+		}
 	}
 }

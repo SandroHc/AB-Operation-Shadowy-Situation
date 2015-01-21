@@ -4,7 +4,7 @@ using System.Collections;
 public class CutsceneUtil : MonoBehaviour {
 	private Camera old;
 
-	private GameController gameController;
+	private GameController gameController;	
 	private PlayerController playerController;	
 
 	public void Start() {
@@ -12,7 +12,7 @@ public class CutsceneUtil : MonoBehaviour {
 		playerController = GameObject.FindGameObjectWithTag(Tags.player).GetComponent<PlayerController>();
 	}
 
-	public void Update() {
+	public void LateUpdate() {
 		if(gameObject.camera.animation.isPlaying && Input.GetButtonDown("Cancel")) {
 			Debug.Log("Cancelling cutscene");
 

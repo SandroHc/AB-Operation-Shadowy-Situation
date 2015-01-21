@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class DialogueManager : MonoBehaviour {
+	private GameController gameController;
+
 	public Dialogue currentDialogue = null;
 
-	public void Start() {
-		//currentDialogue = new DialogueTest();
+	void Awake() {
+		gameController = GameObject.FindGameObjectWithTag(Tags.gameController).GetComponent<GameController>();
 	}
 
 	public void Update() {
@@ -17,8 +19,16 @@ public class DialogueManager : MonoBehaviour {
 
 				for(int i=1; i <= size; i++) {
 					if(Input.GetKeyDown(i.ToString()))
-						currentDialogue.selected(i-1);
+						selected(i-1);
 				}
+			}
+		}
+	}
+
+	public void LateUpdate() {
+		if(currentDialogue != null) {
+			if(gameController.getFocused() && Input.GetButtonDown("Cancel")) {
+				closeDialogue();
 			}
 		}
 	}
@@ -39,11 +49,41 @@ public class DialogueManager : MonoBehaviour {
 				int posY = size * paddingVert + (size-1) * btnHeight;
 
 				for(int i = size-1; i >= 0; i--) {
-					GUI.Button(new Rect(padding, Screen.height - posY, btnWidth, btnHeight), new GUIContent((i + 1) + ". " + options[i]));
+					if(GUI.Button(new Rect(padding, Screen.height - posY, btnWidth, btnHeight), new GUIContent((i + 1) + ". " + options[i])))
+						selected(i);
 
 					posY += paddingVert + btnHeight;
 				}
 			}
+		}
+	}
+
+	private void selected(int i) {
+		if(currentDialogue != null) {
+			if(currentDialogue.selected(i)) {
+				closeDialogue(); // Close the dialogue, as per the API
+			}
+		}
+	}
+
+	public void showDialogue(Dialogue dialogue) {
+		Debug.Log("Opening dialogue " + dialogue.ToString());
+
+		currentDialogue = dialogue;
+		gameController.setFocused(true, false);
+	}
+
+	public void closeDialogue() {
+		if(currentDialogue != null) {
+			Debug.Log("Closing dialogue " + currentDialogue.ToString());
+
+			// Send the event to the Dialogue class (in the event to rollback any change)
+			currentDialogue.closingDialogue();
+			// Null the reference to the dialogue
+			currentDialogue = null;
+
+			// Resume focus on the game
+			gameController.setFocused(false);
 		}
 	}
 }

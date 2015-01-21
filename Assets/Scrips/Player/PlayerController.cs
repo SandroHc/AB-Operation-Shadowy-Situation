@@ -23,19 +23,20 @@ public class PlayerController : MonoBehaviour {
 
 	private Vector3 lastPos; // Used by the animator to get the speed
 
-	public int currentScore;
-	public Text scoreUiText;
+	public int monsterCount; // Total monsters killed
+	public Text uiMonsterCount;
 
-	void Start() {
+	void Awake() {
 		controller = GetComponent<CharacterController>();
 		gameController = GameObject.FindGameObjectWithTag(Tags.gameController).GetComponent<GameController>();
 		animator = GetComponent<Animator>();
 
 		charHeight = controller.height;
-	}
 
-	void Awake() {
 		lastPos = transform.position;
+
+		// Load total monster count
+		monsterCount = PlayerPrefs.GetInt("monster_count", 0);
 	}
 
 	void Update() {
@@ -70,10 +71,9 @@ public class PlayerController : MonoBehaviour {
 
 		// Set the sneaking parameter to the sneak input.
 		animator.SetBool("Sneaking", isCrouching);
-	}
 
-	void LateUpdate() {
-		scoreUiText.text = currentScore.ToString();
+		// Update the UI
+		uiMonsterCount.text = monsterCount.ToString();
 	}
 
 	public float movementY;
@@ -83,13 +83,13 @@ public class PlayerController : MonoBehaviour {
 		if(gameController.isPausedOrFocused()) {
 			return;
 
-			if(controller.isGrounded)
+			/*if(controller.isGrounded)
 				movementY = 0;
 			else
 				movementY -= gravity; // Add gravity force
 
 			controller.Move((new Vector3(0, movementY, 0)) * Time.deltaTime);
-			return;
+			return;*/
 		}
 
 		// Movement calculations
