@@ -18,7 +18,6 @@ public class PlayerController : MonoBehaviour {
 	private float charHeight;
 
 	private CharacterController controller;
-	private GameController gameController;
 	private Animator animator;
 
 	private Vector3 lastPos; // Used by the animator to get the speed
@@ -28,7 +27,6 @@ public class PlayerController : MonoBehaviour {
 
 	void Awake() {
 		controller = GetComponent<CharacterController>();
-		gameController = GameObject.FindGameObjectWithTag(Tags.gameController).GetComponent<GameController>();
 		animator = GetComponent<Animator>();
 
 		charHeight = controller.height;
@@ -44,15 +42,13 @@ public class PlayerController : MonoBehaviour {
 		isCrouching = Input.GetButton("Crouch");
 		isJumping = Input.GetButton("Jump"); // Not using GetButtonDown allows bunnyhops... so, intented feature?
 
-		if(!gameController.isPausedOrFocused()) {
+		if(!GameController.isPausedOrFocused()) {
 			if(Input.GetKeyUp(KeyCode.Home)) { // Reset the player when the key R is released
 				transform.position = spawnLocation;
 				transform.eulerAngles = Vector3.zero;
 			}
-			
-			if((!Network.isClient && !Network.isServer) || gameController.networkView.isMine) { // If we're not on a network OR we're on a network and it's our player
-				HandleMovement();
-			}
+
+			HandleMovement();
 		}
 
 		// Update the camera position based on the crouching state
@@ -80,16 +76,14 @@ public class PlayerController : MonoBehaviour {
 	
 	private void HandleMovement() {
 		// Calculate only gravity
-		if(gameController.isPausedOrFocused()) {
-			return;
-
-			/*if(controller.isGrounded)
+		if(GameController.isPausedOrFocused()) {
+			if(controller.isGrounded)
 				movementY = 0;
 			else
 				movementY -= gravity; // Add gravity force
 
 			controller.Move((new Vector3(0, movementY, 0)) * Time.deltaTime);
-			return;*/
+			return;
 		}
 
 		// Movement calculations
@@ -151,7 +145,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	private void playFootstepSound() {
-		if(audio.isPlaying || gameController.getPaused()) return; // If there is a footstep sound playing, let it finish before changing to a new one
+		if(audio.isPlaying || GameController.getPaused()) return; // If there is a footstep sound playing, let it finish before changing to a new one
 	
 		// Check if the player is moving and touching the ground...
 		if(controller.isGrounded && (Mathf.Abs(controller.velocity.x) + Mathf.Abs(controller.velocity.y) + Mathf.Abs(controller.velocity.z) > 2)) {

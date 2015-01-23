@@ -6,6 +6,8 @@ public class InteractPlayer : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		if(GameController.isPausedOrFocused()) return; // Avoid showing any HUD during focus events (and useless calculations)
+
 		RaycastHit hit;
 		
 		// When we left click and our raycast hits something
@@ -13,7 +15,10 @@ public class InteractPlayer : MonoBehaviour {
 			Interaction other = (Interaction) hit.transform.gameObject.GetComponent(typeof(Interaction));
 
 			if(other != null) {
-				text = other.type + " available. Press E to interact with " + other.name;
+				if(hit.distance <= other.minDistance)
+					text = other.type + " available. Press E to interact with " + other.name;
+				else
+					text = other.type + " available, but not in range";
 
 				if(Input.GetButtonDown("Interact"))
 					other.doAction(this.gameObject);
@@ -25,7 +30,7 @@ public class InteractPlayer : MonoBehaviour {
 	private string text = "";
 
 	void OnGUI() {
-		if(!text.Equals(""))
+		if(!GameController.isPausedOrFocused() && !text.Equals(""))
 			GUI.Box(new Rect(Screen.width / 6, Screen.height - 50, Screen.width / 1.5f, 50), text);
 	}
 }

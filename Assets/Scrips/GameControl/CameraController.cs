@@ -6,8 +6,7 @@ public class CameraController : MonoBehaviour {
 	
 	public float lookSpeed;
 	private float rotationY;
-	
-	private GameController gameController;
+
 	private CharacterController controller;
 	
 	public float headbobSpeed;
@@ -24,7 +23,6 @@ public class CameraController : MonoBehaviour {
 	public float recoil = 0;
 	
 	void Start() {
-		gameController = GameObject.FindGameObjectWithTag(Tags.gameController).GetComponent<GameController>();
 		controller = transform.parent.GetComponent<CharacterController>();
 	}
 	
@@ -47,7 +45,7 @@ public class CameraController : MonoBehaviour {
 		// Update the last position to this frame
 		parentLastPos = transform.parent.position;
 		
-		if(!gameController.isPausedOrFocused()) {
+		if(!GameController.isPausedOrFocused()) {
 			rotationY += Input.GetAxis("Mouse Y") * lookSpeed * Time.deltaTime;
 			rotationY = Mathf.Lerp(rotationY, Mathf.Clamp(rotationY, -90f, 90f), lookSpeed * Time.deltaTime);
 			transform.localRotation = Quaternion.AngleAxis(rotationY, Vector3.left);

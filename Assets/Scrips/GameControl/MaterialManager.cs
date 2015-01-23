@@ -6,15 +6,14 @@ public class MaterialManager : MonoBehaviour {
 	public MeshRenderer rubbishStage1;
 	public MeshRenderer rubbishStage2;
 
-	private GameController gameController;
-
 	private int materialCount; // Total material collected
 	public Text uiMaterialCounter;
 
+	private float pickUpTime = 1;
+	private bool pickingUp = false;
+
 	// Use this for initialization
 	void Awake() {
-		gameController = GameObject.FindGameObjectWithTag(Tags.gameController).GetComponent<GameController>();
-
 		// Load total materials collected
 		materialCount = PlayerPrefs.GetInt("material_count", 0);
 		uiMaterialCounter.text = materialCount.ToString();
@@ -40,6 +39,22 @@ public class MaterialManager : MonoBehaviour {
 		if(materialCount < 0) materialCount = 0;
 
 		saveNewValues();
+	}
+
+	public void pickUp() {
+		if(pickingUp) return;
+
+		pickingUp = true;
+		GameController.setFocused(true);
+
+		Invoke("finishPickUp", pickUpTime);
+	}
+
+	private void finishPickUp() {
+		pickingUp = false;
+		GameController.setFocused(false);
+		
+		increase(1);
 	}
 
 	private void saveNewValues() {

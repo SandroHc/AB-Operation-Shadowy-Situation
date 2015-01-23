@@ -3,13 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class DialogueManager : MonoBehaviour {
-	private GameController gameController;
-
 	public Dialogue currentDialogue = null;
-
-	void Awake() {
-		gameController = GameObject.FindGameObjectWithTag(Tags.gameController).GetComponent<GameController>();
-	}
 
 	public void Update() {
 		if(currentDialogue != null) {
@@ -27,7 +21,7 @@ public class DialogueManager : MonoBehaviour {
 
 	public void LateUpdate() {
 		if(currentDialogue != null) {
-			if(gameController.getFocused() && Input.GetButtonDown("Cancel")) {
+			if(GameController.getFocused() && Input.GetButtonDown("Cancel")) {
 				closeDialogue();
 			}
 		}
@@ -70,7 +64,7 @@ public class DialogueManager : MonoBehaviour {
 		Debug.Log("Opening dialogue " + dialogue.ToString());
 
 		currentDialogue = dialogue;
-		gameController.setFocused(true, false);
+		GameController.setFocused(true, false);
 	}
 
 	public void closeDialogue() {
@@ -83,7 +77,7 @@ public class DialogueManager : MonoBehaviour {
 			currentDialogue = null;
 
 			// Resume focus on the game
-			gameController.setFocused(false);
+			GameController.setFocused(false);
 		}
 	}
 }

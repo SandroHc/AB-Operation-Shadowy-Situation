@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CutsceneUtil : MonoBehaviour {
+public class CutsceneManager : MonoBehaviour {
 	private Camera old;
 
-	private GameController gameController;	
 	private PlayerController playerController;	
 
 	public void Start() {
-		gameController = GameObject.FindGameObjectWithTag(Tags.gameController).GetComponent<GameController>();
 		playerController = GameObject.FindGameObjectWithTag(Tags.player).GetComponent<PlayerController>();
 	}
 
@@ -21,9 +19,9 @@ public class CutsceneUtil : MonoBehaviour {
 	}
 
 	public void startCutscene() {
-		Debug.Log ("Starting cutscene");
+		//Debug.Log("Starting cutscene");
 
-		gameController.setFocused(true);
+		GameController.setFocused(true);
 		playerController.enabled = false;
 
 		old = Camera.main;
@@ -39,12 +37,12 @@ public class CutsceneUtil : MonoBehaviour {
 	}
 
 	public void finishCutscene() {
-		Debug.Log ("Finished cutscene");
+		//Debug.Log("Finished cutscene");
 
 		if(gameObject.camera.animation.isPlaying)
 			gameObject.camera.animation.Stop();
 
-		gameController.setFocused(false);
+		GameController.setFocused(false);
 		playerController.enabled = true;
 		
 		if(old != null) old.enabled = true;

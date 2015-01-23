@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 public class NPCController : MonoBehaviour {
-	private GameController gameController;
 	private new string name;
 	
 	public List<Collider> playersNearby;
@@ -16,7 +15,6 @@ public class NPCController : MonoBehaviour {
 	private TextMesh textMesh;
 
 	void Start() {
-		gameController = GameObject.FindGameObjectWithTag(Tags.gameController).GetComponent<GameController>();
 		name = "NPC Test";
 
 		// Create a clone of the TextMesh prefab
@@ -36,7 +34,7 @@ public class NPCController : MonoBehaviour {
 	}
 
 	void Update() {
-		if(gameController.getFocused())
+		if(GameController.getFocused())
 			playersNearby.ForEach(updateLookingRotation);
 
 

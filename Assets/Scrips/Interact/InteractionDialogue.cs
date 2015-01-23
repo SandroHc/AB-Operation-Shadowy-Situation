@@ -6,7 +6,7 @@ public class InteractionDialogue : Interaction {
 
 	void Awake() {
 		type = Type.Dialogue;
-		minDistance = 3f;
+		minDistance = 5;
 	}
 
 	public override void doAction(GameObject player) {

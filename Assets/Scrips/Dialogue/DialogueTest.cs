@@ -6,8 +6,8 @@ public class DialogueTest : Dialogue {
 
 	public override void generate() {
 		List<string> conv = new List<string>();
-		conv.Add("Elemento 1.");
-		conv.Add("O que achas?");
+		conv.Add("Esta e uma das possiveis falas.");
+		conv.Add("Esta e outra");
 
 		addConversation(new Conversation(conv));
 	}

@@ -4,8 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class MainMenu : MonoBehaviour {
-	private NetworkManager network;
-
 	public GameObject[] panelList;
 	public int currentPanel = 0;
 
@@ -31,8 +29,6 @@ public class MainMenu : MonoBehaviour {
 	}
 
 	void Start() {
-		network = GetComponent<NetworkManager>();
-
 		logoImgOverTransform = logoImgOver.GetComponent<RectTransform>();
 
 		// Populate resolution settings list
@@ -136,11 +132,6 @@ public class MainMenu : MonoBehaviour {
 		}
 	}
 
-	public void btnClickMultiplayer() {
-		updatePanel(2);
-		populateMultiplayerList();
-	}
-
 	public void btnClickHiscores() {
 		Application.OpenURL("http://sandrohc.lixter.com/ab");
 	}
@@ -203,35 +194,5 @@ public class MainMenu : MonoBehaviour {
 	public void applyChanges() {
 		PlayerPrefs.Save();
 		updatePanel(0);
-	}
-
-	/*		MULTIPLAYER		*/
-	public Text multiplayerList;
-
-	public void btnClickStartServer() {
-		network.StartServer("Test");
-	}
-
-	public void btnClickJoinServer() {
-		network.JoinServer(network.hostList[0]);
-	}
-
-	public void btnClickRefreshList() {
-		network.RefreshHostList();
-
-		populateMultiplayerList();
-	}
-
-	private void populateMultiplayerList() {
-		if(network.hostList == null || network.hostList.Length < 0) {
-			multiplayerList.text = "There are no available servers.";
-			return;
-		}
-
-		multiplayerList.text = "";
-
-		for(int i=0; i < network.hostList.Length; i++) {
-			multiplayerList.text += network.hostList[i].gameName + " - " + network.hostList[i].comment + " (" + network.hostList[i].connectedPlayers + "/" + network.hostList[i].playerLimit + " players)\n";
-		}
 	}
 }

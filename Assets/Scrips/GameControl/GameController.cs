@@ -2,17 +2,22 @@
 using System.Collections;
 
 public class GameController : MonoBehaviour {
+	public static GameController INSTANCE { get; private set; }
+
 	public static TextManager textManager;
 	public static AudioManager audioManager;
 	public static SpriteManager spriteManager;
 
 	public static DialogueManager dialogueManager;
 	public static MaterialManager materialManager;
+	public static EnemyManager enemyManager;
 
 	public static PlayerController playerController;
 
-	private bool isPaused = false;
-	private bool isFocused = false;
+	private static bool isPaused = false;
+	private static bool isFocused = false;
+
+	private bool canCancelFocus;
 	
 	public float fadeSpeed;
 	public bool fade = true;
@@ -22,12 +27,15 @@ public class GameController : MonoBehaviour {
 	public GameObject uiCrosshair;
 
 	void Awake() {
+		INSTANCE = this;
+
 		textManager = gameObject.GetComponent<TextManager>();
 		audioManager = gameObject.GetComponent<AudioManager>();
 		spriteManager = gameObject.GetComponent<SpriteManager>();
 
 		dialogueManager = gameObject.GetComponent<DialogueManager>();
 		materialManager = gameObject.GetComponent<MaterialManager>();
+		enemyManager = gameObject.GetComponent<EnemyManager>();
 
 		playerController = GameObject.FindGameObjectWithTag(Tags.player).GetComponent<PlayerController>();
 
@@ -70,6 +78,9 @@ public class GameController : MonoBehaviour {
 	void OnGUI() {
 		if(GUI.Button(new Rect(100, 100, 100, 25), "Lock cursor"))
 			Screen.lockCursor = true;
+
+		if(GUI.Button(new Rect(100, 135, 100, 25), "Spawn enemies"))
+			enemyManager.spawn(new Vector3(5, -24, 80));
 	}
 	
 	public void btnClickedMainMenu() {
@@ -82,11 +93,11 @@ public class GameController : MonoBehaviour {
 		Application.Quit();
 	}
 
-	public bool getPaused() {
+	public static bool getPaused() {
 		return isPaused;
 	}
 
-	private void setPaused(bool state) {
+	private static void setPaused(bool state) {
 		isPaused = state;
 		if(isPaused)
 			enterPause();
@@ -95,19 +106,20 @@ public class GameController : MonoBehaviour {
 	}
 
 
-	public bool getFocused() {
+	public static bool getFocused() {
 		return isFocused;
 	}
 
-	public void setFocused(bool state, bool lockCursor = true) {
+	public static void setFocused(bool state, bool lockCursor = true, bool canCancelFocus = false) {
 		isFocused = state;
+		//this.canCancelFocus = canCancelFocus;
 		if(isFocused)
 			enterFocus(lockCursor);
 		else
 			exitFocus();
 	}
 
-	public bool isPausedOrFocused() {
+	public static bool isPausedOrFocused() {
 		return isPaused || isFocused;
 	}
 
@@ -117,40 +129,40 @@ public class GameController : MonoBehaviour {
 		}
 	}
 
-	private void enterPause() {
+	private static void enterPause() {
 		//Debug.Log("Pausing game");
 
 		isPaused = true;
 
-		uiPause.SetActive(true);
-		uiCrosshair.SetActive(false);
+		INSTANCE.uiPause.SetActive(true);
+		INSTANCE.uiCrosshair.SetActive(false);
 		Screen.lockCursor = false;
 
 		// Save preferences in the event of a crash
-		OnApplicationQuit();
+		INSTANCE.OnApplicationQuit();
 	}
 
-	private void exitPause() {
+	private static void exitPause() {
 		//Debug.Log("Resuming game");
 
 		isPaused = false;
 
-		uiPause.SetActive(false);
-		uiCrosshair.SetActive(true);
+		INSTANCE.uiPause.SetActive(false);
+		INSTANCE.uiCrosshair.SetActive(true);
 		Screen.lockCursor = true;
 	}
 
-	private void enterFocus(bool lockCursor = true) {
+	private static void enterFocus(bool lockCursor = true) {
 		//Debug.Log("Entering focus mode");
 
-		uiCrosshair.SetActive(false);
+		INSTANCE.uiCrosshair.SetActive(false);
 		Screen.lockCursor = lockCursor;
 	}
 
-	private void exitFocus() {
+	private static void exitFocus() {
 		//Debug.Log("Exiting focus mode");
 
-		uiCrosshair.SetActive(!isPaused);
+		INSTANCE.uiCrosshair.SetActive(!isPaused);
 		Screen.lockCursor = !isPaused;
 	}
 
