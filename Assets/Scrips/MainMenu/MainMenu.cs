@@ -24,6 +24,8 @@ public class MainMenu : MonoBehaviour {
 
 	private AsyncOperation ao;
 
+	public GUIStyle labelStyle;
+
 	void Awake() {
 		bgImg.sprite = bgTextures[Random.Range(0, bgTextures.Length)];
 	}
@@ -52,12 +54,7 @@ public class MainMenu : MonoBehaviour {
 			qualityComboBox[i] = new GUIContent(QualitySettings.names[i]);
 		}
 
-		// Load the saved quality from PlayerPrefs
-		int qualitySettings = PlayerPrefs.GetInt("QualitySettings", QualitySettings.GetQualityLevel());
-		if(qualitySettings != QualitySettings.GetQualityLevel())
-			setQuality(qualitySettings, false);
-
-		// And set the current quality on the ComboBox
+		// Select the current quality setting on the ComboBox
 		qualityControl.SetSelectedItemIndex(QualitySettings.GetQualityLevel());
 
 		// Create a style to be used by the ComboBoxes
@@ -86,6 +83,22 @@ public class MainMenu : MonoBehaviour {
 			}
 
 			logoImgOverTransform.localScale = new Vector3(currentScale, currentScale, currentScale);
+		}
+
+		if(fetchingKeyCode) {
+			tempKeyCode = InputManager.fetchKey();
+
+			if(tempKeyCode != KeyCode.None) {
+				//Debug.Log("Before: " + currentInput);
+				// Update the KeyCode, to be updated in the label
+				currentInput = tempKeyCode;
+
+				// And save it to the PlayerPrefs to be loaded
+				InputManager.saveKey(currentInputName, (int) tempKeyCode);
+
+				// And reset the fetching state
+				fetchingKeyCode = false;
+			}
 		}
 	}
 
@@ -163,7 +176,7 @@ public class MainMenu : MonoBehaviour {
 			setResolution(selectedRes);
 
 		bool fullscreen = GUI.Toggle(new Rect(275, 110, 150, 25), Screen.fullScreen, "Set fullscreen");
-		DebugConsole.Log(fullscreen + " vs " + Screen.fullScreen);
+		Debug.Log(fullscreen + " vs " + Screen.fullScreen);
 		if(fullscreen != Screen.fullScreen)
 			Screen.fullScreen = fullscreen;
 
@@ -172,6 +185,46 @@ public class MainMenu : MonoBehaviour {
 
 		if(!QualitySettings.GetQualityLevel().Equals(qualityControl.GetSelectedItemIndex()))
 			setQuality(qualityControl.GetSelectedItemIndex(), false);
+
+		// Input settings
+		drawOptionsInput();
+	}
+
+	private KeyCode currentInput;
+	private string currentInputName;
+
+	private KeyCode tempKeyCode;
+	private bool fetchingKeyCode = false;
+
+	public void drawOptionsInput() {
+		drawInputOption("Fire 1", "fire1", ref InputManager.fire1);
+		drawInputOption("Fire 2", "fire2", ref InputManager.fire2);
+		drawInputOption("Fire 3", "fire3", ref InputManager.fire3);
+		drawInputOption("Jump", "jump", ref InputManager.jump);
+		drawInputOption("Interact", "interact", ref InputManager.interact);
+		drawInputOption("Sprint", "sprint", ref InputManager.sprint);
+		drawInputOption("Crouch", "crouch", ref InputManager.crouch);
+		drawInputOption("Submit", "submit", ref InputManager.submit);
+		drawInputOption("Cancel", "cancel", ref InputManager.cancel);
+
+		// Reset values after each draw call
+		inputY = 200;
+		inputX = 110;
+	}
+
+	int inputY = 200;
+	int inputX = 110;
+	int inputPadding = 35;
+
+	private void drawInputOption(string label, string keyName, ref KeyCode key) {
+		GUI.Label(new Rect(inputX, inputY, 75, 25), label, labelStyle);
+		if(GUI.Button(new Rect(inputX + 95, inputY, 125, 25), key.ToString())) {
+			currentInput = key;
+			currentInputName = keyName;
+			fetchingKeyCode = true;
+		}
+
+		inputY += inputPadding;
 	}
 
 	private void setResolution(Resolution res) {
@@ -184,10 +237,10 @@ public class MainMenu : MonoBehaviour {
 
 	private void setQuality(int newSettings, bool applyExpensiveChanges = true) {
 		QualitySettings.SetQualityLevel(newSettings, applyExpensiveChanges);
-		PlayerPrefs.SetInt("QualitySettings", newSettings);
 	}
 
 	public void resetChanges() {
+		// TODO Rollback cahnges to PlayersPrefs
 		updatePanel(0);
 	}
 

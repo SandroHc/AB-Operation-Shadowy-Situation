@@ -15,12 +15,10 @@ public class EnemyAI : MonoBehaviour {
 
 	private RectTransform hpBarCanvas;
 
-	void Start() {
-		hpBarCanvas = transform.Find("default_hp_bar").GetComponent<RectTransform>();
-	}
-
 	void Awake() {
-		//player = GameObject.FindGameObjectWithTag(Tags.player).transform;
+		hpBarCanvas = transform.Find("default_hp_bar").GetComponent<RectTransform>();
+
+		player = GameController.playerController.transform;
 	}
 
 	void Update() {
