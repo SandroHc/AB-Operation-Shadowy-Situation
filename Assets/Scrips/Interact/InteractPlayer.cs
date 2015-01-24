@@ -20,7 +20,7 @@ public class InteractPlayer : MonoBehaviour {
 				else
 					text = other.type + " available, but not in range";
 
-				if(Input.GetButtonDown("Interact"))
+				if(Input.GetKeyDown(InputManager.interact))
 					other.doAction(this.gameObject);
 			} else
 				text = "";

@@ -21,7 +21,7 @@ public class DialogueManager : MonoBehaviour {
 
 	public void LateUpdate() {
 		if(currentDialogue != null) {
-			if(GameController.getFocused() && Input.GetButtonDown("Cancel")) {
+			if(GameController.getFocused() && Input.GetKeyDown(InputManager.cancel)) {
 				closeDialogue();
 			}
 		}

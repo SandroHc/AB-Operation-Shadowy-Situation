@@ -200,8 +200,9 @@ public class MainMenu : MonoBehaviour {
 		drawInputOption("Fire 1", "fire1", ref InputManager.fire1);
 		drawInputOption("Fire 2", "fire2", ref InputManager.fire2);
 		drawInputOption("Fire 3", "fire3", ref InputManager.fire3);
-		drawInputOption("Jump", "jump", ref InputManager.jump);
+		drawInputOption("Reload", "reload", ref InputManager.reload);
 		drawInputOption("Interact", "interact", ref InputManager.interact);
+		drawInputOption("Jump", "jump", ref InputManager.jump);
 		drawInputOption("Sprint", "sprint", ref InputManager.sprint);
 		drawInputOption("Crouch", "crouch", ref InputManager.crouch);
 		drawInputOption("Submit", "submit", ref InputManager.submit);

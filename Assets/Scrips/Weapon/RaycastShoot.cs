@@ -43,10 +43,10 @@ public class RaycastShoot : MonoBehaviour {
 		if(GameController.isPausedOrFocused())
 			return;
 
-		if(Input.GetKeyUp(KeyCode.R) && ammoRemaining < ammoPerMagazine) // Only reload if the magazine is not full
+		if(Input.GetKeyUp(InputManager.reload) && ammoRemaining < ammoPerMagazine) // Only reload if the magazine is not full
 			reload();
 		
-		if(Input.GetButtonDown("Fire1") && cooldown <= 0) {
+		if(Input.GetKeyDown(InputManager.fire1) && cooldown <= 0) {
 			if(ammoRemaining > 0)
 				shoot();
 			else
@@ -58,7 +58,7 @@ public class RaycastShoot : MonoBehaviour {
 		//	if(cameraController.camera != null) // When in cutscenes, the main camera is disabled
 			cameraController.camera.fieldOfView = Mathf.SmoothDamp(cameraController.camera.fieldOfView, currentFOV, ref dampVelocity, .3f);
 
-		bool isAiming = Input.GetButton("Fire2"); // Right-click by default
+		bool isAiming = Input.GetKey(InputManager.fire2); // Right-click by default
 		currentFOV = isAiming ? 40 : 60;
 	}
 

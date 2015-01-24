@@ -124,7 +124,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	private void handleCancelInput() {
-		if(!isFocused && Input.GetButtonDown("Cancel")) {
+		if(!isFocused && Input.GetKeyDown(InputManager.cancel)) {
 			setPaused(!isPaused);
 		}
 	}
