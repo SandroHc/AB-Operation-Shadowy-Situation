@@ -3,8 +3,10 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class MaterialManager : MonoBehaviour {
-	public MeshRenderer rubbishStage1;
-	public MeshRenderer rubbishStage2;
+	public Mesh stage3;
+	public Mesh stage2;
+	public Mesh stage1;
+	public Mesh stageDepleted;
 
 	private int materialCount; // Total material collected
 	public Text uiMaterialCounter;
