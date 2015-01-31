@@ -1,8 +1,0 @@
-身体 W_FacePartsA_CgfxShader
-身体 W_FacePartsA_CgfxShader
-身体 W_Body_CgfxShader
-身体 CHIKUBI
-瞳 EYE
-瞳 EYE2
-眼鏡 W_FacePartsA_CgfxShader
-眉毛 FACE

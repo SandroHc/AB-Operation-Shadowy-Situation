@@ -207,6 +207,7 @@ public class MainMenu : MonoBehaviour {
 		drawInputOption("Crouch", "crouch", ref InputManager.crouch);
 		drawInputOption("Submit", "submit", ref InputManager.submit);
 		drawInputOption("Cancel", "cancel", ref InputManager.cancel);
+		drawInputOption("Quest Journal", "quest_journal", ref InputManager.journal);
 
 		// Reset values after each draw call
 		inputY = 200;

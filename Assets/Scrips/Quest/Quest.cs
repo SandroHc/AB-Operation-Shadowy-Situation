@@ -26,18 +26,28 @@ public abstract class Quest {
 
 	public abstract void initStages();
 
-	public void enable() {
-		isActive = true;
-		PlayerPrefs.SetInt("quest-" + id + "-status", 1);
-	}
-
-	public void disable() {
-		isActive = false;
-	}
-
 	public bool progress(QuestProgress progress) {
+		// TODO derpy way to test stages
+		PlayerPrefs.SetInt("quest-" + id + "-stage", 0);
+
+
 		return isActive;
-		PlayerPrefs.SetInt("quest-" + id + "-status", 0);
+	}
+
+	public void setActive(bool state) {
+		isActive = state;
+		PlayerPrefs.SetInt("quest-" + id + "-status", state ? 1 : 0);
+
+
+		Debug.Log("Quest " + id + ": status: " + isActive);
+	}
+
+	public bool getActive() {
+		return isActive;
+	}
+
+	public int getCurrentStage() {
+		return currentStage;
 	}
 
 	public class Stage {
@@ -54,7 +64,11 @@ public abstract class Quest {
 		}
 
 		public void update(QuestProgress progress) {
+			current++;
+		}
 
+		public int getId() {
+			return id;
 		}
 	}
 }

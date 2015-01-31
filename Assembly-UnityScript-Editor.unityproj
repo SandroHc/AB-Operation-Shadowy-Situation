@@ -80,7 +80,6 @@
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\ScreenSpaceAmbientObscurance.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_Antialiasing\NFAA.shader" />
      <None Include="Assets\MMD4Mecanim\Shaders\MMD4Mecanim-MMDLit-Deferred-Surface-Lighting.cginc" />
-     <None Include="Assets\Models\Yui\Yui.MMD4Mecanim.xml" />
      <None Include="Assets\MMD4Mecanim\Shaders\MMD4Mecanim-MMDLit-NoShadowCasting-BothFaces-Transparent.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_DepthOfField\TiltShiftHdrLensBlur.shader" />
      <None Include="Assets\MMD4Mecanim\Shaders\MMD4Mecanim-MMDLit-BothFaces-Transparent-Edge.shader" />
@@ -89,7 +88,6 @@
      <None Include="Assets\MMD4Mecanim\Shaders\MMD4Mecanim-MMDLit-Deferred-NoShadowCasting-BothFaces.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\MotionBlur.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\MobileBloom.shader" />
-     <None Include="Assets\Models\Yui\Readme.txt" />
      <None Include="Assets\MMD4Mecanim\Shaders\MMD4Mecanim-MMDLit-Deferred-Edge.shader" />
      <None Include="Assets\MMD4Mecanim\Shaders\MMD4Mecanim-MMDLit-NoShadowCasting-BothFaces.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\GlowCompose.shader" />
@@ -104,14 +102,12 @@
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_Antialiasing\FXAAPreset3.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\FisheyeShader.shader" />
      <None Include="Assets\MMD4Mecanim\Shaders\MMD4Mecanim-MMDLit-Deferred-NoShadowCasting-BothFaces-Transparent.shader" />
-     <None Include="Assets\Models\Yui\ReadmeEN.txt" />
      <None Include="Assets\MMD4Mecanim\Shaders\MMD4Mecanim-MMDLit-Deferred-BothFaces-Edge.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\Contrast Stretch\Apply.shader" />
      <None Include="Assets\MMD4Mecanim\Shaders\MMD4Mecanim-MMDLit-NoShadowCasting.shader" />
      <None Include="Assets\MMD4Mecanim\Shaders\MMD4Mecanim-MMDLit-Deferred-NoShadowCasting-Edge.shader" />
      <None Include="Assets\Standard Assets\Water (Pro Only)\Water4\Sources\Shaders\FX-SimpleWater4.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\frag_ao.cginc" />
-     <None Include="Assets\Models\Yui\Yui.xml" />
      <None Include="Assets\MMD4Mecanim\Shaders\MMD4Mecanim-MMDLit.shader" />
      <None Include="Assets\MMD4Mecanim\Shaders\MMD4Mecanim-MMDLit-NoShadowCasting-Transparent-Edge.shader" />
      <None Include="Assets\MMD4Mecanim\Shaders\MMD4Mecanim-MMDLit-Deferred-SurfaceEdge-PrePassBase.cginc" />
@@ -128,7 +124,6 @@
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\NoiseEffectShaderYUV.shader" />
      <None Include="Assets\MMD4Mecanim\Shaders\MMD4Mecanim-MMDLit-Deferred.shader" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\GlowEffectDownsample.shader" />
-     <None Include="Assets\Models\Yui\âJâXâ^âÇÅ¡Åù.txt" />
      <None Include="Assets\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\CreaseApply.shader" />
      <None Include="Assets\MMD4Mecanim\Shaders\MMD4Mecanim-MMDLit-Deferred-NoShadowCasting-Transparent-Edge.shader" />
      <None Include="Assets\MMD4Mecanim\Shaders\MMD4Mecanim-MMDLit-AutoLight.cginc" />
