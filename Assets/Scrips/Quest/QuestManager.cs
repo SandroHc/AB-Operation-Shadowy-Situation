@@ -1,28 +1,32 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
 public class QuestManager : MonoBehaviour {
 	private List<Quest> questList = new List<Quest>();
-
-	private int activeQuestId;
-	public Quest activeQuest = null;
+	
+	public GameObject panelList;
+	public GameObject panelDescription;
 
 	void Awake() {
 		questList.Clear();
 		questList.Add(new QuestTest());
 
+		foreach(Quest quest in questList) {
+			GameObject buttonObject = new GameObject("btn_" + quest.id);
 
-		activeQuestId = PlayerPrefs.GetInt("active_quest", -1);
-
-		if(activeQuestId != -1) {
-			foreach(Quest quest in questList) {
-				if(quest.id == activeQuestId) {
-					activeQuest = quest;
-					activeQuest.enable();
-					break;
-				}
-			}
+			/*Image image = buttonObject.AddComponent<Image>();
+			image.transform.parent = panelList.transform;
+			image.rectTransform.sizeDelta = new Vector2(180, 50);
+			image.rectTransform.anchoredPosition = Vector3.zero;
+			image.color = new Color(1f, .3f, .3f, .5f);*/
+			Text text = buttonObject.AddComponent<Text>();
+			text.text = quest.name;
+			
+			Button button = buttonObject.AddComponent<Button>();
+			button.targetGraphic = text;//image;
+			button.onClick.AddListener(() => Debug.Log("Button clicked!"));
 		}
 	}
 
@@ -30,39 +34,35 @@ public class QuestManager : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.Y)) {
 			enableQuest(1);
 		} else if(Input.GetKeyDown(KeyCode.U)) {
-			if(activeQuest != null)
-				activeQuest.progress(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setStr("Interacting!"));
+			foreach(Quest quest in questList)
+				quest.progress(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setStr("Interacting!"));
 		} else if(Input.GetKeyDown(KeyCode.I)) {
-			if(activeQuest != null)
-				activeQuest.progress(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setNumber(1337));
+			foreach(Quest quest in questList)
+				quest.progress(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setNumber(1337));
 		} 
 	}
 
 	/**
-	 * Return true if quest has changed. False if, or no quest with ID was found, or quest was not changed. 
+	 * Return true if the quest received the command to be enabled; false otherwise
 	 */
-	bool enableQuest(int id) {
-		if(activeQuestId != id) {
-			foreach(Quest quest in questList) {
-				if(quest == null) continue;
-
-				if(quest.id == id) {
-					// Disable the currently active quest
-					if(activeQuest != null) activeQuest.disable();
-
-					// Switch quest ID
-					activeQuestId = id;
-					PlayerPrefs.SetInt("active_quest", id);
-
-					// Activate the new quest
-					activeQuest = quest;
-					activeQuest.enable();
-
-					return true;
-				}
-			}
+	public bool enableQuest(int id) {
+		Quest quest = getQuest(id);
+		if(quest != null) {
+			quest.enable();
+			return true;
+		} else {
+			return false;
 		}
+	}
 
-		return false;
+	private Quest getQuest(int id) {
+		foreach(Quest quest in questList) {
+			if(quest == null)
+				continue;
+			else if(quest.id == id)
+				return quest;
+		}
+		return null;
 	}
 }
+ 
