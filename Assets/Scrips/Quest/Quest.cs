@@ -6,6 +6,9 @@ using System.Collections.Generic;
  * Utility class to store information related to any quest.
  */
 public abstract class Quest {
+	public enum QUEST_STATUS { INACTIVE = 0, ACTIVE = 1, COMPLETED = 2 };
+	public QUEST_STATUS status;
+
 	public int id;
 	public string name;
 	public string description;
@@ -13,19 +16,12 @@ public abstract class Quest {
 	protected List<Stage> stageList = new List<Stage>();
 	protected int currentStage;
 
-	private bool isActive;
-	private bool isComplete;
-
 	public Quest(int id, string name, string description) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 
-		int status = PlayerPrefs.GetInt("quest-" + id + "-status", 0);
-
-		this.isActive = status == 1;
-		this.isComplete = status == 2;
-
+		this.status = (QUEST_STATUS) PlayerPrefs.GetInt("quest-" + id + "-status", (int) QUEST_STATUS.INACTIVE);
 		this.currentStage = PlayerPrefs.GetInt("quest-" + id + "-stage", 0);
 
 		initStages();
@@ -34,7 +30,7 @@ public abstract class Quest {
 	public abstract void initStages();
 
 	public bool progress(QuestProgress progress) {
-		if(isComplete || !isActive) // Ignore progress calls if there is nothing to do here
+		if(status != QUEST_STATUS.ACTIVE) // Ignore progress calls if there is nothing to do here
 			return false;
 
 
@@ -44,34 +40,28 @@ public abstract class Quest {
 		if(currentStage < stageList.Count && stageList[currentStage].update(progress))
 			currentStage++;
 
-		//Debug.Log("Reached stage " + currentStage + " of " + stageList.Count);
-
 		if(currentStage >= stageList.Count)
-			completeQuest();
-
+			setStatus(QUEST_STATUS.COMPLETED);
 
 		return true;
 	}
 
-	protected void completeQuest() {
-		PlayerPrefs.SetInt("quest-" + id + "-status", 2);
-		isActive = false;
-		isComplete = true;
-
-		Debug.Log("Quest " + name + " (" + id + ") completed");
+	/**
+	 * Return the current status of the quest.
+	 **/
+	public QUEST_STATUS getStatus() {
+		return status;
 	}
 
-	public void setActive(bool state) {
-		isActive = state;
-		PlayerPrefs.SetInt("quest-" + id + "-status", state ? 1 : 0);
+	public void setStatus(QUEST_STATUS status) {
+		Debug.Log("Quest " + name + " (" + id + ") changed from " + this.status.ToString() + " to " + status.ToString());
+
+		this.status = status;
+		PlayerPrefs.SetInt("quest-" + id + "-status", (int) status);
 	}
 
-	public bool getActive() {
-		return isActive;
-	}
-
-	public bool getCompleted() {
-		return isComplete;
+	public List<Stage> getStages() {
+		return stageList;
 	}
 
 	public int getCurrentStage() {
@@ -79,18 +69,17 @@ public abstract class Quest {
 	}
 
 	public abstract class Stage {
-		protected int objective;
-		protected int current;
-
-		public Stage() {
-			objective = 10;
-			current = 0; // TODO load from PlayerPrefs the current status
-		}
-
 		/**
 		 * Function to update the current objective inside the current stage.
 		 * Returns  true  if the objective was reached; false otherwise.
 		 **/
 		abstract public bool update(QuestProgress progress);
+
+		/**
+		 * Used to generate a text that states the current status of this stage.
+		 * e.g. Talk to Deliora.
+		 * 		Picked up 3 out of 9 flowers.
+		 **/
+		abstract public string getText();
 	}
 }

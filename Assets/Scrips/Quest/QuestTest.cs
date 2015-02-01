@@ -12,12 +12,23 @@ public class QuestTest : Quest {
 	}
 
 	protected class StageTest : Stage {
+		private int current, objective;
+
+		public StageTest() {
+			current = 0;
+			objective = 10;
+		}
+
 		public override bool update(QuestProgress progress) {
 			if(progress.type == QuestProgress.ProgressType.MATERIAL_PICKUP) {
-				current += progress.number;
-				Debug.Log("Stage updated. " + current + " of " + objective + " materials picked up");
+				current += (int) progress.getNumber();
+				Debug.Log(string.Format("Stage updated. {0} of {1} materials picked up", current, objective));
 			}
 			return current >= objective;
+		}
+
+		public override string getText() {
+			return string.Format("Gathered {0} of {1} material.", current, objective);
 		}
 	}
 }
