@@ -55,8 +55,14 @@ public class MaterialManager : MonoBehaviour {
 	private void finishPickUp() {
 		pickingUp = false;
 		GameController.setFocused(false);
+
+		// Generate a random number between 3 and 5
+		int materialCount = Random.Range(3, 6);
 		
-		increase(1);
+		increase(materialCount);
+
+		// Send a quest progress update with the number of materials picked.
+		GameController.questManager.sendProgress(new QuestProgress(QuestProgress.ProgressType.MATERIAL_PICKUP).setNumber(materialCount));
 	}
 
 	private void saveNewValues() {

@@ -15,20 +15,24 @@ public class InteractionMaterial : Interaction {
 			uses += .4f * Time.deltaTime;
 
 		if(currentStage != uses) {
+			Mesh newMesh;
 			if(uses >= 3)
-				gameObject.GetComponent<MeshFilter>().mesh = GameController.materialManager.stage3;
+				newMesh = GameController.materialManager.stage3;
 			else if(uses >= 2)
-				gameObject.GetComponent<MeshFilter>().mesh = GameController.materialManager.stage2;
+				newMesh = GameController.materialManager.stage2;
 			else if(uses >= 1)
-				gameObject.GetComponent<MeshFilter>().mesh = GameController.materialManager.stage1;
-			else if(uses < 1)
-				gameObject.GetComponent<MeshFilter>().mesh = GameController.materialManager.stageDepleted;
-			
+				newMesh = GameController.materialManager.stage1;
+			else
+				newMesh = GameController.materialManager.stageDepleted;
+
+			gameObject.GetComponent<MeshFilter>().mesh = newMesh;
 			currentStage = uses;
 		}
 	}
 
 	public override void doAction(GameObject player) {
+		GameController.questManager.sendProgress(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setStr(destName).setPosition(gameObject.transform.position));
+
 		if(uses >= 1) {
 			uses--;
 			GameController.materialManager.pickUp();

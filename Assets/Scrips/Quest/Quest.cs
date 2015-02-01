@@ -14,61 +14,83 @@ public abstract class Quest {
 	protected int currentStage;
 
 	private bool isActive;
+	private bool isComplete;
 
 	public Quest(int id, string name, string description) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
 
-		this.isActive = PlayerPrefs.GetInt("quest-" + id + "-status", 0) == 1;
+		int status = PlayerPrefs.GetInt("quest-" + id + "-status", 0);
+
+		this.isActive = status == 1;
+		this.isComplete = status == 2;
+
 		this.currentStage = PlayerPrefs.GetInt("quest-" + id + "-stage", 0);
+
+		initStages();
 	}
 
 	public abstract void initStages();
 
 	public bool progress(QuestProgress progress) {
-		// TODO derpy way to test stages
-		PlayerPrefs.SetInt("quest-" + id + "-stage", 0);
+		if(isComplete || !isActive) // Ignore progress calls if there is nothing to do here
+			return false;
 
 
-		return isActive;
+		Debug.Log("Quest " + name + " (" + id + ") update. " + progress.ToString());
+
+
+		if(currentStage < stageList.Count && stageList[currentStage].update(progress))
+			currentStage++;
+
+		//Debug.Log("Reached stage " + currentStage + " of " + stageList.Count);
+
+		if(currentStage >= stageList.Count)
+			completeQuest();
+
+
+		return true;
+	}
+
+	protected void completeQuest() {
+		PlayerPrefs.SetInt("quest-" + id + "-status", 2);
+		isActive = false;
+		isComplete = true;
+
+		Debug.Log("Quest " + name + " (" + id + ") completed");
 	}
 
 	public void setActive(bool state) {
 		isActive = state;
 		PlayerPrefs.SetInt("quest-" + id + "-status", state ? 1 : 0);
-
-
-		Debug.Log("Quest " + id + ": status: " + isActive);
 	}
 
 	public bool getActive() {
 		return isActive;
 	}
 
+	public bool getCompleted() {
+		return isComplete;
+	}
+
 	public int getCurrentStage() {
 		return currentStage;
 	}
 
-	public class Stage {
-		private int id;
+	public abstract class Stage {
+		protected int objective;
+		protected int current;
 
-		private int objective;
-		private int current;
-
-		public Stage(int stageId) {
-			this.id = stageId;
-
-			objective = 2;
+		public Stage() {
+			objective = 10;
 			current = 0; // TODO load from PlayerPrefs the current status
 		}
 
-		public void update(QuestProgress progress) {
-			current++;
-		}
-
-		public int getId() {
-			return id;
-		}
+		/**
+		 * Function to update the current objective inside the current stage.
+		 * Returns  true  if the objective was reached; false otherwise.
+		 **/
+		abstract public bool update(QuestProgress progress);
 	}
 }

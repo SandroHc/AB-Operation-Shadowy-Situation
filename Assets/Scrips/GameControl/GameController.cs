@@ -8,6 +8,7 @@ public class GameController : MonoBehaviour {
 	public static AudioManager audioManager;
 	public static SpriteManager spriteManager;
 
+	public static QuestManager questManager;
 	public static DialogueManager dialogueManager;
 	public static MaterialManager materialManager;
 	public static EnemyManager enemyManager;
@@ -33,6 +34,7 @@ public class GameController : MonoBehaviour {
 		audioManager = gameObject.GetComponent<AudioManager>();
 		spriteManager = gameObject.GetComponent<SpriteManager>();
 
+		questManager = gameObject.GetComponent<QuestManager>();
 		dialogueManager = gameObject.GetComponent<DialogueManager>();
 		materialManager = gameObject.GetComponent<MaterialManager>();
 		enemyManager = gameObject.GetComponent<EnemyManager>();

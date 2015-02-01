@@ -13,7 +13,7 @@ public class QuestManager : MonoBehaviour {
 
 	void Awake() {
 		questList.Clear();
-		questList.Add(new QuestTest());
+		registerQuest(new QuestTest());
 
 		RectTransform panelListTransform = panelList.GetComponent<RectTransform>();
 
@@ -47,13 +47,11 @@ public class QuestManager : MonoBehaviour {
 	}
 
 	public void LateUpdate() {
-		if(Input.GetKeyDown(KeyCode.U)) {
-			foreach(Quest quest in questList)
-				quest.progress(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setStr("Interacting!"));
-		} else if(Input.GetKeyDown(KeyCode.I)) {
-			foreach(Quest quest in questList)
-				quest.progress(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setNumber(1337));
-		}
+		if(Input.GetKeyDown(KeyCode.U))
+			sendProgress(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setStr("Interacting!"));
+		else if(Input.GetKeyDown(KeyCode.I))
+			sendProgress(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setNumber(1337));
+
 
 		if(Input.GetKeyDown(InputManager.journal)) {
 			if(!GameController.isPausedOrFocused()) {
@@ -66,6 +64,27 @@ public class QuestManager : MonoBehaviour {
 			GameController.setFocused(false);
 			panelJournal.SetActive(false);
 		}
+	}
+
+	private bool registerQuest(Quest quest) {
+		foreach(Quest obj in questList) {
+			if(obj.id == quest.id) {
+				Debug.Log("Quest " + quest.name + " and " + obj.name + " both have the same id , " + quest.id + ". Ignoring.");
+				return false;
+			}
+		}
+
+		questList.Add(quest);
+		return true;
+	}
+
+	public void sendProgress(QuestProgress progress) {
+		foreach(Quest quest in questList) {
+			if(quest == null)
+				continue;
+
+			quest.progress(progress);
+		}			
 	}
 
 	/**
@@ -107,13 +126,14 @@ public class QuestManager : MonoBehaviour {
 
 		panelDescriptionName.text = quest.name;
 		panelDescriptionDesc.text = quest.description;
-		panelDescriptionStatus.text = quest.getActive() ? "active" : "not active";
+		panelDescriptionStatus.text = quest.getActive() ? "active" : quest.getCompleted() ? "completed" : "not active";
 		panelDescriptionStage.text = quest.getCurrentStage().ToString();
 
-		foreach (Transform child in panelDescriptionStages.transform)
+		foreach(Transform child in panelDescriptionStages.transform)
 			GameObject.Destroy(child.gameObject);
 
 
+		// TODO For debug purposes
 		debugCurrentQuest = id;
 	}
 
@@ -129,7 +149,7 @@ public class QuestManager : MonoBehaviour {
 			return;
 
 		quest.setActive(!quest.getActive());
-		panelDescriptionStatus.text = quest.getActive() ? "active" : "not active";
+		panelDescriptionStatus.text = quest.getActive() ? "active" : quest.getCompleted() ? "completed" : "not active";
 	}
 }
  

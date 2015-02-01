@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class QuestProgress {
-	public enum ProgressType { MONSTER_KILL, INTERACTION };
+	public enum ProgressType { MONSTER_KILL, INTERACTION, MATERIAL_PICKUP };
 	public ProgressType type;
 
 	public string str = "";
@@ -26,5 +26,9 @@ public class QuestProgress {
 	public QuestProgress setPosition(Vector3 pos) {
 		this.pos = pos;
 		return this;
+	}
+
+	public override string ToString() {
+		return "{ type=" + type.ToString() + "; str=\"" + str + "\"; number=" + number + "; pos=" + pos.ToString() + " }";
 	}
 }

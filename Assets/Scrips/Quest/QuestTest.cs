@@ -8,15 +8,16 @@ public class QuestTest : Quest {
 	}
 
 	public override void initStages() {
-		stageList.Add(new Stage(0));
+		stageList.Add(new StageTest());
 	}
 
-	public new bool progress(QuestProgress progress) {
-		if(!base.progress(progress)) return false; // Check if this progress should be ignored. Like when the quest is not activated.
-
-		string progressValue = progress.type == QuestProgress.ProgressType.INTERACTION ? progress.str : progress.number.ToString();
-		Debug.Log(name + " received progress call. Value: " + progressValue);
-
-		return true;
+	protected class StageTest : Stage {
+		public override bool update(QuestProgress progress) {
+			if(progress.type == QuestProgress.ProgressType.MATERIAL_PICKUP) {
+				current += progress.number;
+				Debug.Log("Stage updated. " + current + " of " + objective + " materials picked up");
+			}
+			return current >= objective;
+		}
 	}
 }
