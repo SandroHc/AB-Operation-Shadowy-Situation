@@ -14,16 +14,10 @@ public class MaterialManager : MonoBehaviour {
 	private float pickUpTime = 1;
 	private bool pickingUp = false;
 
-	// Use this for initialization
 	void Awake() {
 		// Load total materials collected
 		materialCount = PlayerPrefs.GetInt("material_count", 0);
 		uiMaterialCounter.text = materialCount.ToString();
-	}
-
-	// Update is called once per frame
-	void Update () {
-
 	}
 
 	public void increase(int value) {

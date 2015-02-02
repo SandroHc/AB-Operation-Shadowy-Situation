@@ -129,7 +129,7 @@ public class QuestManager : MonoBehaviour {
 	 * Populate the Journal panel with information about the desired quest
 	 **/
 	private void showInfo(Quest quest) {
-		if(quest == null) return;// TODO Clear UI quest description, to clear the content of the previous selected quest
+		if(quest == null) return;// TODO Clear UI quest description, to clear the content of the previously selected quest
 
 		// if is the first time showing quest info, activate the respective panel
 		if(!panelDescription.activeSelf)
