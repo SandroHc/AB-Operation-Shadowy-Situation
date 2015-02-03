@@ -36,12 +36,8 @@ public abstract class Dialogue {
 
 	public void closingDialogue() { }
 
-	public class Conversation {
-		private List<string> options = new List<string>();
-
-		public Conversation(List<string> options) {
-			this.options = options;
-		}
+	public abstract class Conversation {
+		protected List<string> options = new List<string>();
 
 		public List<string> get() {
 			return options;
@@ -51,8 +47,28 @@ public abstract class Dialogue {
 			return options.Count;
 		}
 
-		public bool selected(int index) {
-			return true;
+		public void draw() {
+			int size = options.Count;
+			
+			int btnWidth = 400;
+			int btnHeight = 30;
+			
+			int padding = Screen.width / 2 - btnWidth / 2;
+			int paddingVert = 8;
+
+			int posY = 0;
+
+			for(int i = size-1; i >= 0; i--) {
+				posY += paddingVert + btnHeight;
+
+				if(GUI.Button(new Rect(padding, Screen.height - posY, btnWidth, btnHeight), new GUIContent((i + 1) + ". " + options[i])))
+					selected(i);
+			}
 		}
+
+		/**
+		 * Returns true if the dialogue is over (e.g. no more conversations)
+		 **/
+		abstract public bool selected(int index);
 	}
 }

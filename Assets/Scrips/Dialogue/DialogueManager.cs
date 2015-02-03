@@ -30,25 +30,8 @@ public class DialogueManager : MonoBehaviour {
 	public void OnGUI() {
 		if(currentDialogue != null) {
 			Dialogue.Conversation conv = currentDialogue.getCurrentConversation();
-			if(conv != null) {
-				List<string> options = conv.get();
-				int size = options.Count;
-
-				int btnWidth = 400;
-				int btnHeight = 30;
-
-				int padding = Screen.width / 2 - btnWidth / 2;
-				int paddingVert = 8;
-
-				int posY = size * paddingVert + (size-1) * btnHeight;
-
-				for(int i = size-1; i >= 0; i--) {
-					if(GUI.Button(new Rect(padding, Screen.height - posY, btnWidth, btnHeight), new GUIContent((i + 1) + ". " + options[i])))
-						selected(i);
-
-					posY += paddingVert + btnHeight;
-				}
-			}
+			if(conv != null)
+				conv.draw();
 		}
 	}
 

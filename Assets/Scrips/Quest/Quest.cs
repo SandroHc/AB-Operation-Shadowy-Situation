@@ -6,7 +6,7 @@ using System.Collections.Generic;
  * Utility class to store information related to any quest.
  */
 public abstract class Quest {
-	public enum QUEST_STATUS { INACTIVE = 0, ACTIVE = 1, COMPLETED = 2 };
+	public enum QUEST_STATUS { UNKNOWN = -1, INACTIVE = 0, ACTIVE = 1, COMPLETED = 2 };
 	public QUEST_STATUS status;
 
 	public int id;

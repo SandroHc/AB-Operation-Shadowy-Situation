@@ -110,7 +110,7 @@ public class QuestManager : MonoBehaviour {
 	 * Returns the Quest with that ID.
 	 * If no quest with that ID is found, returns null.
 	 **/
-	private Quest getQuest(int id) {
+	public Quest getQuest(int id) {
 		foreach(Quest quest in questList) {
 			if(quest == null)
 				continue;
@@ -118,6 +118,11 @@ public class QuestManager : MonoBehaviour {
 				return quest;
 		}
 		return null;
+	}
+
+	public Quest.QUEST_STATUS getQuestStatus(int id) {
+		Quest target = getQuest(id);
+		return target != null ? target.getStatus() : Quest.QUEST_STATUS.UNKNOWN;
 	}
 
 	public Text panelDescriptionName;
