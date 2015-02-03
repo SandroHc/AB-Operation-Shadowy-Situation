@@ -38,7 +38,7 @@ public class QuestManager : MonoBehaviour {
 			text.rectTransform.anchorMax = Vector2.one;
 			text.rectTransform.anchoredPosition = new Vector2(.5f, .5f);
 			text.text = quest.name;
-			text.font = GameController.textManager.font;
+			text.font = GameController.textManager.uiFont;
 			text.fontSize = 20;
 			text.color = Color.black;
 			text.alignment = TextAnchor.MiddleCenter;
@@ -160,7 +160,7 @@ public class QuestManager : MonoBehaviour {
 			text.rectTransform.anchorMax = Vector2.one;
 			text.rectTransform.anchoredPosition = new Vector2(.5f, .5f);
 			text.text = stage.getText();
-			text.font = GameController.textManager.font;
+			text.font = GameController.textManager.uiFont;
 			text.fontSize = 20;
 			text.color = Color.black;
 			text.alignment = TextAnchor.MiddleCenter;

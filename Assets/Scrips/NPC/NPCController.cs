@@ -1,51 +1,23 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class NPCController : MonoBehaviour {
-	private new string name;
-	
-	public List<Collider> playersNearby;
-	
-	public float lookSpeed;
-	
-	public bool toggle = false;
-	public float hSliderValue = 0;
+	public new string name;
 
-	public GameObject textMeshPrefab;
-	private TextMesh textMesh;
+	//public GameObject uiCanvas;
+	public Text uiName;
 
-	void Start() {
-		name = "NPC Test";
-
-		// Create a clone of the TextMesh prefab
-		GameObject obj = GameObject.Instantiate(textMeshPrefab) as GameObject;
-		// Set the prefab as a child of this GO
-		obj.transform.parent = gameObject.transform;
-
-		// Setup the TextMesh component
-		textMesh = obj.GetComponent<TextMesh>(); 
-		textMesh.text = name;
-		textMesh.characterSize = 0.025f;
-		textMesh.alignment = TextAlignment.Center;
-		textMesh.anchor = TextAnchor.MiddleCenter;
-
-		// Setup the clone position
-		obj.transform.localPosition = new Vector3(0, 1.3f, 0);
+	void Awake() {
+		uiName.text = name;
 	}
 
 	void Update() {
-		if(GameController.getFocused())
-			playersNearby.ForEach(updateLookingRotation);
+		if(Camera.main != null && Camera.main.transform.hasChanged) { // When in cutscenes, the main camera is disabled
+			// gameObject.transform.forward = Camera.main.transform.forward; // Keeps the text facing the player
 
-
-		if(Camera.main != null) // When in cutscenes, the main camera is disabled
-			if(Camera.main.transform.hasChanged)
-				textMesh.transform.forward = Camera.main.transform.forward; // Keeps the TextMesh facing the player
-	}
-
-	private void updateLookingRotation(Collider collider) {
-		Quaternion targetRotation = Quaternion.LookRotation(transform.position - collider.transform.position);
-		// Smoothly rotate towards the target point
-		collider.transform.rotation = Quaternion.Slerp(collider.transform.rotation, targetRotation, lookSpeed * Time.deltaTime);
+			Quaternion rotation = Quaternion.Euler(0, Camera.main.transform.localRotation.y, 0);
+			gameObject.transform.localRotation = rotation;
+		}
 	}
 }

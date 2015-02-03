@@ -2,6 +2,6 @@
 using System.Collections;
 
 public class TextManager : MonoBehaviour {
-	public Font font;
+	public Font uiFont;
 	public Material material;
 }

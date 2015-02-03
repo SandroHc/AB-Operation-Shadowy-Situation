@@ -1,0 +1,916 @@
+fileFormatVersion: 2
+guid: aa1d7383439699843b273b80019052e4
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: barHorizontal_blue_left.png
+    21300002: barHorizontal_blue_mid.png
+    21300004: barHorizontal_blue_right.png
+    21300006: barHorizontal_green_left.png
+    21300008: barHorizontal_green_mid.png
+    21300010: barHorizontal_green_right.png
+    21300012: barHorizontal_red_left.png
+    21300014: barHorizontal_red_mid.png
+    21300016: barHorizontal_red_right.png
+    21300018: barHorizontal_shadow_left.png
+    21300020: barHorizontal_shadow_mid.png
+    21300022: barHorizontal_shadow_right.png
+    21300024: barHorizontal_white_left.png
+    21300026: barHorizontal_white_mid.png
+    21300028: barHorizontal_white_right.png
+    21300030: barHorizontal_yellow_left.png
+    21300032: barHorizontal_yellow_mid.png
+    21300034: barHorizontal_yellow_right.png
+    21300036: barVertical_blue_bottom.png
+    21300038: barVertical_blue_mid.png
+    21300040: barVertical_blue_top.png
+    21300042: barVertical_green_bottom.png
+    21300044: barVertical_green_mid.png
+    21300046: barVertical_green_top.png
+    21300048: barVertical_red_bottom.png
+    21300050: barVertical_red_mid.png
+    21300052: barVertical_red_top.png
+    21300054: barVertical_shadow_bottom.png
+    21300056: barVertical_shadow_mid.png
+    21300058: barVertical_shadow_top.png
+    21300060: barVertical_white_bottom.png
+    21300062: barVertical_white_mid.png
+    21300064: barVertical_white_top.png
+    21300066: barVertical_yellow_bottom.png
+    21300068: barVertical_yellow_mid.png
+    21300070: barVertical_yellow_top.png
+    21300072: crossair_black.png
+    21300074: crossair_blackOutline.png
+    21300076: crossair_blue.png
+    21300078: crossair_blueOutline.png
+    21300080: crossair_red.png
+    21300082: crossair_redOutline.png
+    21300084: crossair_white.png
+    21300086: crossair_whiteOutline.png
+    21300088: cursor_hand.png
+    21300090: cursor_pointer3D.png
+    21300092: cursor_pointer3D_shadow.png
+    21300094: cursor_pointerFlat.png
+    21300096: cursor_pointerFlat_shadow.png
+    21300098: dotBlue.png
+    21300100: dotGreen.png
+    21300102: dotRed.png
+    21300104: dotWhite.png
+    21300106: dotYellow.png
+    21300108: dot_shadow.png
+    21300110: glassPanel.png
+    21300112: glassPanel_cornerBL.png
+    21300114: glassPanel_cornerBR.png
+    21300116: glassPanel_cornerTL.png
+    21300118: glassPanel_cornerTR.png
+    21300120: glassPanel_corners.png
+    21300122: glassPanel_projection.png
+    21300124: glassPanel_tab.png
+    21300126: metalPanel.png
+    21300128: metalPanel_blue.png
+    21300130: metalPanel_blueCorner.png
+    21300132: metalPanel_green.png
+    21300134: metalPanel_greenCorner.png
+    21300136: metalPanel_plate.png
+    21300138: metalPanel_red.png
+    21300140: metalPanel_redCorner.png
+    21300142: metalPanel_yellow.png
+    21300144: metalPanel_yellowCorner.png
+    21300146: squareBlue.png
+    21300148: squareGreen.png
+    21300150: squareRed.png
+    21300152: squareWhite.png
+    21300154: squareYellow.png
+    21300156: square_shadow.png
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 1024
+  textureSettings:
+    filterMode: 1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: barHorizontal_blue_left.png
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 408
+        width: 6
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barHorizontal_blue_mid.png
+      rect:
+        serializedVersion: 2
+        x: 388
+        y: 66
+        width: 16
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barHorizontal_blue_right.png
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 486
+        width: 6
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barHorizontal_green_left.png
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 382
+        width: 6
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barHorizontal_green_mid.png
+      rect:
+        serializedVersion: 2
+        x: 386
+        y: 120
+        width: 16
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barHorizontal_green_right.png
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 460
+        width: 6
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barHorizontal_red_left.png
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 356
+        width: 6
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barHorizontal_red_mid.png
+      rect:
+        serializedVersion: 2
+        x: 386
+        y: 146
+        width: 16
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barHorizontal_red_right.png
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 330
+        width: 6
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barHorizontal_shadow_left.png
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 304
+        width: 6
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barHorizontal_shadow_mid.png
+      rect:
+        serializedVersion: 2
+        x: 386
+        y: 172
+        width: 16
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barHorizontal_shadow_right.png
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 278
+        width: 6
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barHorizontal_white_left.png
+      rect:
+        serializedVersion: 2
+        x: 402
+        y: 172
+        width: 6
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barHorizontal_white_mid.png
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 250
+        width: 16
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barHorizontal_white_right.png
+      rect:
+        serializedVersion: 2
+        x: 402
+        y: 120
+        width: 6
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barHorizontal_yellow_left.png
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 434
+        width: 6
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barHorizontal_yellow_mid.png
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 224
+        width: 16
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barHorizontal_yellow_right.png
+      rect:
+        serializedVersion: 2
+        x: 402
+        y: 146
+        width: 6
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barVertical_blue_bottom.png
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 6
+        width: 26
+        height: 6
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barVertical_blue_mid.png
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 174
+        width: 26
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barVertical_blue_top.png
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 0
+        width: 26
+        height: 6
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barVertical_green_bottom.png
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 0
+        width: 26
+        height: 6
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barVertical_green_mid.png
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 126
+        width: 26
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barVertical_green_top.png
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 0
+        width: 26
+        height: 6
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barVertical_red_bottom.png
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 6
+        width: 26
+        height: 6
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barVertical_red_mid.png
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 110
+        width: 26
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barVertical_red_top.png
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 26
+        height: 6
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barVertical_shadow_bottom.png
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 6
+        width: 26
+        height: 6
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barVertical_shadow_mid.png
+      rect:
+        serializedVersion: 2
+        x: 386
+        y: 172
+        width: 16
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barVertical_shadow_top.png
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 6
+        width: 26
+        height: 6
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barVertical_white_bottom.png
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 0
+        width: 26
+        height: 6
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barVertical_white_mid.png
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 142
+        width: 26
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barVertical_white_top.png
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 6
+        width: 26
+        height: 6
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barVertical_yellow_bottom.png
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 0
+        width: 26
+        height: 6
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barVertical_yellow_mid.png
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 158
+        width: 26
+        height: 16
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: barVertical_yellow_top.png
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 6
+        width: 26
+        height: 6
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: crossair_black.png
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 12
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: crossair_blackOutline.png
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 76
+        width: 36
+        height: 36
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: crossair_blue.png
+      rect:
+        serializedVersion: 2
+        x: 332
+        y: 44
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: crossair_blueOutline.png
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 148
+        width: 36
+        height: 36
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: crossair_red.png
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 44
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: crossair_redOutline.png
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 112
+        width: 36
+        height: 36
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: crossair_white.png
+      rect:
+        serializedVersion: 2
+        x: 332
+        y: 12
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: crossair_whiteOutline.png
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 184
+        width: 36
+        height: 36
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cursor_hand.png
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 190
+        width: 30
+        height: 30
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cursor_pointer3D.png
+      rect:
+        serializedVersion: 2
+        x: 380
+        y: 276
+        width: 20
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cursor_pointer3D_shadow.png
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 35
+        width: 20
+        height: 27
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cursor_pointerFlat.png
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 11
+        width: 20
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: cursor_pointerFlat_shadow.png
+      rect:
+        serializedVersion: 2
+        x: 366
+        y: 193
+        width: 20
+        height: 27
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dotBlue.png
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 166
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dotGreen.png
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 62
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dotRed.png
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 118
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dotWhite.png
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 142
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dotYellow.png
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 86
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: dot_shadow.png
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 86
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: glassPanel.png
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 412
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 15, y: 15, z: 15, w: 15}
+    - name: glassPanel_cornerBL.png
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 312
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 15, y: 15, z: 15, w: 15}
+    - name: glassPanel_cornerBR.png
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 212
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 15, y: 15, z: 15, w: 15}
+    - name: glassPanel_cornerTL.png
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 12
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 15, y: 15, z: 15, w: 15}
+    - name: glassPanel_cornerTR.png
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 412
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 15, y: 15, z: 15, w: 15}
+    - name: glassPanel_corners.png
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 212
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 15, y: 15, z: 15, w: 15}
+    - name: glassPanel_projection.png
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 112
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 15, y: 15, z: 15, w: 15}
+    - name: glassPanel_tab.png
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 300
+        width: 100
+        height: 112
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 15, y: 15, z: 15, w: 20}
+    - name: metalPanel.png
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 212
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 15, y: 15, z: 15, w: 15}
+    - name: metalPanel_blue.png
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 312
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 15, y: 15, z: 15, w: 40}
+    - name: metalPanel_blueCorner.png
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 412
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 15, y: 15, z: 15, w: 40}
+    - name: metalPanel_green.png
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 12
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 15, y: 15, z: 15, w: 40}
+    - name: metalPanel_greenCorner.png
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 112
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 15, y: 15, z: 15, w: 40}
+    - name: metalPanel_plate.png
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 220
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: metalPanel_red.png
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 312
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 15, y: 15, z: 15, w: 40}
+    - name: metalPanel_redCorner.png
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 412
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 15, y: 15, z: 15, w: 40}
+    - name: metalPanel_yellow.png
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 12
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 15, y: 15, z: 15, w: 40}
+    - name: metalPanel_yellowCorner.png
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 112
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 15, y: 15, z: 15, w: 40}
+    - name: squareBlue.png
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 36
+        width: 19
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 6, y: 6, z: 6, w: 6}
+    - name: squareGreen.png
+      rect:
+        serializedVersion: 2
+        x: 380
+        y: 224
+        width: 19
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 6, y: 6, z: 6, w: 6}
+    - name: squareRed.png
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 92
+        width: 19
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 6, y: 6, z: 6, w: 6}
+    - name: squareWhite.png
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 10
+        width: 19
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 6, y: 6, z: 6, w: 6}
+    - name: squareYellow.png
+      rect:
+        serializedVersion: 2
+        x: 380
+        y: 250
+        width: 19
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 6, y: 6, z: 6, w: 6}
+    - name: square_shadow.png
+      rect:
+        serializedVersion: 2
+        x: 386
+        y: 198
+        width: 19
+        height: 26
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 

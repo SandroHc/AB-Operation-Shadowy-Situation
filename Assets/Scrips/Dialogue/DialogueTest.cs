@@ -29,9 +29,6 @@ public class DialogueTest : Dialogue {
 			} else {
 				options.Add("Voltar");
 			}
-
-			for(int i=2; i < 11; i++)
-				options.Add("Opçao " + i);
 		}
 
 		public override bool selected(int index) {
