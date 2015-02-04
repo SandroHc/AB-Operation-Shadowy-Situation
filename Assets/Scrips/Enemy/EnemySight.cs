@@ -49,7 +49,7 @@ public class EnemySight : MonoBehaviour
 
 
 		// TODO Temp code to animate the enemy
-		anim.SetFloat("Speed", Vector3.Distance(lastPos, transform.position) * 10);
+//		anim.SetFloat("Speed", Vector3.Distance(lastPos, transform.position) * 10);
 		lastPos = transform.position;
 
 		// TODO Temp code to follow the enemy
@@ -72,13 +72,13 @@ public class EnemySight : MonoBehaviour
 			if(angle < fieldOfViewAngle * 0.5f) {
 				RaycastHit hit;
 
-				Debug.Log("IN FIELD OF VIEW!!");
+//				Debug.Log("IN FIELD OF VIEW!!");
 				
 				// ... and if a raycast towards the player hits something...
 				if(Physics.Raycast(transform.position + transform.up, direction.normalized, out hit, col.radius)) {
 					// ... and if the raycast hits the player...
 					if(hit.collider.gameObject.tag == Tags.player) {
-						Debug.Log("IN RAYCAST!!");
+//						Debug.Log("IN RAYCAST!!");
 						// ... the player is in sight.
 						playerInSight = true;
 						
@@ -95,7 +95,7 @@ public class EnemySight : MonoBehaviour
 
 		//	if(playerLayerZeroStateHash == hash.locomotionState || playerLayerOneStateHash == hash.shoutState) { // If the player is running or is attracting attention...
 			if(CalculatePathLength(other.transform.position) <= col.radius) { // ... and if the player is within hearing range...
-					Debug.Log("INSIDE DISTANCE!!");
+//					Debug.Log("INSIDE DISTANCE!!");
 					playerInSight = true; // TODO Temp var. The player is not yet in sight, the robot should check the zone and then may trigger the player sighting
 
 					// ... set the last personal sighting of the player to the player's current position.
