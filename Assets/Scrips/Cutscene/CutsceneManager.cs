@@ -2,12 +2,11 @@
 using System.Collections;
 
 public class CutsceneManager : MonoBehaviour {
-	private Camera old;
-
-	private PlayerController playerController;	
+	public static Camera cutsceneCamera;
+	private Camera playerCamera;
 
 	public void Start() {
-		playerController = GameObject.FindGameObjectWithTag(Tags.player).GetComponent<PlayerController>();
+		cutsceneCamera = gameObject.GetComponent<Camera>();
 	}
 
 	public void LateUpdate() {
@@ -22,10 +21,10 @@ public class CutsceneManager : MonoBehaviour {
 		//Debug.Log("Starting cutscene");
 
 		GameController.setFocused(true);
-		playerController.enabled = false;
+		GameController.playerController.enabled = false;
 
-		old = Camera.main;
-		if(old != null) old.enabled = false;
+		playerCamera = Camera.main;
+		if(playerCamera != null) playerCamera.enabled = false;
 		gameObject.camera.enabled = true;
 
 		gameObject.camera.animation.PlayQueued("CutsceneTest1");
@@ -39,13 +38,13 @@ public class CutsceneManager : MonoBehaviour {
 	public void finishCutscene() {
 		//Debug.Log("Finished cutscene");
 
-		if(gameObject.camera.animation.isPlaying)
-			gameObject.camera.animation.Stop();
+		if(cutsceneCamera.animation.isPlaying)
+			cutsceneCamera.animation.Stop();
 
 		GameController.setFocused(false);
-		playerController.enabled = true;
+		GameController.playerController.enabled = true;
 		
-		if(old != null) old.enabled = true;
-		gameObject.camera.enabled = false;
+		if(playerCamera != null) playerCamera.enabled = true;
+		cutsceneCamera.enabled = false;
 	}
 }
