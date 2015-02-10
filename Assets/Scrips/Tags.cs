@@ -22,6 +22,8 @@ public class Tags : MonoBehaviour {
 
 	public const string rubbish			= "rubbish";
 
+	public const string cutsceneCamera 	= "cutsceneCamera";
+
 	public const string none = ""; // Untagged objects
 
 	public static bool isGround(string tag) {

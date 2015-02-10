@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour {
 	public static SpriteManager spriteManager;
 
 	public static QuestManager questManager;
+	public static CutsceneManager cutsceneManager;
 	public static DialogueManager dialogueManager;
 	public static MaterialManager materialManager;
 	public static EnemyManager enemyManager;
@@ -35,6 +36,7 @@ public class GameController : MonoBehaviour {
 		spriteManager = gameObject.GetComponent<SpriteManager>();
 
 		questManager = gameObject.GetComponent<QuestManager>();
+		cutsceneManager = gameObject.GetComponent<CutsceneManager>();
 		dialogueManager = gameObject.GetComponent<DialogueManager>();
 		materialManager = gameObject.GetComponent<MaterialManager>();
 		enemyManager = gameObject.GetComponent<EnemyManager>();

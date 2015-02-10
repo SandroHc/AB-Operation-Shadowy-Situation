@@ -5,46 +5,53 @@ public class CutsceneManager : MonoBehaviour {
 	public static Camera cutsceneCamera;
 	private Camera playerCamera;
 
+	public Cutscene cutscene;
+	
 	public void Start() {
-		cutsceneCamera = gameObject.GetComponent<Camera>();
+		cutsceneCamera = (GameObject.FindWithTag(Tags.cutsceneCamera) as GameObject).GetComponent<Camera>();
 	}
 
 	public void LateUpdate() {
-		if(gameObject.camera.animation.isPlaying && Input.GetButtonDown("Cancel")) {
+		if(cutsceneCamera.animation.isPlaying && Input.GetButtonDown("Cancel")) {
 			Debug.Log("Cancelling cutscene");
 
-			finishCutscene();
+			stopCutscene();
 		}
 	}
 
-	public void startCutscene() {
+	public void startCutscene(Cutscene cutscene) {
+		if(cutscene == null) return;
+
 		//Debug.Log("Starting cutscene");
+
+		this.cutscene = cutscene;
+		cutscene.setupCutscene();
 
 		GameController.setFocused(true);
 		GameController.playerController.enabled = false;
 
 		playerCamera = Camera.main;
 		if(playerCamera != null) playerCamera.enabled = false;
-		gameObject.camera.enabled = true;
+		cutsceneCamera.enabled = true;
 
-		gameObject.camera.animation.PlayQueued("CutsceneTest1");
-		//gameObject.camera.animation.PlayQueued("CutsceneTest2");
-	/*	foreach(AnimationState state in gameObject.camera.animation) {
-			Debug.Log("Playing section: " + state.name);
-			gameObject.camera.animation.PlayQueued(state.name);
-		}*/
+		cutscene.startCutscene();
 	}
 
-	public void finishCutscene() {
-		//Debug.Log("Finished cutscene");
+	public void stopCutscene() {
+		//Debug.Log("Stopping cutscene");
 
 		if(cutsceneCamera.animation.isPlaying)
 			cutsceneCamera.animation.Stop();
+
+		cutscene.stopCutscene();
 
 		GameController.setFocused(false);
 		GameController.playerController.enabled = true;
 		
 		if(playerCamera != null) playerCamera.enabled = true;
 		cutsceneCamera.enabled = false;
+
+		// Remove the reference to the, now finished, cutscene
+		cutscene = null;
 	}
 }
