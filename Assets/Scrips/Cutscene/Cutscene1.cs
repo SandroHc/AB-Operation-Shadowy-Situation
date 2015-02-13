@@ -10,48 +10,38 @@ public class Cutscene1 : Cutscene {
 	}
 
 	void OnTriggerEnter(Collider other) {
+		// If the collider is not the player, cancel any interactions
 		if(other.tag != Tags.player) return;
 		
-		// Start the cutscene
-		Debug.Log (GameController.cutsceneManager);
+		// Start this cutscene
 		GameController.cutsceneManager.startCutscene(this);
 	}
 
-	public override void startCutscene() {
-		currentStage.startStage();
-	}
-
-	public override void stopCutscene() {
-		currentStage.stopStage();
-	}
-
 	public class Stage1 : Stage {
-		public override void setupStage() {
-		}
 
 		public override void startStage() {
-			Debug.Log ("Starting animation CutsceneTest1");
+			Debug.Log("Starting animation CutsceneTest1");
 
 			CutsceneManager.cutsceneCamera.animation.PlayQueued("CutsceneTest1");
 		}
 
-		public override void stopStage() {
-
+		// Advace to the next stage when the animation reaches its end
+		public override void finishAnimation() {
+			stopStage();
 		}
 	}
 
 	public class Stage2 : Stage {
-		public override void setupStage() {
-		}
 		
 		public override void startStage() {
 			Debug.Log ("Starting animation CutsceneTest2");
 			
 			CutsceneManager.cutsceneCamera.animation.PlayQueued("CutsceneTest2");
 		}
-		
-		public override void stopStage() {
-			
+
+		// Advace to the next stage when the animation reaches its end
+		public override void finishAnimation() {
+			stopStage();
 		}
 	}
 }

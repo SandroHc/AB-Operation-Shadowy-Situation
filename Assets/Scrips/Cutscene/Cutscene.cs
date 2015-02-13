@@ -14,11 +14,23 @@ public abstract class Cutscene : MonoBehaviour {
 
 		// Set the current stage to the first one
 		currentStage = stageList[0]; 
-		currentStage.setupStage();
+		currentStage.setupStage(this);
 	}
 
-	abstract public void startCutscene();
-	abstract public void stopCutscene();
+	public void startCutscene() {
+		if(currentStage != null)
+			currentStage.startStage();
+	}
+	
+	public void stopCutscene() {
+		// Cear the reference to the current stage.
+		// Ensures that there is no way for the stage to interfere
+		// with this cutscene, effectively stopping it.
+		if(currentStage != null) {
+			currentStage.setCutscene(null);
+			currentStage = null;
+		}
+	}
 
 	protected void nextStage() {
 		// If the current stage is null (WHY?), reset back to the first stage
@@ -27,8 +39,7 @@ public abstract class Cutscene : MonoBehaviour {
 			return;
 		}
 
-		currentStage.stopStage();
-
+		// Try to get the index of the next stage
 		int index = stageList.IndexOf(currentStage);
 		if(index != -1 && ++index < stageList.Count) {
 			currentStage = stageList[index];
@@ -38,19 +49,37 @@ public abstract class Cutscene : MonoBehaviour {
 			return;
 		}
 
-		currentStage.setupStage();
+		// Send the events to cofing and start the new stage
+		currentStage.setupStage(this);
 		currentStage.startStage();
 	}
 
 	public void finishAnimation() {
-		int index = stageList.IndexOf(currentStage);
-		if(index >= 0 && index < stageList.Count)
-			nextStage();
+		// Send the event to the stage
+		if(currentStage != null)
+			currentStage.finishAnimation();
 	}
 
 	public abstract class Stage {
-		abstract public void setupStage();
+		protected Cutscene cutscene;
+
 		abstract public void startStage();
-		abstract public void stopStage();
+
+		public void setupStage(Cutscene cutscene) {
+			setCutscene(cutscene);
+		}
+
+		public void stopStage() {
+			if(cutscene == null) return;
+
+			// Go to the next stage in the cutscene
+			cutscene.nextStage();
+		}
+
+		public virtual void finishAnimation() { }
+
+		public void setCutscene(Cutscene cutscene) {
+			this.cutscene = cutscene;
+		}
 	}
 }

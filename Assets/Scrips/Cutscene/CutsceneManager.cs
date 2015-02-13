@@ -40,10 +40,10 @@ public class CutsceneManager : MonoBehaviour {
 	public void stopCutscene() {
 		//Debug.Log("Stopping cutscene");
 
+		cutscene.stopCutscene();
+
 		if(cutsceneCamera.animation.isPlaying)
 			cutsceneCamera.animation.Stop();
-
-		cutscene.stopCutscene();
 
 		GameController.setFocused(false);
 		GameController.playerController.enabled = true;
