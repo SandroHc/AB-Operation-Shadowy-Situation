@@ -23,7 +23,8 @@ public class QuestManager : MonoBehaviour {
 
 			Image image = buttonObject.AddComponent<Image>();
 			image.transform.parent = panelList.transform;
-			image.rectTransform.sizeDelta = new Vector2(panelListTransform.rect.width, 50);
+			image.rectTransform.sizeDelta = new Vector2(panelListTransform.rect.width - 10, 50);
+			image.rectTransform.position = new Vector2(5, 0);
 			image.rectTransform.anchoredPosition = Vector3.zero;
 			image.color = new Color(1f, 1f, 1f, .5f);
 			
@@ -39,7 +40,7 @@ public class QuestManager : MonoBehaviour {
 			text.rectTransform.anchoredPosition = new Vector2(.5f, .5f);
 			text.text = quest.name;
 			text.font = GameController.textManager.uiFont;
-			text.fontSize = 20;
+			text.fontSize = 18;
 			text.color = Color.black;
 			text.alignment = TextAnchor.MiddleCenter;
 
