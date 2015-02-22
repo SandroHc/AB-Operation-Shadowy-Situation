@@ -1,64 +1,39 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemySight : MonoBehaviour
-{
+public class EnemySight : MonoBehaviour {
 	public float fieldOfViewAngle = 110f;           // Number of degrees, centred on forward, for the enemy see.
 	public bool playerInSight;                      // Whether or not the player is currently sighted.
 	public Vector3 personalLastSighting;            // Last place this enemy spotted the player.
-	
-	
+
 	private NavMeshAgent nav;                       // Reference to the NavMeshAgent component.
 	private SphereCollider col;                     // Reference to the sphere collider trigger component.
-	private Animator anim;                          // Reference to the Animator.
-	//private LastPlayerSighting lastPlayerSighting;  // Reference to last global sighting of the player.
-	//private Animator playerAnim;                    // Reference to the player's animator component.
-	//private PlayerHealth playerHealth;              // Reference to the player's health script.
-	//private HashIDs hash;                           // Reference to the HashIDs.
 	private Vector3 previousSighting;               // Where the player was sighted last frame.
 
-
-	private Vector3 lastPos; // TODO To be removed. Used by the animator to get the speed
+	public float currentTime;
 	
 	void Awake() {
 		// Setting up the references.
 		nav = GetComponent<NavMeshAgent>();
 		col = GetComponent<SphereCollider>();
-		anim = GetComponent<Animator>();
-	//	player = GameObject.FindGameObjectWithTag(Tags.player);
-	//	playerAnim = player.GetComponent<Animator>();
-	//	playerHealth = player.GetComponent<PlayerHealth>();
-	//	hash = GameObject.FindGameObjectWithTag(Tags.gameController).GetComponent<HashIDs>();
-		
-		// Set the personal sighting and the previous sighting to the reset position.
-	//	personalLastSighting = lastPlayerSighting.resetPosition;
-	//	previousSighting = lastPlayerSighting.resetPosition;
-
-		lastPos = transform.position; // TODO To be removed.
 	}
 	
-	
 	void Update() {
-	//	// If the player is alive...
-	//	if(playerHealth.health > 0f)
-	//		// ... set the animator parameter to whether the player is in sight or not.
-	//		anim.SetBool(hash.playerInSightBool, playerInSight);
-	//	else
-	//		// ... set the animator parameter to false.
-	//		anim.SetBool(hash.playerInSightBool, false);
-
-
-		// TODO Temp code to animate the enemy
-//		anim.SetFloat("Speed", Vector3.Distance(lastPos, transform.position) * 10);
-		lastPos = transform.position;
-
 		// TODO Temp code to follow the enemy
 		if(playerInSight)
-			nav.destination = personalLastSighting;
+			nav.SetDestination(personalLastSighting);
+
+//		DrawPath(nav.path);
 	}
 	
 	
 	void OnTriggerStay(Collider other) {
+		// Only check for new player sights twice a second
+		if(currentTime < .5f) {
+			currentTime += Time.deltaTime;
+			return;
+		}
+
 		// If the player has entered the trigger sphere...
 		if(other.gameObject.tag == Tags.player) {
 			// By default the player is not in sight.
@@ -69,39 +44,18 @@ public class EnemySight : MonoBehaviour
 			float angle = Vector3.Angle(direction, transform.forward);
 			
 			// If the angle between forward and where the player is, is less than half the angle of view...
-			if(angle < fieldOfViewAngle * 0.5f) {
+			if(angle < fieldOfViewAngle) {
 				RaycastHit hit;
 
 //				Debug.Log("IN FIELD OF VIEW!!");
+
+				// ... the player is in sight.
+				playerInSight = true;
 				
-				// ... and if a raycast towards the player hits something...
-				if(Physics.Raycast(transform.position + transform.up, direction.normalized, out hit, col.radius)) {
-					// ... and if the raycast hits the player...
-					if(hit.collider.gameObject.tag == Tags.player) {
-//						Debug.Log("IN RAYCAST!!");
-						// ... the player is in sight.
-						playerInSight = true;
-						
-						// Set the last global sighting is the players current position.
-						//lastPlayerSighting.position = player.transform.position;
-						personalLastSighting = hit.collider.transform.position;
-					}
-				}
+				// Set the last global sighting is the players current position.
+				//lastPlayerSighting.position = player.transform.position;
+				personalLastSighting = other.transform.position;
 			}
-			
-			// Store the name hashes of the current states.
-		//	int playerLayerZeroStateHash = playerAnim.GetCurrentAnimatorStateInfo(0).nameHash;
-		//	int playerLayerOneStateHash = playerAnim.GetCurrentAnimatorStateInfo(1).nameHash;
-
-		//	if(playerLayerZeroStateHash == hash.locomotionState || playerLayerOneStateHash == hash.shoutState) { // If the player is running or is attracting attention...
-			if(CalculatePathLength(other.transform.position) <= col.radius) { // ... and if the player is within hearing range...
-//					Debug.Log("INSIDE DISTANCE!!");
-					playerInSight = true; // TODO Temp var. The player is not yet in sight, the robot should check the zone and then may trigger the player sighting
-
-					// ... set the last personal sighting of the player to the player's current position.
-					personalLastSighting = other.transform.position;
-				}
-		//	}
 		}
 	}
 	
@@ -130,18 +84,46 @@ public class EnemySight : MonoBehaviour
 		allWayPoints[allWayPoints.Length - 1] = targetPosition;
 		
 		// The points inbetween are the corners of the path.
-		for(int i = 0; i < path.corners.Length; i++) {
+		for(int i = 0; i < path.corners.Length; i++)
 			allWayPoints[i + 1] = path.corners[i];
-		}
 		
 		// Create a float to store the path length that is by default 0.
 		float pathLength = 0;
 		
 		// Increment the path length by an amount equal to the distance between each waypoint and the next.
-		for(int i = 0; i < allWayPoints.Length - 1; i++) {
+		for(int i = 0; i < allWayPoints.Length - 1; i++)
 			pathLength += Vector3.Distance(allWayPoints[i], allWayPoints[i + 1]);
-		}
 		
 		return pathLength;
+	}
+
+	private Color c = Color.blue;
+
+	void DrawPath(NavMeshPath path) {
+		if(path.corners.Length < 2)
+			return;
+
+		switch (path.status) {
+		case NavMeshPathStatus.PathComplete:
+			c = Color.blue;
+			break;
+		case NavMeshPathStatus.PathInvalid:
+			c = Color.red;
+			break;
+		case NavMeshPathStatus.PathPartial:
+			c = Color.yellow;
+			break;
+		}
+
+		Vector3 previousCorner = path.corners[0];
+
+		int i = 1;
+		while (i < path.corners.Length) {
+			Vector3 currentCorner = path.corners[i];
+			Debug.DrawLine(previousCorner, currentCorner, c);
+			previousCorner = currentCorner;
+			i++;
+		}
+
 	}
 }
