@@ -206,10 +206,10 @@
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.0/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="BulletXNA-Unity">
- <HintPath>D:/Desenvolvimento/C#/Unity/AB/Assets/BulletXNA/BulletXNA-Unity.dll</HintPath>
+ <HintPath>D:/Desenvolvimento/C#/AB/Assets/BulletXNA/BulletXNA-Unity.dll</HintPath>
  </Reference>
  <Reference Include="MMD4MecanimInternal">
- <HintPath>D:/Desenvolvimento/C#/Unity/AB/Assets/MMD4Mecanim/Scripts/Internal/MMD4MecanimInternal.dll</HintPath>
+ <HintPath>D:/Desenvolvimento/C#/AB/Assets/MMD4Mecanim/Scripts/Internal/MMD4MecanimInternal.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
