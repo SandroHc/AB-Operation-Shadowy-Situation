@@ -22,7 +22,7 @@ public class Cutscene1 : Cutscene {
 		public override void startStage() {
 			Debug.Log("Starting animation CutsceneTest1");
 
-			CutsceneManager.cutsceneCamera.animation.PlayQueued("CutsceneTest1");
+			CutsceneManager.cutsceneCamera.GetComponent<Animation>().PlayQueued("CutsceneTest1");
 		}
 
 		// Advace to the next stage when the animation reaches its end
@@ -36,7 +36,7 @@ public class Cutscene1 : Cutscene {
 		public override void startStage() {
 			Debug.Log ("Starting animation CutsceneTest2");
 			
-			CutsceneManager.cutsceneCamera.animation.PlayQueued("CutsceneTest2");
+			CutsceneManager.cutsceneCamera.GetComponent<Animation>().PlayQueued("CutsceneTest2");
 		}
 
 		// Advace to the next stage when the animation reaches its end

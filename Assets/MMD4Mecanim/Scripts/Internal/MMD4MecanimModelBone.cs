@@ -71,7 +71,7 @@ public partial class MMD4MecanimModel
 				return false;
 			}
 
-			AnimationInfo[] animationInfos = _animator.GetCurrentAnimationClipState(0);
+			AnimatorClipInfo[] animationInfos = _animator.GetCurrentAnimatorClipInfo(0);
 			if( animationInfos == null || animationInfos.Length == 0 ) {
 				return false;
 			}
@@ -133,7 +133,7 @@ public partial class MMD4MecanimModel
 		}
 
 		bool isNoAnimation = false;
-		AnimationInfo[] animationInfos = _animator.GetCurrentAnimationClipState(0);
+		AnimatorClipInfo[] animationInfos = _animator.GetCurrentAnimatorClipInfo(0);
 		if( animationInfos == null || animationInfos.Length == 0 ) {
 			isNoAnimation = true;
 			if( !this.pphEnabledNoAnimation ) {
@@ -145,7 +145,7 @@ public partial class MMD4MecanimModel
 		if( isNoAnimation ) {
 			pphRate = 1.0f; // pphEnabledNoAnimation
 		} else {
-			foreach( AnimationInfo animationInfo in animationInfos ) {
+			foreach( AnimatorClipInfo animationInfo in animationInfos ) {
 				if( !animationInfo.clip.name.EndsWith( ".vmd" ) ) {
 					pphRate += animationInfo.weight;
 				}

@@ -12,7 +12,7 @@ public class SpriteManager : MonoBehaviour {
 	private Renderer bulletMeshRenderer;
 
 	void Start() {
-		bulletMeshRenderer = (bulletPrefab.GetComponent("MeshFilter") as MeshFilter).renderer;
+		bulletMeshRenderer = bulletPrefab.GetComponent<MeshFilter>().GetComponent<Renderer>();
 	}
 
 	public GameObject getBullet(string type) {

@@ -8,8 +8,9 @@ public abstract class Cutscene : MonoBehaviour {
 
 	public void setupCutscene() {
 		// Copy the animations of this Game object to the Camera
-		foreach(AnimationState state in animation) {
-			CutsceneManager.cutsceneCamera.animation.AddClip(state.clip, state.name);
+		Animation targetAnimation = CutsceneManager.cutsceneCamera.GetComponent<Animation>();
+		foreach(AnimationState state in GetComponent<Animation>()) {
+			targetAnimation.AddClip(state.clip, state.name);
 		}
 
 		// Set the current stage to the first one

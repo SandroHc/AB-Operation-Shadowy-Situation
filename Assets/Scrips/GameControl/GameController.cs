@@ -3,6 +3,7 @@ using System.Collections;
 
 public class GameController : MonoBehaviour {
 	public static GameController INSTANCE { get; private set; }
+	private GUITexture guiTexture;
 
 	public static TextManager textManager;
 	public static AudioManager audioManager;
@@ -31,6 +32,7 @@ public class GameController : MonoBehaviour {
 
 	void Awake() {
 		INSTANCE = this;
+		guiTexture = GetComponent<GUITexture>();
 
 		textManager = gameObject.GetComponent<TextManager>();
 		audioManager = gameObject.GetComponent<AudioManager>();
@@ -49,7 +51,8 @@ public class GameController : MonoBehaviour {
 		guiTexture.color = Color.black;
 		guiTexture.pixelInset = new Rect(0f, 0f, Screen.width, Screen.height);
 
-		Screen.lockCursor = true;
+		Cursor.visible = false;
+		Cursor.lockState = CursorLockMode.Locked;
 
 		// Reset the fader
 		fade = true;
@@ -83,8 +86,10 @@ public class GameController : MonoBehaviour {
 	}
 
 	void OnGUI() {
-		if(GUI.Button(new Rect(20, 100, 100, 25), "Lock cursor"))
-			Screen.lockCursor = true;
+		if(GUI.Button(new Rect(20, 100, 100, 25), "Lock cursor")) {
+			Cursor.visible = true;
+			Cursor.lockState = CursorLockMode.Confined;
+		}
 
 		if(GUI.Button(new Rect(20, 135, 100, 25), "Spawn enemies"))
 			enemyManager.spawn(new Vector3(5, -24, 80));
@@ -146,7 +151,9 @@ public class GameController : MonoBehaviour {
 
 		INSTANCE.uiPause.SetActive(true);
 		INSTANCE.uiCrosshair.SetActive(false);
-		Screen.lockCursor = false;
+
+		Cursor.visible = true;
+		Cursor.lockState = CursorLockMode.Confined;
 
 		// Save preferences in the event of a crash
 		INSTANCE.OnApplicationQuit();
@@ -159,21 +166,27 @@ public class GameController : MonoBehaviour {
 
 		INSTANCE.uiPause.SetActive(false);
 		INSTANCE.uiCrosshair.SetActive(true);
-		Screen.lockCursor = true;
+
+		Cursor.visible = true;
+		Cursor.lockState = CursorLockMode.Confined;
 	}
 
 	private static void enterFocus(bool lockCursor = true) {
 		//Debug.Log("Entering focus mode");
 
 		INSTANCE.uiCrosshair.SetActive(false);
-		Screen.lockCursor = lockCursor;
+
+		Cursor.visible = !lockCursor;
+		Cursor.lockState = lockCursor ? CursorLockMode.Locked : CursorLockMode.Confined;
 	}
 
 	private static void exitFocus() {
 		//Debug.Log("Exiting focus mode");
 
 		INSTANCE.uiCrosshair.SetActive(!isPaused);
-		Screen.lockCursor = !isPaused;
+
+		Cursor.visible = isPaused;
+		Cursor.lockState = isPaused ? CursorLockMode.Confined : CursorLockMode.Locked;
 	}
 
 	void OnApplicationQuit() {

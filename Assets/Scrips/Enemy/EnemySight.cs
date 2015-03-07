@@ -11,7 +11,7 @@ public class EnemySight : MonoBehaviour {
 	private Vector3 previousSighting;               // Where the player was sighted last frame.
 
 	public float currentTime;
-	
+
 	void Awake() {
 		// Setting up the references.
 		nav = GetComponent<NavMeshAgent>();
@@ -23,7 +23,7 @@ public class EnemySight : MonoBehaviour {
 		if(playerInSight)
 			nav.SetDestination(personalLastSighting);
 
-//		DrawPath(nav.path);
+		DrawPath(nav.path);
 	}
 	
 	
@@ -58,13 +58,26 @@ public class EnemySight : MonoBehaviour {
 			}
 		}
 	}
+
+	void OnTriggerEnter(Collider other) {
+		// If the player enters the triger zone, activate the GameObject
+		if(other.gameObject.tag == Tags.player) {
+			enabled = true;
+		}
+	}
 	
 	
 	void OnTriggerExit(Collider other) {
-		// If the player leaves the trigger zone...
-		if(other.gameObject.tag == Tags.player)
-			// ... the player is not in sight.
+		// If the player leaves the trigger zone the player is not in sight.
+		if(other.gameObject.tag == Tags.player) {
 			playerInSight = false;
+
+			// Also, deactivate the GameObject to prevent unneeded calls
+			enabled = false;
+
+			// Reset the timer
+			currentTime = 0f;
+		}
 	}
 	
 	

@@ -3,16 +3,18 @@ using System.Collections;
 
 public class CutsceneManager : MonoBehaviour {
 	public static Camera cutsceneCamera;
+	private Animation animation;
 	private Camera playerCamera;
 
 	public Cutscene cutscene;
 	
 	public void Start() {
-		cutsceneCamera = (GameObject.FindWithTag(Tags.cutsceneCamera) as GameObject).GetComponent<Camera>();
+		cutsceneCamera = GameObject.FindWithTag(Tags.cutsceneCamera).GetComponent<Camera>();
+		animation = cutsceneCamera.GetComponent<Animation>();
 	}
 
 	public void LateUpdate() {
-		if(cutsceneCamera.animation.isPlaying && Input.GetButtonDown("Cancel")) {
+		if(animation.isPlaying && Input.GetButtonDown("Cancel")) {
 			Debug.Log("Cancelling cutscene");
 
 			stopCutscene();
@@ -42,8 +44,8 @@ public class CutsceneManager : MonoBehaviour {
 
 		cutscene.stopCutscene();
 
-		if(cutsceneCamera.animation.isPlaying)
-			cutsceneCamera.animation.Stop();
+		if(animation.isPlaying)
+			animation.Stop();
 
 		GameController.setFocused(false);
 		GameController.playerController.enabled = true;

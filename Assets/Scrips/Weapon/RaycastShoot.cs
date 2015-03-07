@@ -3,6 +3,9 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class RaycastShoot : MonoBehaviour {
+	private AudioSource audioSource;
+	private Camera camera;
+
 	public AudioClip[] audioWeapon; // 0 - shoot; 1 - shoot no ammo; 2 - reload
 
 	public int magazines = 2;
@@ -28,6 +31,9 @@ public class RaycastShoot : MonoBehaviour {
 	public CameraController cameraController; // Used to emulate the effect of recoil
 
 	void Awake() {
+		audioSource = GetComponent<AudioSource>();
+		camera = cameraController.GetComponent<Camera>();
+
 		ammoRemaining = ammoPerMagazine;
 		updateUI();
 	}
@@ -50,13 +56,13 @@ public class RaycastShoot : MonoBehaviour {
 			if(ammoRemaining > 0)
 				shoot();
 			else
-				audio.PlayOneShot(audioWeapon[1]); // No ammo sound
+				audioSource.PlayOneShot(audioWeapon[1]); // No ammo sound
 		}
 
 
 		// Change the camera FOV smoothly
 		//	if(cameraController.camera != null) // When in cutscenes, the main camera is disabled
-			cameraController.camera.fieldOfView = Mathf.SmoothDamp(cameraController.camera.fieldOfView, currentFOV, ref dampVelocity, .3f);
+			camera.fieldOfView = Mathf.SmoothDamp(cameraController.GetComponent<Camera>().fieldOfView, currentFOV, ref dampVelocity, .3f);
 
 		bool isAiming = Input.GetKey(InputManager.fire2); // Right-click by default
 		currentFOV = isAiming ? 40 : 60;
@@ -85,7 +91,7 @@ public class RaycastShoot : MonoBehaviour {
 		cameraController.doRecoil();
 
 		cooldown = cooldownShoot;
-		audio.PlayOneShot(audioWeapon[0]); // Shoot sound
+		audioSource.PlayOneShot(audioWeapon[0]); // Shoot sound
 
 		updateUI();
 	}
@@ -96,7 +102,7 @@ public class RaycastShoot : MonoBehaviour {
 			ammoRemaining = ammoPerMagazine;
 			cooldown = cooldownReload;
 
-			audio.PlayOneShot(audioWeapon[2]); // Reload sound
+			audioSource.PlayOneShot(audioWeapon[2]); // Reload sound
 		}
 
 		updateUI();

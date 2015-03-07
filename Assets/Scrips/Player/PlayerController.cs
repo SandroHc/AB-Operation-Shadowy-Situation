@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerController : MonoBehaviour {
+	private AudioSource audioSource;
+
 	public float gravity = 1f; // 9.81m/s in real world
 
 	public float moveSpeed;
@@ -28,7 +30,8 @@ public class PlayerController : MonoBehaviour {
 	void Awake() {
 		controller = GetComponent<CharacterController>();
 		animator = GetComponent<Animator>();
-
+		audioSource = GetComponent<AudioSource>();
+		
 		charHeight = controller.height;
 
 		lastPos = transform.position;
@@ -118,20 +121,20 @@ public class PlayerController : MonoBehaviour {
 	private void updateCurrentFootsteps(Collider hit) {
 		// Change the footstep sound according to the ground type
 		switch(hit.gameObject.tag) {
-			case Tags.groundWood:	audio.clip = GameController.audioManager.footstepWood; break;
-			case Tags.groundGrass:	audio.clip = GameController.audioManager.footstepGrass; break;
-			case Tags.groundMetal:	audio.clip = GameController.audioManager.footstepMetal; break;
-			case Tags.groundWater:	audio.clip = GameController.audioManager.footstepWater; break;
+			case Tags.groundWood:	audioSource.clip = GameController.audioManager.footstepWood; break;
+			case Tags.groundGrass:	audioSource.clip = GameController.audioManager.footstepGrass; break;
+			case Tags.groundMetal:	audioSource.clip = GameController.audioManager.footstepMetal; break;
+			case Tags.groundWater:	audioSource.clip = GameController.audioManager.footstepWater; break;
 		}
 	}
 
 	private void playFootstepSound() {
-		if(audio.isPlaying || GameController.getPaused()) return; // If there is a footstep sound playing, let it finish before changing to a new one
+		if(audioSource.isPlaying || GameController.getPaused()) return; // If there is a footstep sound playing, let it finish before changing to a new one
 	
 		// Check if the player is moving and touching the ground...
 		if(controller.isGrounded && (Mathf.Abs(controller.velocity.x) + Mathf.Abs(controller.velocity.y) + Mathf.Abs(controller.velocity.z) > 2)) {
 			// And play it
-			audio.Play();
+			audioSource.Play();
 		}
 	}
 }

@@ -1,3 +1,9 @@
+// Upgrade NOTE: commented out 'float4 unity_LightmapST', a built-in variable
+// Upgrade NOTE: commented out 'sampler2D unity_Lightmap', a built-in variable
+// Upgrade NOTE: commented out 'sampler2D unity_LightmapInd', a built-in variable
+// Upgrade NOTE: replaced tex2D unity_Lightmap with UNITY_SAMPLE_TEX2D
+// Upgrade NOTE: replaced tex2D unity_LightmapInd with UNITY_SAMPLE_TEX2D_SAMPLER
+
 #include "HLSLSupport.cginc"
 #include "UnityShaderVariables.cginc"
 #define UNITY_PASS_PREPASSFINAL
@@ -31,7 +37,7 @@ struct v2f_surf
 };
 
 #ifndef LIGHTMAP_OFF
-float4 unity_LightmapST;
+// float4 unity_LightmapST;
 #endif
 float4 _MainTex_ST;
 
@@ -87,8 +93,8 @@ sampler2D _LightBuffer;
 sampler2D _LightSpecBuffer;
 #endif
 #ifndef LIGHTMAP_OFF
-sampler2D unity_Lightmap;
-sampler2D unity_LightmapInd;
+// sampler2D unity_Lightmap;
+// sampler2D unity_LightmapInd;
 float4 unity_LightmapFade;
 #endif
 
@@ -108,8 +114,8 @@ inline half4 frag_core(v2f_surf IN, half4 albedo)
 	#ifndef LIGHTMAP_OFF
 	// Pending: Sphere for Lightmap.(Now disabled)
 	#ifdef DIRLIGHTMAP_OFF
-	half4 lmtex = tex2D(unity_Lightmap, IN.lmap.xy);
-	half4 lmtex2 = tex2D(unity_LightmapInd, IN.lmap.xy);
+	half4 lmtex = UNITY_SAMPLE_TEX2D(unity_Lightmap, IN.lmap.xy);
+	half4 lmtex2 = UNITY_SAMPLE_TEX2D_SAMPLER(unity_LightmapInd,unity_Lightmap, IN.lmap.xy);
 	half lmFade = length(IN.lmapFadePos) * unity_LightmapFade.z + unity_LightmapFade.w;
 	half3 lmFull = MMDLit_DecodeLightmap(lmtex);
 	half3 lmIndirect = MMDLit_DecodeLightmap(lmtex2);
@@ -119,8 +125,8 @@ inline half4 frag_core(v2f_surf IN, half4 albedo)
 		(half3)albedo,
 		(half3)light);
 	#else
-	half4 lmtex = tex2D(unity_Lightmap, IN.lmap.xy);
-	half4 lmIndTex = tex2D(unity_LightmapInd, IN.lmap.xy);
+	half4 lmtex = UNITY_SAMPLE_TEX2D(unity_Lightmap, IN.lmap.xy);
+	half4 lmIndTex = UNITY_SAMPLE_TEX2D_SAMPLER(unity_LightmapInd,unity_Lightmap, IN.lmap.xy);
 	//half4 lm = MMDLit_DirLightmap(lmtex, lmIndTex, IN.normal, 0);
 	//light += lm;
 	half3 c = MMDLit_DirLightmap(

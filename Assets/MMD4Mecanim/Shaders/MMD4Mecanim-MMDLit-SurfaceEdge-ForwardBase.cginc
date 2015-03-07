@@ -1,3 +1,8 @@
+// Upgrade NOTE: commented out 'float4 unity_LightmapST', a built-in variable
+// Upgrade NOTE: commented out 'sampler2D unity_Lightmap', a built-in variable
+// Upgrade NOTE: commented out 'sampler2D unity_LightmapInd', a built-in variable
+// Upgrade NOTE: replaced tex2D unity_Lightmap with UNITY_SAMPLE_TEX2D
+
 #include "HLSLSupport.cginc"
 #include "UnityShaderVariables.cginc"
 #define UNITY_PASS_FORWARDBASE
@@ -28,7 +33,7 @@ struct v2f_surf {
 };
 #endif
 #ifndef LIGHTMAP_OFF
-float4 unity_LightmapST;
+// float4 unity_LightmapST;
 #endif
 
 v2f_surf vert_surf (appdata_full v)
@@ -59,9 +64,9 @@ v2f_surf vert_surf (appdata_full v)
 }
 
 #ifndef LIGHTMAP_OFF
-sampler2D unity_Lightmap;
+// sampler2D unity_Lightmap;
 #ifndef DIRLIGHTMAP_OFF
-sampler2D unity_LightmapInd;
+// sampler2D unity_LightmapInd;
 #endif
 #endif
 
@@ -85,11 +90,11 @@ fixed4 frag_surf (v2f_surf IN) : COLOR
 
 	#ifndef LIGHTMAP_OFF
 	#ifndef DIRLIGHTMAP_OFF
-	half4 lmtex = tex2D(unity_Lightmap, IN.lmap.xy);
+	half4 lmtex = UNITY_SAMPLE_TEX2D(unity_Lightmap, IN.lmap.xy);
 	//half4 lmIndTex = tex2D(unity_LightmapInd, IN.lmap.xy);
 	half3 lm = MMDLit_DecodeLightmap(lmtex);
 	#else // !DIRLIGHTMAP_OFF
-	half4 lmtex = tex2D(unity_Lightmap, IN.lmap.xy);
+	half4 lmtex = UNITY_SAMPLE_TEX2D(unity_Lightmap, IN.lmap.xy);
 	half3 lm = MMDLit_DecodeLightmap(lmtex);
 	#endif // !DIRLIGHTMAP_OFF
 	#ifdef SHADOWS_SCREEN

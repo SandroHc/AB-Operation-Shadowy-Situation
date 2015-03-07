@@ -22,7 +22,7 @@ public class QuestManager : MonoBehaviour {
 			GameObject buttonObject = new GameObject("btn_" + quest.id);
 
 			Image image = buttonObject.AddComponent<Image>();
-			image.transform.parent = panelList.transform;
+			image.transform.SetParent(panelList.transform);
 			image.rectTransform.sizeDelta = new Vector2(panelListTransform.rect.width - 10, 50);
 			image.rectTransform.position = new Vector2(5, 0);
 			image.rectTransform.anchoredPosition = Vector3.zero;
