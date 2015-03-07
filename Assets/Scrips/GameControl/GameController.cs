@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour {
 	public static EnemyManager enemyManager;
 
 	public static PlayerController playerController;
+	public static PathfindHelper playerPathfind;
 
 	private static bool isPaused = false;
 	private static bool isFocused = false;
@@ -41,7 +42,9 @@ public class GameController : MonoBehaviour {
 		materialManager = gameObject.GetComponent<MaterialManager>();
 		enemyManager = gameObject.GetComponent<EnemyManager>();
 
-		playerController = GameObject.FindGameObjectWithTag(Tags.player).GetComponent<PlayerController>();
+		GameObject player = GameObject.FindGameObjectWithTag(Tags.player);
+		playerController = player.GetComponent<PlayerController>();
+		playerPathfind = player.transform.FindChild("pathfind").GetComponent<PathfindHelper>();
 
 		guiTexture.color = Color.black;
 		guiTexture.pixelInset = new Rect(0f, 0f, Screen.width, Screen.height);
@@ -80,10 +83,10 @@ public class GameController : MonoBehaviour {
 	}
 
 	void OnGUI() {
-		if(GUI.Button(new Rect(100, 100, 100, 25), "Lock cursor"))
+		if(GUI.Button(new Rect(20, 100, 100, 25), "Lock cursor"))
 			Screen.lockCursor = true;
 
-		if(GUI.Button(new Rect(100, 135, 100, 25), "Spawn enemies"))
+		if(GUI.Button(new Rect(20, 135, 100, 25), "Spawn enemies"))
 			enemyManager.spawn(new Vector3(5, -24, 80));
 	}
 	
@@ -131,6 +134,9 @@ public class GameController : MonoBehaviour {
 		if(!isFocused && Input.GetKeyDown(InputManager.cancel)) {
 			setPaused(!isPaused);
 		}
+
+		if(Input.GetKey(KeyCode.E))
+			playerPathfind.setDestination(new Vector3(-100, 0, 0));
 	}
 
 	private static void enterPause() {
