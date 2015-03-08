@@ -38,6 +38,7 @@ ModelImporter:
     100064: school_door.002
     100066: school_glass.001
     100068: school_glass.002
+    100070: library
     400000: Camera
     400002: //RootNode
     400004: school
@@ -73,6 +74,7 @@ ModelImporter:
     400064: school_door.002
     400066: school_glass.001
     400068: school_glass.002
+    400070: library
     2300000: school
     2300002: teacher_zone
     2300004: walkroad
@@ -106,6 +108,7 @@ ModelImporter:
     2300060: school_door.002
     2300062: school_glass.001
     2300064: school_glass.002
+    2300066: library
     3300000: school
     3300002: teacher_zone
     3300004: walkroad
@@ -139,6 +142,7 @@ ModelImporter:
     3300060: school_door.002
     3300062: school_glass.001
     3300064: school_glass.002
+    3300066: library
     4300000: teacher_zone
     4300002: walkroad
     4300004: school
@@ -172,6 +176,7 @@ ModelImporter:
     4300060: school_door.001
     4300062: school_glass.001
     4300064: school_glass.002
+    4300066: library
     6400000: director_building
     6400002: school_door_001
     6400004: school_door_002
@@ -197,18 +202,19 @@ ModelImporter:
     6400044: school_door.002
     6400046: school_glass.001
     6400048: school_glass.002
+    6400050: library
     7400000: Default Take
     9500000: //RootNode
   materials:
     importMaterials: 1
-    materialName: 1
+    materialName: 0
     materialSearch: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
     optimizeGameObjects: 0
     motionNodeName: 
-    animationCompression: 1
+    animationCompression: 3
     animationRotationError: .5
     animationPositionError: .5
     animationScaleError: .5
@@ -218,7 +224,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: .00999999978
+    globalScale: .100000001
     meshCompression: 0
     addColliders: 1
     importBlendShapes: 1
@@ -252,7 +258,7 @@ ModelImporter:
     feetSpacing: 0
     rootMotionBoneName: 
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   additionalBone: 0
   userData: 
   assetBundleName: 
