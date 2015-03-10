@@ -9,3 +9,4 @@ Build/
 *.orig
 
 *Thumbs.db*
+Assets/Scenes/MainGame/LightmapSnapshot.asset

@@ -1,0 +1,173 @@
+uSky Manager attributes:
+=============================
+
+Sky Update
+----------------	
+Selecting this check box forces a complete update of the sky calculations in each frame. It is only necessary to turn it on if you need to update any parameter at runtime. In general the Unity Editor will bake the ambient and cubemaps and will not update during the play mode, so you may just leave it off. 
+
+Time Of Day
+--------------
+Slider controls the light vertically.( Rotation X of the sun light)
+The range represents the time from 0:00 to 24:00 hour.
+
+Longitude
+--------------
+Slider controls the light horizionally.( Rotation Y of the sun light)
+The range represents the rotation arround from 0 to 360 degree.
+
+
+=============================
+Day Sky
+=============================
+
+
+Exposure
+----------	
+This value sets the brightness of the sky. It gets multiplied by the intensity to yield the overall sky color. 
+Higher values will result in brighter skies. Fading down this value during the day time helps simulate an eclipse. The default value is 1.
+Note Exposure value will affect the sun and moon light intensity also.
+
+
+Rayleigh Scattering
+---------------------	 
+This parameter specifies the Rayleigh scattering constant. Rayleigh scattering is caused by particles in the atmosphere (up to 8 km) and is wavelength dependent.
+With a default value is 1, it produces typical earth-like sky colors (blue sky during the day, reddish/yellowish colors at sun set, and the like).
+
+
+Mie Scattering
+-----------------
+This parameter sets the Mie scattering constant. Mie scattering is caused by aerosols in the lower atmosphere (up to 1.2 km).
+It is wavelength independent and responsible for haze and halos around the sun on foggy days.
+Smaller values result in a clearer sky. Bigger values make the sky appear hazier. The default value is 1.
+
+
+Sun Anisotropy Factor
+-----------------------
+The anisotropy factor controls the sun's appearance in the sky. The closer this value gets to 1.0, the sharper and smaller the sun spot will be.
+Higher values cause more fuzzy and bigger sun spots. A good default value is 0.75 ~ 0.80. 
+
+
+Sun Size
+------------
+Size of the sun disk. larger value gets bigger sun. The default value is 1.
+
+
+Density Scale
+----------------
+This will effectively flip the vertical fall off and produce thick fog in the sky.
+It mainly reference the intensity of the haze at horizon level. The default value is 1.
+
+
+Sunset Time Offset
+------------------
+It allows user to shift the sunset color at specified time. Normally sunset will appear only when the sun fall near by the horizon level.
+The default value is 0.
+
+
+Wavelengths
+------------
+This triple defines the wavelengths (in nm) of the RGB primaries. Tweaking these values will shift the colors of the resulting gradients and produce different kinds of atmospheres.
+This can be very useful in combination with Rayleigh scattering if you choose a sun intensity of pure, bright white. 
+(in range [380..780], default wavelengths is (680.0, 550.0, 440.0))
+
+
+Sky Tint
+-----------
+Multiply the custom color with exist sky color. It affect the color at the day time only. The default is White.
+
+
+Sunset Zenith Color
+-------------------
+It will affect the sky color at sunset time only. (No affect at the day time.) It allow user to have custom color at sunset.
+
+
+Ground Color
+----------------
+It is the bottom half color of the skybox. In general, it will affect also the color of ambient light coming from below as well. 
+
+
+Sun Light
+--------------------
+It need to attach a "Directional Light" from the scene and it will align the sun position from the sky with different time of day.
+
+
+=============================
+Night Sky
+=============================
+
+Enable Night Sky
+----------------------
+Toggle the Night Sky On and Off. If it is Off, the uSky shader will skip all the night sky calculation completely and Stars field will not render.
+It is usefull if you are running a static day sky only.
+
+
+Night Zenith color
+----------------------
+This RGB value that is scaled by the multiplier specifies the zenith color of the night sky gradient. (Top of the night sky)
+
+
+Night Horizon color
+----------------------
+This RGB value that is scaled by the multiplier specifies the horizon color of the night sky gradient.
+Note: This color will affect from sunset sky through the night cycle. (No affect at the day time).
+
+
+Star Intensity
+-----------------
+This controls the intensity of the Stars field in night sky. Larger value gets brighter stars.
+
+
+Outer Space Intensity
+----------------------
+This controls the intensity of the Outer Space Cubemap in night sky.
+
+
+Moon inner corona color & Scale
+--------------------------------
+This RGB value that is scaled by the multiplier specifies the color of the moon's inner corona.
+
+This value controls the size and blurriness of the moon's inner corona. 
+bigger values will produce a bigger, blurry corona. 
+Smaller values will produce a smaller, more focused corona.
+
+
+Moon outer corona color & Scale
+----------------------------------
+This RGB value that is scaled by the multiplier specifies the color of the moon's outer corona.
+
+This value controls the size and blurriness of the moon's outer corona. 
+bigger values will produce a bigger, blurry corona. 
+Smaller values will produce a smaller, more focused corona.
+
+
+Moon Size
+-----------------
+This controls the moon texture size in the night sky. Larger value gets bigger moon.
+
+
+Moon Light
+-----------------
+It need to attach a Gameobject from the scene and it represents the moon in the night sky. The moon position is based on the rotation from "Moon Light" gameobject.
+Note:
+There is a limitation that the position of the moon have to be above the horizon area. If the moon is exactly at the horizon, then the opposite side will have a mirror moon image.
+
+
+Skybox Material
+-----------------
+It is the Skybox Material of the uSky. 
+Note: The package included two version of the material. You need to use the correct version that match the version with your Unity Editor. The main different of the Unity 5 material that sky shader will remove sun and mie scatter in reflection probe, that's necessary in order to avoid double highlights for the box projection. Also the Preview window is temporary off for Unity 5 beta.
+
+
+Auto Apply Skybox
+-------------------
+If it is on, it will automatically assign the current skybox material to Render Settings in the Unity Editor.
+
+
+Linear Space
+--------------
+Toggle it if you are using Linear color space mode in the Player Settings. In general that linear is essential with physically-based shading workflow, it computes more accurate lighting and result are more realistic to the real world lighting.
+
+Tonemapping
+--------------
+Toggle it if the Main Camera is using HDR mode and Tonemapping image effect. It will unfold the brightness of the sky to full range. After the Camera Tonemapping, the sky will return to normal brightness.
+Note: If you apply the sunshafts image effect, it need to be bottom of the Tonemapping.

@@ -1,0 +1,46 @@
+uSky 1.0.1 Change Log
+=======================
+- Renamed Component "uSkyRenderer" to "uSkyManager".
+
+- Added "Time Of Day" and "Longitude" sliders to control the full Day/Night cycle of the sun rotation.
+
+- Added new "uSkyLight" script to manage the Sun and Moon lighting in the scene. Single editable "Gradient" to control the full Day/Night cycle of both Sun and Moon light color.
+It included two sliders to control Sun and Moon intensity. 
+
+- Added new Night Sky with "Moon", "Stars Field" and "Outer Space Cubemap". Also added new Night Sky Parameters in uSkyManager.
+Included the MilkyWay Cubemap that match up with stars position of "Stars Field".
+
+- Now the uSky "Exposure" becomes a global lighting exposure control for day time. It will affect final output of the Sun and Moon intensity with uSkyLight.
+
+- Included the Unity 4 "uSky GUI Demo" scene that same as demo webplayer and included the GUI scripts.
+
+- Combined the "Density Scale" and "Altitude Scale" to single "Density Scale" setting from range 0 to 4. 
+
+- New "Night Zenith Color" will replace the "Sunset Zenith Color" through the night sky cycle. It still will affect on the sunset sky color.
+
+- Changed smaller maxmium value of some sliders range and changed default sun is smaller as well.
+
+- Renamed parameter "Directional Light" to "Sun Light".
+
+- Renamed the end of "Wavelength" with "s" for correct spelling, now it is "Wavelengths".
+
+- Updated the documentation.
+
+
+
+uSky 1.0.0f2 Change Log
+=======================
+- Since Unity 5 beta 13 changed for a big and tessellated sphere mesh. Now some codes of uSky shader allows computing per-vertex based for better performance.
+New update of the uSky shader that approximately run 10 ~ 20% faster. This performance gain is for Unity 5 beta 13 or newer users only, uSky shader for Unity 4 will remain the same.
+
+* Note: Do not use the uSky shader for Unity 5 in Unity 4.x.x. 
+
+- Removed the Directional Light in the Unity 5 uSkyRenderer Prefab. When apply this Prefab, user need to apply the Directional Light manually to uSkyRenderer.
+(When Create or Start a new scene in Unity 5, default always included the Directional Light in the scene. So we removed it from Prefab for less confusion) 
+
+- Small update on the uSkyRenderer.cs, better ground ambient between different color space.
+
+
+uSky 1.0.0e Change Log
+=======================
+- Fixed Wavelength setting : the missing _betaR and _betaM values pass to shader.

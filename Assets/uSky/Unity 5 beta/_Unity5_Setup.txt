@@ -1,0 +1,18 @@
+Set up in Unity 5 project 
+==================================
+(Menu) Window > Lighting > 
+==================================
+Scene (tab) : 
+----------------------------------
+Environment Lighting
+> Ambient Source    ==> Skybox
+> Baked Sky Light   ==> Realtime
+> Reflection Source ==> Skybox
+
+
+==================================
+Hierarchy Window
+==================================
+The Directional light (Sun light):
+
+Baking		==> Realtime
