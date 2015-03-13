@@ -4,7 +4,7 @@ using System.Collections;
 
 public class RaycastShoot : MonoBehaviour {
 	private AudioSource audioSource;
-	private Camera camera;
+	private new Camera camera;
 
 	public AudioClip[] audioWeapon; // 0 - shoot; 1 - shoot no ammo; 2 - reload
 
