@@ -168,7 +168,7 @@ public class GameController : MonoBehaviour {
 		INSTANCE.uiCrosshair.SetActive(true);
 
 		Cursor.visible = true;
-		Cursor.lockState = CursorLockMode.Confined;
+		Cursor.lockState = CursorLockMode.Locked;
 	}
 
 	private static void enterFocus(bool lockCursor = true) {
