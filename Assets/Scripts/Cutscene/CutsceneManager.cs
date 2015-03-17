@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CutsceneManager : MonoBehaviour {
 	public static Camera cutsceneCamera;
-	private Animation animation;
+	private new Animation animation;
 	private Camera playerCamera;
 
 	public Cutscene cutscene;

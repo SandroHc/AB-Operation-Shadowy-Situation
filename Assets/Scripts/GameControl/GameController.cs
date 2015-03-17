@@ -3,7 +3,7 @@ using System.Collections;
 
 public class GameController : MonoBehaviour {
 	public static GameController INSTANCE { get; private set; }
-	private GUITexture guiTexture;
+	private new GUITexture guiTexture;
 
 	public static TextManager textManager;
 	public static AudioManager audioManager;
@@ -168,7 +168,7 @@ public class GameController : MonoBehaviour {
 		INSTANCE.uiCrosshair.SetActive(true);
 
 		Cursor.visible = true;
-		Cursor.lockState = CursorLockMode.Confined;
+		Cursor.lockState = CursorLockMode.Locked;
 	}
 
 	private static void enterFocus(bool lockCursor = true) {

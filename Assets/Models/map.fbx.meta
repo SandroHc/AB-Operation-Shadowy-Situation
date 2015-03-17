@@ -41,6 +41,26 @@ ModelImporter:
     100070: library
     100072: school_glass.003
     100074: school_glass.004
+    100076: classroom
+    100078: classroom_b1f1n1
+    100080: classroom_b1f1n2
+    100082: classroom_b1f1n3
+    100084: classroom_b1f1n4
+    100086: gym_walls
+    100088: lib_walls
+    100090: other
+    100092: prof_walls
+    100094: professor_building
+    100096: prof_floor
+    100098: classroom_ba
+    100100: school_ba_glass
+    100102: school_ba_ground
+    100104: school_ba_walls
+    100106: school_bb_glass
+    100108: school_bb_ground
+    100110: school_bb_walls
+    100112: school_block_a
+    100114: school_block_b
     400000: Camera
     400002: //RootNode
     400004: school
@@ -79,6 +99,26 @@ ModelImporter:
     400070: library
     400072: school_glass.003
     400074: school_glass.004
+    400076: classroom
+    400078: classroom_b1f1n1
+    400080: classroom_b1f1n2
+    400082: classroom_b1f1n3
+    400084: classroom_b1f1n4
+    400086: gym_walls
+    400088: lib_walls
+    400090: other
+    400092: prof_walls
+    400094: professor_building
+    400096: prof_floor
+    400098: classroom_ba
+    400100: school_ba_glass
+    400102: school_ba_ground
+    400104: school_ba_walls
+    400106: school_bb_glass
+    400108: school_bb_ground
+    400110: school_bb_walls
+    400112: school_block_a
+    400114: school_block_b
     2300000: school
     2300002: teacher_zone
     2300004: walkroad
@@ -115,6 +155,20 @@ ModelImporter:
     2300066: library
     2300068: school_glass.003
     2300070: school_glass.004
+    2300072: classroom_b1f1n1
+    2300074: classroom_b1f1n2
+    2300076: classroom_b1f1n3
+    2300078: classroom_b1f1n4
+    2300080: gym_walls
+    2300082: lib_walls
+    2300084: prof_walls
+    2300086: prof_floor
+    2300088: school_ba_glass
+    2300090: school_ba_ground
+    2300092: school_ba_walls
+    2300094: school_bb_glass
+    2300096: school_bb_ground
+    2300098: school_bb_walls
     3300000: school
     3300002: teacher_zone
     3300004: walkroad
@@ -151,6 +205,20 @@ ModelImporter:
     3300066: library
     3300068: school_glass.003
     3300070: school_glass.004
+    3300072: classroom_b1f1n1
+    3300074: classroom_b1f1n2
+    3300076: classroom_b1f1n3
+    3300078: classroom_b1f1n4
+    3300080: gym_walls
+    3300082: lib_walls
+    3300084: prof_walls
+    3300086: prof_floor
+    3300088: school_ba_glass
+    3300090: school_ba_ground
+    3300092: school_ba_walls
+    3300094: school_bb_glass
+    3300096: school_bb_ground
+    3300098: school_bb_walls
     4300000: teacher_zone
     4300002: walkroad
     4300004: school
@@ -187,6 +255,20 @@ ModelImporter:
     4300066: library
     4300068: school_glass.004
     4300070: school_glass.003
+    4300072: classroom_b1f1n1
+    4300074: classroom_b1f1n4
+    4300076: classroom_b1f1n2
+    4300078: classroom_b1f1n3
+    4300080: lib_walls
+    4300082: gym_walls
+    4300084: prof_walls
+    4300086: prof_floor
+    4300088: school_bb_glass
+    4300090: school_bb_ground
+    4300092: school_bb_walls
+    4300094: school_ba_walls
+    4300096: school_ba_ground
+    4300098: school_ba_glass
     6400000: director_building
     6400002: school_door_001
     6400004: school_door_002
@@ -216,6 +298,20 @@ ModelImporter:
     6400052: school_glass
     6400054: school_glass.003
     6400056: school_glass.004
+    6400058: classroom_b1f1n1
+    6400060: classroom_b1f1n2
+    6400062: classroom_b1f1n3
+    6400064: classroom_b1f1n4
+    6400066: gym_walls
+    6400068: lib_walls
+    6400070: prof_walls
+    6400072: prof_floor
+    6400074: school_ba_glass
+    6400076: school_ba_ground
+    6400078: school_ba_walls
+    6400080: school_bb_glass
+    6400082: school_bb_ground
+    6400084: school_bb_walls
     7400000: Default Take
     9500000: //RootNode
   materials:

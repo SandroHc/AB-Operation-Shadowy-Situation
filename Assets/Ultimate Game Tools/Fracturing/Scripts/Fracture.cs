@@ -1618,8 +1618,7 @@ namespace UltimateFracturing
 
             newGameObject.AddComponent<MeshRenderer>();
 
-            newGameObject.GetComponent<Renderer>().castShadows    = gameObjectIn.GetComponent<Renderer>().castShadows;
-            newGameObject.GetComponent<Renderer>().receiveShadows = gameObjectIn.GetComponent<Renderer>().receiveShadows;
+			newGameObject.GetComponent<Renderer>().shadowCastingMode = gameObjectIn.GetComponent<Renderer>().shadowCastingMode;
             newGameObject.GetComponent<Renderer>().enabled        = false;
 
             Material[] aMaterials = new Material[meshData.nSubMeshCount];
