@@ -52,7 +52,13 @@ public class CameraController : MonoBehaviour {
 			
 			target.transform.Rotate(0, Input.GetAxis("Mouse X") * lookSpeed * Time.deltaTime, 0);
 		}
+
+
+		if(Input.GetKeyDown(KeyCode.Alpha0))
+		   enableEffects(!effectsEnabled);
 	}
+
+	bool effectsEnabled = true;
 
 	public void addRecoil(float value) {
 		recoil += value;
@@ -71,5 +77,15 @@ public class CameraController : MonoBehaviour {
 			transform.localRotation = Quaternion.Slerp(transform.localRotation, Quaternion.identity, recoilSpeed / 2 * Time.deltaTime);
 		//	transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, transform.localEulerAngles.z);
 		} 
+	}
+
+	public void enableEffects(bool enabled) {
+		Debug.Log((enabled ? "Enabling" : "Disabling") + " effects");
+
+		(gameObject.GetComponent("Antialiasing") as MonoBehaviour).enabled = enabled;
+		(gameObject.GetComponent("VignetteAndChromaticAberration") as MonoBehaviour).enabled = enabled;
+		(gameObject.GetComponent("BloomOptimized") as MonoBehaviour).enabled = enabled;
+
+		effectsEnabled = enabled;
 	}
 }

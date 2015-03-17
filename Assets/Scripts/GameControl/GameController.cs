@@ -82,7 +82,11 @@ public class GameController : MonoBehaviour {
 			}
 		}
 	
-		handleCancelInput();
+		checkCancelInput();
+
+
+		if(Input.GetKey(KeyCode.E))
+			playerPathfind.updateLine();//setDestination(new Vector3(-100, 0, 0));
 	}
 
 	void OnGUI() {
@@ -135,13 +139,14 @@ public class GameController : MonoBehaviour {
 		return isPaused || isFocused;
 	}
 
-	private void handleCancelInput() {
-		if(!isFocused && Input.GetKeyDown(InputManager.cancel)) {
-			setPaused(!isPaused);
-		}
+	private void checkCancelInput() {
+		if(Input.GetKeyDown(InputManager.cancel)) {
+			if(!isFocused) {
+				setPaused(!isPaused);
+			}
 
-		if(Input.GetKey(KeyCode.E))
-			playerPathfind.updateLine();//setDestination(new Vector3(-100, 0, 0));
+			cutsceneManager.cancelBtnClicked();
+		}
 	}
 
 	private static void enterPause() {

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CutsceneManager : MonoBehaviour {
 	public static Camera cutsceneCamera;
-	private new Animation animation;
+	public static new Animation animation;
 	private Camera playerCamera;
 
 	public Cutscene cutscene;
@@ -13,11 +13,13 @@ public class CutsceneManager : MonoBehaviour {
 		animation = cutsceneCamera.GetComponent<Animation>();
 	}
 
-	public void LateUpdate() {
-		if(animation.isPlaying && Input.GetButtonDown("Cancel")) {
+	public void cancelBtnClicked() {
+		if(animation.isPlaying) {
 			Debug.Log("Cancelling cutscene");
-
-			stopCutscene();
+			
+			//stopCutscene();
+			if(cutscene != null)
+				cutscene.nextStage();
 		}
 	}
 
@@ -55,5 +57,12 @@ public class CutsceneManager : MonoBehaviour {
 
 		// Remove the reference to the, now finished, cutscene
 		cutscene = null;
+	}
+
+	public static void playAnimation(string name, bool playImmediate = false) {
+		if(playImmediate)
+			animation.Play(name);
+		else
+			animation.PlayQueued(name);
 	}
 }

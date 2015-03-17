@@ -23,7 +23,7 @@ public abstract class Cutscene : MonoBehaviour {
 			currentStage.startStage();
 	}
 	
-	public void stopCutscene() {
+	public virtual void stopCutscene() {
 		// Cear the reference to the current stage.
 		// Ensures that there is no way for the stage to interfere
 		// with this cutscene, effectively stopping it.
@@ -33,7 +33,7 @@ public abstract class Cutscene : MonoBehaviour {
 		}
 	}
 
-	protected void nextStage() {
+	public void nextStage() {
 		// If the current stage is null (WHY?), reset back to the first stage
 		if(currentStage == null) {
 			currentStage = stageList[0];
