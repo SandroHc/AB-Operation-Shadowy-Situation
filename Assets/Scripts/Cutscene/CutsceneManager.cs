@@ -44,10 +44,17 @@ public class CutsceneManager : MonoBehaviour {
 	public void stopCutscene() {
 		//Debug.Log("Stopping cutscene");
 
+		// Send a quest progress update with the cutscene ID
+		GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.ProgressType.CUTSCENE).setStr(cutscene.getName()));
+		
+
 		cutscene.stopCutscene();
 
 		if(animation.isPlaying)
 			animation.Stop();
+
+		/*foreach(AnimationClip state in animation)
+			animation.RemoveClip(state);*/
 
 		GameController.setFocused(false);
 		GameController.playerController.enabled = true;

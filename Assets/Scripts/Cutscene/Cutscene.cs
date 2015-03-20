@@ -6,9 +6,15 @@ public abstract class Cutscene : MonoBehaviour {
 	protected List<Stage> stageList = new List<Stage>();
 	protected Stage currentStage;
 
+	protected new string name;
+
+	public Cutscene(string name) {
+		this.name = name;
+	}
+
 	public void setupCutscene() {
 		// Copy the animations of this Game object to the Camera
-		Animation targetAnimation = CutsceneManager.cutsceneCamera.GetComponent<Animation>();
+		Animation targetAnimation = CutsceneManager.animation;
 		foreach(AnimationState state in GetComponent<Animation>()) {
 			targetAnimation.AddClip(state.clip, state.name);
 		}
@@ -59,6 +65,10 @@ public abstract class Cutscene : MonoBehaviour {
 		// Send the event to the stage
 		if(currentStage != null)
 			currentStage.finishAnimation();
+	}
+
+	public string getName() {
+		return name;
 	}
 
 	public abstract class Stage {

@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class QuestProgress {
-	public enum ProgressType { MONSTER_KILL, INTERACTION, MATERIAL_PICKUP };
+	public enum ProgressType { MONSTER_KILL, INTERACTION, MATERIAL_PICKUP, DIALOGUE, CUTSCENE, POSITION };
 	public ProgressType type;
 
 	private string str = "";

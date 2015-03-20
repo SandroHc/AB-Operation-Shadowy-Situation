@@ -31,7 +31,7 @@ public class InteractionMaterial : Interaction {
 	}
 
 	public override void doAction(GameObject player) {
-		GameController.questManager.sendProgress(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setStr(destName).setPosition(gameObject.transform.position));
+		GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setStr(destName).setPosition(gameObject.transform.position));
 
 		if(uses >= 1) {
 			uses--;

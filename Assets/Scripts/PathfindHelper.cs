@@ -7,6 +7,9 @@ public class PathfindHelper : MonoBehaviour {
 
 	private Vector3 destination;
 	public Transform destTransform;
+
+	public float minDistance = 6f;
+	public bool eventFired = false;
 	
 	void Start() {
 		agent = gameObject.GetComponent<NavMeshAgent>();
@@ -15,6 +18,17 @@ public class PathfindHelper : MonoBehaviour {
 		if(destTransform != null) {
 			destination = destTransform.position;
 			agent.SetDestination(destination);
+		}
+	}
+
+	void Update() {
+		if(Vector3.Distance(transform.position, destination) < minDistance) {
+			if(!eventFired) {
+				eventFired = true;
+				GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.ProgressType.POSITION).setPosition(destination));
+			}
+		} else {
+			eventFired = false;
 		}
 	}
 

@@ -50,9 +50,9 @@ public class QuestManager : MonoBehaviour {
 
 	public void LateUpdate() {
 		if(Input.GetKeyDown(KeyCode.U))
-			sendProgress(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setStr("Interacting!"));
+			fireProgressEvent(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setStr("Interacting!"));
 		else if(Input.GetKeyDown(KeyCode.I))
-			sendProgress(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setNumber(1337));
+			fireProgressEvent(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setNumber(1337));
 
 		// If the Joural button os pressed, show it!
 		if(Input.GetKeyDown(InputManager.journal)) {
@@ -86,7 +86,9 @@ public class QuestManager : MonoBehaviour {
 		return true;
 	}
 
-	public void sendProgress(QuestProgress progress) {
+	public void fireProgressEvent(QuestProgress progress) {
+		Debug.Log ("Firing event: " + progress.ToString());
+
 		foreach(Quest quest in questList) {
 			if(quest == null) continue;
 			quest.progress(progress);

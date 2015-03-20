@@ -10,7 +10,7 @@ public class InteractionDialogue : Interaction {
 	}
 
 	public override void doAction(GameObject player) {
-		GameController.questManager.sendProgress(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setStr(destName).setPosition(gameObject.transform.position));
+		GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setStr(destName).setPosition(gameObject.transform.position));
 
 		GameController.dialogueManager.showDialogue(new DialogueTest());
 	}

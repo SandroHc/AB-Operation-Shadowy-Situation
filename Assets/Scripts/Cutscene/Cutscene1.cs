@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Cutscene1 : Cutscene {
 
-	public Cutscene1() {
+	public Cutscene1() : base("Cutscene1") {
 		stageList.Add(new Stage1());
 		stageList.Add(new Stage2());
 	}
