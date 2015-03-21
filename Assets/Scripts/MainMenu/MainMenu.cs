@@ -91,7 +91,7 @@ public class MainMenu : MonoBehaviour {
 			if(tempKeyCode != KeyCode.None) {
 				//Debug.Log("Before: " + currentInput);
 				// Update the KeyCode, to be updated in the label
-				currentInput = tempKeyCode;
+//				currentInput = tempKeyCode;
 
 				// And save it to the PlayerPrefs to be loaded
 				InputManager.saveKey(currentInputName, (int) tempKeyCode);
@@ -190,7 +190,7 @@ public class MainMenu : MonoBehaviour {
 		drawOptionsInput();
 	}
 
-	private KeyCode currentInput;
+//	private KeyCode currentInput;
 	private string currentInputName;
 
 	private KeyCode tempKeyCode;
@@ -221,7 +221,7 @@ public class MainMenu : MonoBehaviour {
 	private void drawInputOption(string label, string keyName, ref KeyCode key) {
 		GUI.Label(new Rect(inputX, inputY, 75, 25), label, labelStyle);
 		if(GUI.Button(new Rect(inputX + 95, inputY, 125, 25), key.ToString())) {
-			currentInput = key;
+//			currentInput = key;
 			currentInputName = keyName;
 			fetchingKeyCode = true;
 		}

@@ -21,7 +21,7 @@ public class EnemyAI : MonoBehaviour {
 		hpBarCanvas.gameObject.SetActive(player != null);
 
 		if(player != null) {
-			// Make the canvas look athe the player (the canvas local rotation is set to 180º for this to work, as the canvas will be flipped horizontally)
+			// Make the canvas look at the the player // Need to check the following comment ->  (the canvas local rotation is set to 180º for this to work, as the canvas will be flipped horizontally)
 			hpBarCanvas.rotation = player.rotation;
 
 			attack();

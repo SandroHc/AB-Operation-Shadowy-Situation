@@ -183,7 +183,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
 		if (
 			(Input.GetMouseButton (0) || Input.GetMouseButton (1)) &&	// Act if a mouse button is down
-			(!requireLock || controlLock || Screen.lockCursor)			// ... and we're allowed to
+			(!requireLock || controlLock || Cursor.lockState == CursorLockMode.Locked)			// ... and we're allowed to
 		)
 		{
 			if (controlLock)

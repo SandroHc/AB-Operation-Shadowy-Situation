@@ -87,7 +87,7 @@ public class ThirdPersonController2 : MonoBehaviour
 	{
 		float rotationAmount;
 
-		if (Input.GetMouseButton(0) && (!requireLock || controlLock || Screen.lockCursor) && !NJG.NJGMapBase.instance.isMouseOver)
+		if (Input.GetMouseButton(0) && (!requireLock || controlLock || Cursor.lockState == CursorLockMode.Locked) && !NJG.NJGMapBase.instance.isMouseOver)
 		// If the right mouse button is held, rotation is locked to the mouse
 		{
 			if (controlLock)

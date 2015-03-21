@@ -13,7 +13,10 @@ public class InteractControl : MonoBehaviour {
 	void Awake() {
 		key.text = InputManager.interact.ToString();
 
-		Debug.Log (InputManager.interact);
+		// Try to get the target interaction
+		target = gameObject.GetComponent<Interaction>();
+		if(target == null)
+			target = gameObject.GetComponentInChildren<Interaction>();
 	}
 	
 	void Update() {

@@ -7,7 +7,7 @@ public class EnemySight : MonoBehaviour {
 	public Vector3 personalLastSighting;            // Last place this enemy spotted the player.
 
 	private NavMeshAgent nav;                       // Reference to the NavMeshAgent component.
-	private SphereCollider col;                     // Reference to the sphere collider trigger component.
+//	private SphereCollider col;                     // Reference to the sphere collider trigger component.
 	private Vector3 previousSighting;               // Where the player was sighted last frame.
 
 	public float currentTime;
@@ -15,7 +15,7 @@ public class EnemySight : MonoBehaviour {
 	void Awake() {
 		// Setting up the references.
 		nav = GetComponent<NavMeshAgent>();
-		col = GetComponent<SphereCollider>();
+//		col = GetComponent<SphereCollider>();
 	}
 	
 	void Update() {
@@ -45,7 +45,7 @@ public class EnemySight : MonoBehaviour {
 			
 			// If the angle between forward and where the player is, is less than half the angle of view...
 			if(angle < fieldOfViewAngle) {
-				RaycastHit hit;
+//				RaycastHit hit;
 
 //				Debug.Log("IN FIELD OF VIEW!!");
 
