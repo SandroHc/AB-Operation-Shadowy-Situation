@@ -2,16 +2,16 @@
 using System.Collections;
 
 public class InteractPlayer : MonoBehaviour {
-	public float range = 50f;
+	public float range = 10f;
 
 	// Update is called once per frame
-	void Update () {
+	void Update() {
 		if(GameController.isPausedOrFocused()) return; // Avoid showing any HUD during focus events (and useless calculations)
 
 		RaycastHit hit;
-		
-		// When we left click and our raycast hits something
-		if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, range)) {
+
+		// Check if we're looking at an interactable entity
+		if(Physics.Raycast(transform.position, transform.forward, out hit, range)) {
 			Interaction other = (Interaction) hit.transform.gameObject.GetComponent(typeof(Interaction));
 
 			if(other != null) {

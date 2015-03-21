@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityStandardAssets.ImageEffects;
 
 public class CameraController : MonoBehaviour {
 	public GameObject target;
@@ -82,9 +83,9 @@ public class CameraController : MonoBehaviour {
 	public void enableEffects(bool enabled) {
 		Debug.Log((enabled ? "Enabling" : "Disabling") + " effects");
 
-		(gameObject.GetComponent("Antialiasing") as MonoBehaviour).enabled = enabled;
-		(gameObject.GetComponent("VignetteAndChromaticAberration") as MonoBehaviour).enabled = enabled;
-		(gameObject.GetComponent("BloomOptimized") as MonoBehaviour).enabled = enabled;
+		gameObject.GetComponent<Antialiasing>().enabled = enabled;
+		gameObject.GetComponent<VignetteAndChromaticAberration>().enabled = enabled;
+		gameObject.GetComponent<BloomOptimized>().enabled = enabled;
 
 		effectsEnabled = enabled;
 	}

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityStandardAssets.ImageEffects;
 
 public class GameController : MonoBehaviour {
 	public static GameController INSTANCE { get; private set; }
@@ -29,6 +30,13 @@ public class GameController : MonoBehaviour {
 
 	public GameObject uiPause;
 	public GameObject uiCrosshair;
+
+	private static VignetteAndChromaticAberration vignette;
+	private static bool vignetteEnabled;
+	private static float vignetteIntensity;
+	private static float vignetteTargetIntensity = 5f;
+	private static float vignetteAberration;
+	private static float vignetteTargetAberration = 7f;
 
 	void Awake() {
 		INSTANCE = this;
@@ -81,21 +89,35 @@ public class GameController : MonoBehaviour {
 				}
 			}
 		}
+
+
+		// Try to obtain an instance of the camera vignette
+		if(vignette == null) {
+			vignette = Camera.main.gameObject.GetComponent<VignetteAndChromaticAberration>();
+		} else {
+			if(isPaused) {
+				vignette.intensity = Mathf.Lerp(vignette.intensity, vignetteTargetIntensity, Time.deltaTime * 10);
+				vignette.chromaticAberration = Mathf.Lerp(vignette.chromaticAberration, vignetteTargetAberration, Time.deltaTime * 10);
+			} else {
+				vignette.intensity = Mathf.Lerp(vignette.intensity, vignetteIntensity, Time.deltaTime * 15);
+				vignette.chromaticAberration = Mathf.Lerp(vignette.chromaticAberration, vignetteAberration, Time.deltaTime * 15);
+			}
+		}
 	
 		checkCancelInput();
 
 
 		if(Input.GetKey(KeyCode.E))
 			playerPathfind.updateLine();//setDestination(new Vector3(-100, 0, 0));
+
+		if(Input.GetKeyDown(KeyCode.L)) {
+			Cursor.visible = false;
+			Cursor.lockState = CursorLockMode.Locked;
+		}
 	}
 
 	void OnGUI() {
-		if(GUI.Button(new Rect(20, 100, 100, 25), "Lock cursor")) {
-			Cursor.visible = true;
-			Cursor.lockState = CursorLockMode.Confined;
-		}
-
-		if(GUI.Button(new Rect(20, 135, 100, 25), "Spawn enemies"))
+		if(GUI.Button(new Rect(20, 100, 100, 25), "Spawn enemies"))
 			enemyManager.spawn(new Vector3(5, -24, 80));
 	}
 	
@@ -162,6 +184,15 @@ public class GameController : MonoBehaviour {
 
 		// Save preferences in the event of a crash
 		INSTANCE.OnApplicationQuit();
+
+		
+		if(vignette != null) {
+			vignetteEnabled = vignette.enabled;
+			if(!vignette.enabled) vignette.enabled = true;
+			
+			vignetteIntensity = vignette.intensity;
+			vignetteAberration = vignette.chromaticAberration;
+		}
 	}
 
 	private static void exitPause() {
@@ -172,7 +203,7 @@ public class GameController : MonoBehaviour {
 		INSTANCE.uiPause.SetActive(false);
 		INSTANCE.uiCrosshair.SetActive(true);
 
-		Cursor.visible = true;
+		Cursor.visible = false;
 		Cursor.lockState = CursorLockMode.Locked;
 	}
 

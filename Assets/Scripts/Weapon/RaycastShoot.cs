@@ -72,7 +72,7 @@ public class RaycastShoot : MonoBehaviour {
 		RaycastHit hit;
 
 		// When we left click and our raycast hits something
-		if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, range)) {
+		if(Physics.Raycast(transform.position, transform.forward, out hit, range)) {
 			// Do not render bullet holes on enemies (because the bullet will be shown on the capsule collider, not the mesh)
 			if(hit.transform.gameObject.tag != Tags.enemy) {
 				ShatterGlass shatter = hit.transform.gameObject.GetComponent<ShatterGlass>();
