@@ -5,9 +5,10 @@ public class InteractionMaterial : Interaction {
 	public float uses = 3;
 	private float currentStage = 3;
 
+	public MeshFilter mesh;
+
 	void Awake() {
 		type = Type.PickUp;
-		minDistance = 5;
 	}
 
 	void Update() {
@@ -15,23 +16,21 @@ public class InteractionMaterial : Interaction {
 			uses += .4f * Time.deltaTime;
 
 		if(currentStage != uses) {
-			Mesh newMesh;
 			if(uses >= 3)
-				newMesh = GameController.materialManager.stage3;
+				mesh.mesh = GameController.materialManager.stage3;
 			else if(uses >= 2)
-				newMesh = GameController.materialManager.stage2;
+				mesh.mesh = GameController.materialManager.stage2;
 			else if(uses >= 1)
-				newMesh = GameController.materialManager.stage1;
+				mesh.mesh = GameController.materialManager.stage1;
 			else
-				newMesh = GameController.materialManager.stageDepleted;
+				mesh.mesh = GameController.materialManager.stageDepleted;
 
-			gameObject.GetComponent<MeshFilter>().mesh = newMesh;
 			currentStage = uses;
 		}
 	}
 
-	public override void doAction(GameObject player) {
-		GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setStr(destName).setPosition(gameObject.transform.position));
+	public override void doAction() {
+		GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setStr(name).setPosition(gameObject.transform.position));
 
 		if(uses >= 1) {
 			uses--;

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class InputManager : MonoBehaviour {
 	private static KeyCode[] validKeyCodes;
@@ -43,5 +44,13 @@ public class InputManager : MonoBehaviour {
 				return validKeyCodes[i];
 		}
 		return KeyCode.None;
+	}
+
+	private static List<InteractControl> interactList;
+
+	public static void register(InteractControl obj) {
+		if(interactList == null) interactList = new List<InteractControl>(1);
+
+		interactList.Add(obj);
 	}
 }
