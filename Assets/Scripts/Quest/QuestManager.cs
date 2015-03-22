@@ -54,12 +54,10 @@ public class QuestManager : MonoBehaviour {
 		else if(Input.GetKeyDown(KeyCode.I))
 			fireProgressEvent(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setNumber(1337));
 
-		// If the Joural button os pressed, show it!
-		if(Input.GetKeyDown(InputManager.journal)) {
-			if(!GameController.isPausedOrFocused()) {
-				GameController.setFocused(true, false);
-				panelJournal.SetActive(true);
-			}
+		// If the Joural button is pressed, show it!
+		if(Input.GetKeyDown(InputManager.journal) && !GameController.isPausedOrFocused()) {
+			GameController.setFocused(true, false);
+			panelJournal.SetActive(true);
 		}
 
 		// If the Journal is visible and the Cancel button is pressed, close the Journal.

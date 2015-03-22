@@ -24,7 +24,7 @@ public class EnemyHP : MonoBehaviour {
 		// Don't let the current HP be over the maximum or under zero!
 		currHealth = Mathf.Max(Mathf.Min(currHealth, maxHealth), 0);
 		
-		if(currHealth == 0)
+		if(currHealth <= 0)
 			Died();
 
 		// Request an update to the HP bar
@@ -32,6 +32,7 @@ public class EnemyHP : MonoBehaviour {
 	}
 
 	void Died() {
+		GameController.enemyManager.kill();
 		Destroy(gameObject);
 	}
 

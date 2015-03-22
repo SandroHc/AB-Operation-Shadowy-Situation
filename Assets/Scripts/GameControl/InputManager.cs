@@ -16,6 +16,7 @@ public class InputManager : MonoBehaviour {
 	public static KeyCode submit;
 	public static KeyCode cancel;
 	public static KeyCode journal;
+	public static KeyCode crafting;
 
 	void Start() {
 		if(validKeyCodes == null)
@@ -32,6 +33,7 @@ public class InputManager : MonoBehaviour {
 		submit = (KeyCode) PlayerPrefs.GetInt("input_submit", (int) KeyCode.Return);
 		cancel = (KeyCode) PlayerPrefs.GetInt("input_cancel", (int) KeyCode.Escape);
 		journal = (KeyCode) PlayerPrefs.GetInt("input_quest_journal", (int) KeyCode.J);
+		crafting = (KeyCode) PlayerPrefs.GetInt("input_crafting", (int) KeyCode.K);
 	}
 
 	public static void saveKey(string name, int value) {

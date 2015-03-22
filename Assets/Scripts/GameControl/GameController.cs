@@ -14,6 +14,7 @@ public class GameController : MonoBehaviour {
 	public static CutsceneManager cutsceneManager;
 	public static DialogueManager dialogueManager;
 	public static MaterialManager materialManager;
+	public static CraftingManager craftingManager;
 	public static EnemyManager enemyManager;
 
 	public static PlayerController playerController;
@@ -50,6 +51,7 @@ public class GameController : MonoBehaviour {
 		cutsceneManager = gameObject.GetComponent<CutsceneManager>();
 		dialogueManager = gameObject.GetComponent<DialogueManager>();
 		materialManager = gameObject.GetComponent<MaterialManager>();
+		craftingManager = gameObject.GetComponent<CraftingManager>();
 		enemyManager = gameObject.GetComponent<EnemyManager>();
 
 		GameObject player = GameObject.FindGameObjectWithTag(Tags.player);

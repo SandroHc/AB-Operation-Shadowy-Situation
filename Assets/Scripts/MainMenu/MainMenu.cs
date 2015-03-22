@@ -208,6 +208,7 @@ public class MainMenu : MonoBehaviour {
 		drawInputOption("Submit", "submit", ref InputManager.submit);
 		drawInputOption("Cancel", "cancel", ref InputManager.cancel);
 		drawInputOption("Quest Journal", "quest_journal", ref InputManager.journal);
+		drawInputOption("Crafting", "crafting", ref InputManager.crafting);
 
 		// Reset values after each draw call
 		inputY = 200;

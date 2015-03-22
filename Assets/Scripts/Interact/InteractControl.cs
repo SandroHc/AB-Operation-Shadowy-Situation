@@ -20,14 +20,13 @@ public class InteractControl : MonoBehaviour {
 	}
 	
 	void Update() {
-		if(Input.GetKey(InputManager.interact) && !GameController.isPausedOrFocused()) {
-			fill.fillAmount = (fill.fillAmount + Time.deltaTime * interactMultiplier) % 1; 
-		} else {
-			fill.fillAmount = Mathf.Lerp(fill.fillAmount, 0, Time.deltaTime * 10);
-		}
+		if(Input.GetKey(InputManager.interact) && !GameController.isPausedOrFocused())
+			fill.fillAmount = (fill.fillAmount + Time.deltaTime * interactMultiplier) % 1; // Increment the fill amount. Reset after the number 1.
+		else
+			fill.fillAmount = Mathf.Lerp(fill.fillAmount, 0, Time.deltaTime * 10); // Decrement the fill amount back to 0
 
-		if(fill.fillAmount >= .95f) {
+		// If the amount is over 95%, start the interaction
+		if(fill.fillAmount >= .95f)
 			target.doAction();
-		}
 	}
 }
