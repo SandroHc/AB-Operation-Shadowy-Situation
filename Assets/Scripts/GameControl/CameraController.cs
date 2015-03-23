@@ -18,13 +18,22 @@ public class CameraController : MonoBehaviour {
 	public float eyeHeightRacio;
 	public float currentAimRacio = 1; // Used when aiming weapons to define "aim level"
 
-	public float maxRecoilX = -20;
-	public float maxRecoilY = 20;
-	public float recoilSpeed = 10;
-	public float recoil = 0;
+	bool effectsEnabled;
+
+	float upSpeed = 9; // controls smoothing speed
+	float dnSpeed = 20; // how fast the weapon returns to original position
 	
+	Vector3 angleInitial; // initial angle private
+	Vector3 angleCurrent = Vector3.zero; // smoothed angle
+
+	private float targetX; // unfiltered recoil angle private
+
 	void Start() {
 		controller = transform.parent.GetComponent<CharacterController>();
+
+		effectsEnabled = PlayerPrefs.GetInt("settings_effects_enabled", 1) == 1;
+		if(!effectsEnabled) // Default is the effects are enabled
+			enableEffects(effectsEnabled);
 	}
 	
 	void Awake() {
@@ -32,6 +41,9 @@ public class CameraController : MonoBehaviour {
 		Input.ResetInputAxes();
 		
 		parentLastPos = transform.parent.position;
+
+		// Save original angles
+		angleInitial = transform.localEulerAngles;
 	}
 	
 	void Update() {
@@ -55,29 +67,18 @@ public class CameraController : MonoBehaviour {
 		}
 
 
+
+		angleCurrent.x = Mathf.Lerp(angleCurrent.x, targetX, upSpeed * Time.deltaTime); // smooth movement a little
+		transform.localEulerAngles = angleInitial - angleCurrent; // move the camera or weapon
+		targetX = Mathf.Lerp(targetX, 0, dnSpeed * Time.deltaTime); // returns to rest
+
+
 		if(Input.GetKeyDown(KeyCode.Alpha0))
 		   enableEffects(!effectsEnabled);
 	}
 
-	bool effectsEnabled = true;
-
-	public void addRecoil(float value) {
-		recoil += value;
-	}
-
-	public void doRecoil() {
-		if (recoil > 0) {
-			var maxRecoil = Quaternion.Euler(maxRecoilX + Random.Range(-10, 10), maxRecoilY + Random.Range(-10, 10), 0);
-			transform.localRotation = Quaternion.Slerp(transform.localRotation, maxRecoil, recoilSpeed * Time.deltaTime); // This controls the actual recoil
-		//	transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, transform.localEulerAngles.z); // This one also
-			//equippedGun.model.transform.position = Vector3.Slerp(equippedGun.model.transform.position, new Vector3(equippedGun.model.transform.position.x + equippedGun.maxRecoilX, equippedGun.model.transform.position.y,equippedGun.model.transform.position.z), Time.deltaTime * equippedGun.recoilSpeed);
-			// Don't you dare uncomment the above line!
-			recoil -= Time.deltaTime;
-		} else {
-			recoil = 0;
-			transform.localRotation = Quaternion.Slerp(transform.localRotation, Quaternion.identity, recoilSpeed / 2 * Time.deltaTime);
-		//	transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, transform.localEulerAngles.z);
-		} 
+	public void recoil(float recoil) {
+		targetX += recoil; // add recoil force
 	}
 
 	public void enableEffects(bool enabled) {

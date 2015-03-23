@@ -9,4 +9,8 @@ public class AudioManager : MonoBehaviour {
 
 	public AudioClip waterFlowing;
 	public AudioClip waterFlowingLoud;
+
+	public AudioClip weaponPistolShoot;
+	public AudioClip weaponPistolShootNoAmmo;
+	public AudioClip weaponPistolReload;
 }

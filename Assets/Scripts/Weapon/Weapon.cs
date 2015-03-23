@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class Weapon : MonoBehaviour {
-	protected string name;
+public abstract class Weapon {
+	protected string name = "";
+	
+	public enum WeaponType { Pistol, AssaultRifle, Shotgun, SniperRifle, Equipment };
+	protected WeaponType type;
 
 	protected float damage = 1f;
 	protected float range = 50f;
@@ -10,7 +13,7 @@ public abstract class Weapon : MonoBehaviour {
 	protected float cooldownShoot = .3f;
 	protected float cooldownReload = 1f;
 
-	protected float recoil = .1f;
+	protected float recoil = 5f;
 
 	protected int defaultMagazines = 2;
 	protected int defaultMaxAmmunition = 10;
@@ -18,34 +21,50 @@ public abstract class Weapon : MonoBehaviour {
 	protected int currentMagazines;
 	protected int currentAmmunition;
 
-	protected AudioClip[] sounds;
+	protected AudioClip[] sounds = new AudioClip[3];
 	protected enum SoundLabel { SHOOT, SHOOT_NO_AMMO, RELOAD };
 
 	public Weapon() {
-		currentMagazines = defaultMagazines;
-		currentAmmunition = defaultMaxAmmunition;
+
 	}
 
 	public void targetHit(GameObject target, RaycastHit hit) {
 		target.SendMessage("takeDamage", damage, SendMessageOptions.DontRequireReceiver);
 	}
 
-	public bool eventShoot() {
+	public bool shoot() {
+		if(WeaponManager.weaponCooldown > 0)
+			return false;
+
+		// Only shoot if ammunition is available
+		// Else, try to reload the weapon
 		if(currentAmmunition > 0) {
 			currentAmmunition--;
+
+			WeaponManager.weaponCooldown = cooldownShoot;
 
 			playSound(SoundLabel.SHOOT);
 			return true;
 		} else {
-			playSound(SoundLabel.SHOOT_NO_AMMO);
+			if(!reload())
+				playSound(SoundLabel.SHOOT_NO_AMMO);
 			return false;
 		}
 	}
 	
-	public bool eventReload() {
+	public bool reload() {
+		// TODO Testing code
+		if(Input.GetKey(KeyCode.Return))
+			currentAmmunition = defaultMaxAmmunition;
+
+		if(WeaponManager.weaponCooldown > 0)
+			return false;
+
 		if(currentMagazines > 1) {
 			currentMagazines--;
 			currentAmmunition = defaultMaxAmmunition;
+
+			WeaponManager.weaponCooldown = cooldownReload;
 
 			playSound(SoundLabel.RELOAD);
 			return true;
@@ -54,19 +73,48 @@ public abstract class Weapon : MonoBehaviour {
 		}
 	}
 
-	public void eventAimEnter() {
+	public void aimEnter() {
 
 	}
 
-	public void eventAimExit() {
+	public void aimExit() {
 
+	}
+
+	public void equip() {
+		// Populate the available magazines & ammunition
+		currentMagazines = PlayerPrefs.GetInt("weapon_" + name + "_magazines", defaultMagazines);
+		currentAmmunition = PlayerPrefs.GetInt("weapon_" + name + "_ammo", defaultMaxAmmunition);
+
+		PlayerPrefs.SetString("weapon_equipped", name);
+	}
+
+	public void unequip() {
+		// Check if the save is redundant or not.
+		// Store the avaiable magazines
+		if(currentMagazines != defaultMagazines)
+			PlayerPrefs.SetInt("weapon_" + name + "_magazines", currentMagazines);
+		else
+			PlayerPrefs.DeleteKey("weapon_" + name + "_magazines");
+
+		// Store the available ammunition
+		if(currentAmmunition != defaultMaxAmmunition)
+			PlayerPrefs.SetInt("weapon_" + name + "_magazines", currentAmmunition);
+		else
+			PlayerPrefs.DeleteKey("weapon_" + name + "_ammo");
 	}
 
 	private void playSound(SoundLabel label) {
 		AudioClip clip = sounds[(int) label];
 		if(clip != null)
-			GetComponent<AudioSource>().PlayOneShot(clip);
+			WeaponManager.audioSource.PlayOneShot(clip);
 	}
+
+	public void populateSounds(AudioClip shoot = null, AudioClip shootNoAmmo = null, AudioClip reload = null) {
+		sounds[(int) SoundLabel.SHOOT] = shoot;
+		sounds[(int) SoundLabel.SHOOT_NO_AMMO] = shootNoAmmo;
+		sounds[(int) SoundLabel.RELOAD] = reload;
+	} 
 
 	public float getDamage() {
 		return damage;
@@ -74,5 +122,25 @@ public abstract class Weapon : MonoBehaviour {
 
 	public float getRange() {
 		return range;
+	}
+
+	public float getRecoil() {
+		return recoil;
+	}
+
+	public string getName() {
+		return name;
+	}
+
+	public int getMagazines() {
+		return currentMagazines;
+	}
+
+	public int getAmmunition() {
+		return currentAmmunition;
+	}
+
+	public int getAmmunitionPerMagazine() {
+		return defaultMaxAmmunition;
 	}
 }

@@ -1,77 +1,11 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 
 public class RaycastShoot : MonoBehaviour {
-	private AudioSource audioSource;
-	private new Camera camera;
 
-	public AudioClip[] audioWeapon; // 0 - shoot; 1 - shoot no ammo; 2 - reload
-
-	public int magazines = 2;
-	public int ammoPerMagazine = 10;
-	private int ammoRemaining;
-
-	public float range = 50f;
-	public float damage = 1f;
-
-	public float cooldownShoot = .3f;
-	public float cooldownReload = 1f;
-	private float cooldown = 0f;
-
-	public Text bulletUI;
-
-	// Variables used when aiming
-	private float currentFOV = 60f;
-	private float dampVelocity = 0.4f;
-
-	public float recoil = .1f;
-
-	// TODO Temporary reference
-	public CameraController cameraController; // Used to emulate the effect of recoil
-
-	void Awake() {
-		audioSource = GetComponent<AudioSource>();
-		camera = cameraController.GetComponent<Camera>();
-
-		ammoRemaining = ammoPerMagazine;
-		updateUI();
-	}
-
-	void Update() {
-		// Draws our raycast and gives it a green color and a length of 10 meters
-		//Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 10, Color.green, 0, false);
-
-		if(cooldown > 0)
-			cooldown -= Time.deltaTime;
-
-		// We don't want to be able to shoot in the Pause Menu, don't we?
-		if(GameController.isPausedOrFocused())
-			return;
-
-		if(Input.GetKeyUp(InputManager.reload) && ammoRemaining < ammoPerMagazine) // Only reload if the magazine is not full
-			reload();
-		
-		if(Input.GetKeyDown(InputManager.fire1) && cooldown <= 0) {
-			if(ammoRemaining > 0)
-				shoot();
-			else
-				audioSource.PlayOneShot(audioWeapon[1]); // No ammo sound
-		}
-
-
-		// Change the camera FOV smoothly
-		//	if(cameraController.camera != null) // When in cutscenes, the main camera is disabled
-			camera.fieldOfView = Mathf.SmoothDamp(cameraController.GetComponent<Camera>().fieldOfView, currentFOV, ref dampVelocity, .3f);
-
-		bool isAiming = Input.GetKey(InputManager.fire2); // Right-click by default
-		currentFOV = isAiming ? 40 : 60;
-	}
-
-	void shoot() {
+	public RaycastHit raycast(float range) {
 		RaycastHit hit;
 
-		// When we left click and our raycast hits something
 		if(Physics.Raycast(transform.position, transform.forward, out hit, range)) {
 			// Do not render bullet holes on enemies (because the bullet will be shown on the capsule collider, not the mesh)
 			if(hit.transform.gameObject.tag != Tags.enemy) {
@@ -88,34 +22,10 @@ public class RaycastShoot : MonoBehaviour {
 					Destroy(obj, 10);
 				}
 			}
-
-			hit.transform.gameObject.SendMessage("takeDamage", damage, SendMessageOptions.DontRequireReceiver);
 		}
 
-		ammoRemaining--;
-		cameraController.addRecoil(recoil);
-		cameraController.doRecoil();
 
-		cooldown = cooldownShoot;
-		audioSource.PlayOneShot(audioWeapon[0]); // Shoot sound
-
-		updateUI();
-	}
-
-	void reload() {
-		if(magazines > 1) {
-			magazines--;
-			ammoRemaining = ammoPerMagazine;
-			cooldown = cooldownReload;
-
-			audioSource.PlayOneShot(audioWeapon[2]); // Reload sound
-		}
-
-		updateUI();
-	}
-
-	void updateUI() {
-		bulletUI.text = ammoRemaining + "/" + ammoPerMagazine * (magazines - 1);
+		return hit;
 	}
 
 	/**
