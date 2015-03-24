@@ -17,27 +17,16 @@ public class RaycastShoot : MonoBehaviour {
 					Vector3 position = hit.point;
 					position += hit.normal * .0001f; // Lift the object a bit to prevent z-fighting
 
-					GameObject obj = Instantiate(GameController.spriteManager.getBullet(convertTag(hit.transform.tag)), position, Quaternion.FromToRotation(Vector3.up, hit.normal)) as GameObject; // Then we'll instantiate a random bullet hole texture from our array and apply it where we click and adjust the position and rotation of textures to match the object being hit
-					obj.transform.parent = hit.transform;
+					// Then we'll instantiate a random bullet hole texture from our array and apply it where we click and adjust the position and rotation of textures to match the object being hit
+					GameObject obj = Instantiate(GameController.spriteManager.getBullet(hit.transform.tag), position, Quaternion.FromToRotation(Vector3.up, hit.normal)) as GameObject;
+					obj.transform.SetParent(hit.transform);
+
+					// Destroy the bullet hole after 10 seconds
 					Destroy(obj, 10);
 				}
 			}
 		}
 
-
 		return hit;
-	}
-
-	/**
-	 * Picks the object tag and converts it to the tags used in the SpriteManager
-	 */
-	string convertTag(string tag) {
-		switch(tag) {
-		case Tags.wallConcrete:	return "concrete";
-		case Tags.wallGlass:	return "glass";
-		case Tags.wallMetal:	return "metal";
-		case Tags.wallWood:		return "wood";
-		default:				return "none";
-		}
 	}
 }

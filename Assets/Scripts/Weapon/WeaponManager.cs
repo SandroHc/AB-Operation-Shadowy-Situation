@@ -55,43 +55,58 @@ public class WeaponManager : MonoBehaviour {
 		if(GameController.isPausedOrFocused())
 			return;
 
+		// Decrease the cooldown only during the gameplay. Else, someone could exploit this to reset the cooldown in the Pause menu
 		if(weaponCooldown > 0)
 			weaponCooldown -= Time.deltaTime;
 
 		// Check Aim controls
-		bool isAiming = Input.GetKey(InputManager.fire2);
-		currentFieldOfView = isAiming ? defaultFieldOfView * .6f /* shrink the FOV by 60% */ : defaultFieldOfView;
-
-		if(isAiming != isAimingLast) {
-			if(isAiming)
-				equippedWeapon.aimEnter();
-			else
-				equippedWeapon.aimExit();
-		}
-
-		isAimingLast = isAiming;
-
-		// Update the camera FOV
-		camera.fieldOfView = Mathf.SmoothDamp(camera.fieldOfView, currentFieldOfView, ref speedChangeFOV, .3f);
-
+		handleAim();
 
 		// Check Reload controls
-		if(Input.GetKeyUp(InputManager.reload)) // Only reload if the magazine is not full
-			equippedWeapon.reload();
+		handleReload();
 
 		// Cehck Fire controls
+		handleShoot();
+
+		// TODO: Udate label based on events (instead of updating constantly)
+		weaponInfo.text = equippedWeapon.getAmmunition() + "/" + equippedWeapon.getAmmunitionPerMagazine() * (equippedWeapon.getMagazines() - 1);
+	}
+
+	private void handleAim() {
+		bool isAiming = Input.GetKey(InputManager.fire2);
+		currentFieldOfView = isAiming ? defaultFieldOfView * .6f /* shrink the FOV by 60% */ : defaultFieldOfView;
+		
+		if(isAiming != isAimingLast) {
+			if(isAiming) {
+				equippedWeapon.aimEnter();
+				cameraController.aimEnter();
+			} else {
+				equippedWeapon.aimExit();
+				cameraController.aimExit();
+			}
+		}
+		
+		isAimingLast = isAiming;
+		
+		// Update the camera FOV
+		camera.fieldOfView = Mathf.SmoothDamp(camera.fieldOfView, currentFieldOfView, ref speedChangeFOV, .3f);
+	}
+
+	private void handleReload() {
+		if(Input.GetKeyUp(InputManager.reload)) // Only reload if the magazine is not full
+			equippedWeapon.reload();
+	}
+
+	private void handleShoot() {
 		if(Input.GetKeyDown(InputManager.fire1)) {
 			if(equippedWeapon.shoot()) {
-				cameraController.recoil(equippedWeapon.getRecoil());
-
+				cameraController.GetComponentInParent<RecoilHandler>().recoil(equippedWeapon.getRecoil());
+				
 				RaycastHit hit = raycast.raycast(equippedWeapon.getRange());
 				if(hit.transform != null)
 					equippedWeapon.targetHit(hit.transform.gameObject, hit);
 			}
 		}
-
-		// TODO: Udate label based on events (instead of updating constantly)
-		weaponInfo.text = equippedWeapon.getAmmunition() + "/" + equippedWeapon.getAmmunitionPerMagazine() * (equippedWeapon.getMagazines() - 1);
 	}
 
 	public static void switchWeapon(Weapon weapon) {
