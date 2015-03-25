@@ -3,6 +3,8 @@ using System.Collections;
 
 public abstract class Weapon {
 	protected string name = "";
+
+	protected GameObject weaponPrefab;
 	
 	public enum WeaponType { Pistol, AssaultRifle, Shotgun, SniperRifle, Equipment };
 	protected WeaponType type;
@@ -142,5 +144,9 @@ public abstract class Weapon {
 
 	public int getAmmunitionPerMagazine() {
 		return defaultMaxAmmunition;
+	}
+
+	public GameObject getPrefab() {
+		return weaponPrefab;
 	}
 }

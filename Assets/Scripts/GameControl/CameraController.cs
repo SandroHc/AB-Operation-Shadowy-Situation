@@ -16,7 +16,6 @@ public class CameraController : MonoBehaviour {
 	public float headbobAmountX;
 	public float headbobAmountY;
 	public float eyeHeightRacio;
-	public float currentAimRacio = 1; // Used when aiming weapons to define "aim level"
 
 	bool effectsEnabled;
 
@@ -54,8 +53,8 @@ public class CameraController : MonoBehaviour {
 			headbobStepCounter += Vector3.Distance(parentLastPos, transform.parent.position) * headbobSpeed;
 		
 		Vector3 temp = transform.localPosition;
-		temp.x = Mathf.Sin(headbobStepCounter) * headbobAmountX * currentAimRacio;
-		temp.y = (Mathf.Cos(headbobStepCounter * 2) * headbobAmountY * -1 * currentAimRacio) + (transform.parent.localScale.y * eyeHeightRacio) - (transform.parent.localScale.y / 2);
+		temp.x = Mathf.Sin(headbobStepCounter) * headbobAmountX;
+		temp.y = (Mathf.Cos(headbobStepCounter * 2) * headbobAmountY * -1) + (transform.parent.localScale.y * eyeHeightRacio) - (transform.parent.localScale.y / 2);
 		transform.localPosition = temp;
 		
 		// Update the last position to this frame

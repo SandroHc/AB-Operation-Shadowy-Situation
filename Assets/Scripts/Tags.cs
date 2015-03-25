@@ -7,6 +7,8 @@ public class Tags : MonoBehaviour {
 	public const string enemy			= "enemy";
 	public const string npc				= "npc";
 
+	public const string weapon		 	= "weapon";
+
 	// Ground types
 	public const string groundWood		= "groundWood";
 	public const string groundGrass		= "groundGrass";

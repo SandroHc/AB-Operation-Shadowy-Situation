@@ -4,7 +4,8 @@ using System.Collections;
 public class WeaponTest : Weapon {
 
 	public WeaponTest() {
-		this.name = "TEST";
+		this.name = "M9";
+		this.weaponPrefab = GameController.prefabManager.weaponM9;
 		this.type = WeaponType.Pistol;
 
 		this.damage = 1f;

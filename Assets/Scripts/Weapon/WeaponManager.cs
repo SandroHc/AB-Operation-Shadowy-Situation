@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class WeaponManager : MonoBehaviour {
 	public static List<Weapon> weaponList;
 	public static Weapon equippedWeapon;
+	private static Weapon defaultWeapon;
 
 	public static float weaponCooldown = 0;
 
@@ -18,7 +19,7 @@ public class WeaponManager : MonoBehaviour {
 
 	private bool isAimingLast;
 
-	public RaycastShoot raycast;
+	private RaycastShoot raycast;
 	public static AudioSource audioSource;
 
 	public Text weaponInfo;
@@ -26,21 +27,27 @@ public class WeaponManager : MonoBehaviour {
 	public CameraController cameraController;
 
 	void Start() {
+		defaultWeapon = new WeaponTest();
+
 		weaponList = new List<Weapon>();
-		weaponList.Add(new WeaponTest());
+		weaponList.Add(defaultWeapon);
 
 
 		string equippedWeaponName = PlayerPrefs.GetString("weapon_equipped", "");
-		if(equippedWeaponName == "")
-			equippedWeapon = weaponList[0]; // TODO Have a default weapon
-		else
+		// If the weapon name is not equal to "", try to find the weapon instance
+		if(!"".Equals(equippedWeaponName))
 			equippedWeapon = getWeapon(equippedWeaponName);
+
+		// If no weapon instance was found, set the default one
+		if(equippedWeapon == null)
+			equippedWeapon = defaultWeapon;
 
 		// Prepare the weapon for use
 		equippedWeapon.equip();
 	}
 
 	void Awake() {
+		raycast = cameraController.GetComponent<RaycastShoot>();
 		audioSource = raycast.GetComponent<AudioSource>();
 
 		camera = cameraController.GetComponent<Camera>();
@@ -122,7 +129,7 @@ public class WeaponManager : MonoBehaviour {
 		equippedWeapon.equip();
 	}
 
-	private static Weapon getWeapon(string name) {
+	public static Weapon getWeapon(string name) {
 		for(int i=0; i < weaponList.Count; i++)
 			if(weaponList[i].getName() == name)
 				return weaponList[i];
