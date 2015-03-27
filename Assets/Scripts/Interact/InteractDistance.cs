@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class InteractDistance : MonoBehaviour {
+	public bool isActive = true;
+
 	public float range = 5f;
 	
 	void Awake() {
@@ -14,6 +16,8 @@ public class InteractDistance : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
+		if(!isActive) return;
+
 		if(Tags.player.Equals(other.tag)) {
 			InteractControl obj = gameObject.GetComponent<InteractControl>();
 			if(obj != null) {
@@ -26,6 +30,8 @@ public class InteractDistance : MonoBehaviour {
 	}
 	
 	void OnTriggerExit(Collider other) {
+		if(!isActive) return;
+
 		if(Tags.player.Equals(other.tag)) {
 			InteractControl obj = gameObject.GetComponent<InteractControl>();
 			if(obj != null) {
@@ -35,5 +41,9 @@ public class InteractDistance : MonoBehaviour {
 				obj.background.color = Color.grey;
 			}
 		}
+	}
+
+	public void setActive(bool state) {
+		isActive = state;
 	}
 }

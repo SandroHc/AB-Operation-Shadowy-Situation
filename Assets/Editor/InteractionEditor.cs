@@ -7,6 +7,7 @@ public class PropertyHolderEditor : Editor {
 //	private Interaction instance;
 	
 	public SerializedProperty type_prop;
+	public SerializedProperty name_prop;
 
 	/* Dialogue */
 	public SerializedProperty dialogue_prop;
@@ -19,6 +20,7 @@ public class PropertyHolderEditor : Editor {
 
 		// Setup the SerializedProperties
 		type_prop = serializedObject.FindProperty("type");
+		name_prop = serializedObject.FindProperty("name");
 
 		/* Dialogue */
 		dialogue_prop = serializedObject.FindProperty("dialogue");
@@ -31,6 +33,7 @@ public class PropertyHolderEditor : Editor {
 		serializedObject.Update();
 		
 		EditorGUILayout.PropertyField(type_prop);
+		EditorGUILayout.PropertyField(name_prop);
 
 		switch((Interaction.Type) type_prop.intValue) {
 		case Interaction.Type.Dialogue:

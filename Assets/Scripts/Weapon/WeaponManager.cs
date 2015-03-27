@@ -121,12 +121,18 @@ public class WeaponManager : MonoBehaviour {
 			return;
 
 		// Send the unequip event to the old weapon
-		if(equippedWeapon != null)
+		if(equippedWeapon != null) {
 			equippedWeapon.unequip();
+			equippedWeapon.drop();
+		}
 
 		// Swap the weapons and send the equip event
 		equippedWeapon = weapon;
 		equippedWeapon.equip();
+	}
+
+	public static void dropWeapon() {
+		switchWeapon(defaultWeapon);
 	}
 
 	public static Weapon getWeapon(string name) {

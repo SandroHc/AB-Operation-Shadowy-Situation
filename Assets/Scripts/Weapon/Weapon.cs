@@ -5,6 +5,7 @@ public abstract class Weapon {
 	protected string name = "";
 
 	protected GameObject weaponPrefab;
+	public GameObject weaponInstance;
 	
 	public enum WeaponType { Pistol, AssaultRifle, Shotgun, SniperRifle, Equipment };
 	protected WeaponType type;
@@ -89,6 +90,20 @@ public abstract class Weapon {
 		currentAmmunition = PlayerPrefs.GetInt("weapon_" + name + "_ammo", defaultMaxAmmunition);
 
 		PlayerPrefs.SetString("weapon_equipped", name);
+
+
+		// If there is no instance (AND there is a prefab), create one
+		if(weaponInstance == null && weaponPrefab != null) {
+			// Instantiate the prefab
+			weaponInstance = GameObject.Instantiate(weaponPrefab);
+
+			// Setup the new instance
+			weaponInstance.gameObject.transform.SetParent(Camera.main.transform);
+
+			// Reset position and rotation (that might have changed with the change of parent)
+			weaponInstance.gameObject.transform.localPosition = Vector3.zero;
+			weaponInstance.gameObject.transform.localRotation = Quaternion.Euler(Vector3.zero);
+		}
 	}
 
 	public void unequip() {
@@ -104,6 +119,10 @@ public abstract class Weapon {
 			PlayerPrefs.SetInt("weapon_" + name + "_magazines", currentAmmunition);
 		else
 			PlayerPrefs.DeleteKey("weapon_" + name + "_ammo");
+	}
+
+	public void drop() {
+		
 	}
 
 	private void playSound(SoundLabel label) {

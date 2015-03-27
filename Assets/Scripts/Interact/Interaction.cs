@@ -55,13 +55,20 @@ public class Interaction : MonoBehaviour {
 	}
 
 	public void doAction() {
-		GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setStr(name).setPosition(gameObject.transform.position));
+		GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setStr(this.name).setPosition(gameObject.transform.position));
 
 		switch(type) {
 		case Type.Dialogue:
 			GameController.dialogueManager.showDialogue(new DialogueTest());
 			break;
-		case Type.ItemPickUp: // Not yet implemented
+		case Type.ItemPickUp:
+			// If the item is a weapon, use the appropriate methods
+			WeaponDrop weaponScript = GetComponent<WeaponDrop>();
+			if(weaponScript != null) {
+				weaponScript.pick();
+				return;
+			}
+
 			break;
 		case Type.MaterialPickUp:			
 			if(picksRemaining >= 1) {
