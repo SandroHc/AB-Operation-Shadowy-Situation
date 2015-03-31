@@ -1,66 +1,100 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
 public class DialogueManager : MonoBehaviour {
-	public Dialogue currentDialogue = null;
+	public static Dialogue currentDialogue = null;
 
-	public void Update() {
-		if(currentDialogue != null) {
-			Dialogue.Conversation conv = currentDialogue.getCurrentConversation();
-			if(conv != null) {
-				int size = conv.getSize();
+	public GameObject panelDialogue;
+	public GameObject panelTalk;
+	private GameObject panelSelection;
 
-				for(int i=1; i <= size; i++) {
-					if(Input.GetKeyDown(i.ToString()))
-						selected(i-1);
-				}
-			}
-		}
+	public GameObject buttonPrefab;
+
+	void Awake() {
+		panelTalk = panelDialogue.transform.FindChild("talk").gameObject;
+		panelSelection = panelDialogue.transform.FindChild("selection").gameObject;
 	}
 
-	public void LateUpdate() {
-		if(currentDialogue != null) {
-			if(GameController.getFocused() && Input.GetKeyDown(InputManager.cancel)) {
-				closeDialogue();
-			}
-		}
-	}
+	void LateUpdate() {
+		if(currentDialogue == null)
+			return;
 
-	public void OnGUI() {
-		if(currentDialogue != null) {
-			Dialogue.Conversation conv = currentDialogue.getCurrentConversation();
-			if(conv != null)
-				conv.draw();
-		}
-	}
+		currentDialogue.update();
 
-	private void selected(int i) {
-		if(currentDialogue != null) {
-			if(currentDialogue.selected(i)) {
-				closeDialogue(); // Close the dialogue, as per the API
-			}
-		}
+		if(Input.GetKeyDown(InputManager.cancel))
+			closeDialogue();
 	}
 
 	public void showDialogue(Dialogue dialogue) {
 		Debug.Log("Opening dialogue " + dialogue.ToString());
+		
+		panelDialogue.SetActive(true);
+
+		GameController.setFocused(true, false);
 
 		currentDialogue = dialogue;
-		GameController.setFocused(true, false);
+		currentDialogue.show();
 	}
 
 	public void closeDialogue() {
-		if(currentDialogue != null) {
-			Debug.Log("Closing dialogue " + currentDialogue.ToString());
+		if(currentDialogue == null)
+			return;
 
-			// Send the event to the Dialogue class (in the event to rollback any change)
-			currentDialogue.closingDialogue();
-			// Null the reference to the dialogue
-			currentDialogue = null;
+		Debug.Log("Closing dialogue " + currentDialogue.ToString());
 
-			// Resume focus on the game
-			GameController.setFocused(false);
+		// Send the event to the Dialogue class (to be able to rollback any changes)
+		currentDialogue.close();
+		// Null the reference to the dialogue
+		currentDialogue = null;
+
+		// Resume focus on the game
+		GameController.setFocused(false);
+
+		panelDialogue.gameObject.SetActive(false);
+	}
+
+	public void showTalk(string title, string text) {
+		panelTalk.SetActive(true);
+		panelSelection.gameObject.SetActive(false);
+
+		panelTalk.transform.FindChild("title").GetComponent<Text>().text = title;
+		panelTalk.transform.FindChild("text").GetComponent<Text>().text = text;
+	}
+
+	public void showSelection(string[] options) {
+		Debug.Log("Showing selection: " + options.Length + " elements");
+
+		panelTalk.SetActive(false);
+		panelSelection.SetActive(true);
+
+		// Remove all previous added buttons 
+		foreach(Transform child in panelSelection.transform)
+			GameObject.Destroy(child.gameObject);
+
+		for(int i=0; i < options.Length; i++) {
+			generateButton(i, options[i]);
 		}
+	}
+
+	private GameObject generateButton(int id, string str) {
+		GameObject buttonObject = GameObject.Instantiate(buttonPrefab);
+		buttonObject.name = "btn_selection_" + id;
+		buttonObject.transform.SetParent(panelSelection.transform);
+
+
+		RectTransform rect = buttonObject.GetComponent<RectTransform>();
+		rect.localPosition = new Vector3(0, -(id * 35) + 67.5f, 0);
+
+
+		Button button = buttonObject.GetComponent<Button>();
+		button.onClick.AddListener(() => currentDialogue.selected(id));
+
+
+		Text text = buttonObject.GetComponentInChildren<Text>();
+		text.text = (id+1) + ". " + str;	
+
+		return buttonObject;
 	}
 }

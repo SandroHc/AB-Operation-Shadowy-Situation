@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Dialogue1Quest1 : Dialogue {
-	
-	public override void generate() {
-		addConversation(new Conversation1());
+
+	public Dialogue1Quest1() : base(new Conversation1()) {
+		// NO-OP
 	}
 	
-	private class Conversation1 : Conversation {
+	private class Conversation1 : DialogueSelection {
 		public Conversation1() {
 			options.Add("Opçao 1");
 			options.Add("Opçao 2");
@@ -16,8 +16,6 @@ public class Dialogue1Quest1 : Dialogue {
 		}
 		
 		public override bool selected(int index) {
-			Debug.Log ("Selected: " + index);
-			
 			return true;
 		}
 	}

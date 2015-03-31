@@ -23,12 +23,6 @@ public class AudioManager : MonoBehaviour {
 		masterVolume = PlayerPrefs.GetFloat("volume_master", 1);
 		effectsVolume = PlayerPrefs.GetFloat("volume_effects", .75f);
 		ambienceVolume = PlayerPrefs.GetFloat("volume_ambience", .25f);
-
-		// Initialize any sound-related scripts
-
-		// This is used to be sure that the volume settings are loaded before any foreing script tried to retrieve them.
-		// Which whould happen if the said script would load before this one.
-		SoundtrackController.INSTANCE.init();
 	}
 
 	public static float getMasterVolume() {

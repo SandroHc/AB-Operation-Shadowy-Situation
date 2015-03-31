@@ -7,22 +7,20 @@ public class SoundtrackController : MonoBehaviour {
 
 	private AudioSource source;
 
-	public static SoundtrackController INSTANCE;
-
 	void Start() {
-		INSTANCE = this;
-	}
-	
-	public void init() {
 		source = GetComponent<AudioSource>();
 		if(source == null)
 			gameObject.AddComponent<AudioSource>();
-
+		
 		// Set the volume according to the settings (also, applying master volume)
 		source.volume = AudioManager.getAmbienceVolume();
 
 		// Initiate the loop
 		nextClip();
+	}
+
+	void Awake() {
+		// Called before the "Start" event...
 	}
 
 	private void nextClip() {

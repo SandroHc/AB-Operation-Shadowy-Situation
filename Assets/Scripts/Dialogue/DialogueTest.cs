@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 public class DialogueTest : Dialogue {
 
-	public override void generate() {
-		addConversation(new Conversation1());
+	public DialogueTest() : base(new Selection()) {
+		// NO-OP
 	}
 
-	private class Conversation1 : Conversation {
+	private class Selection : DialogueSelection {
 		private Quest questTest;
 
-		public Conversation1() {
+		public Selection() {
 			questTest = GameController.questManager.getQuest(1);
 			string questTestName = questTest != null ? questTest.name : "INVALID_QUEST"; 
 			if(questTest != null) {
@@ -45,6 +45,19 @@ public class DialogueTest : Dialogue {
 				break;
 			}
 
+			// Select the "Talk" dialogue
+			DialogueManager.currentDialogue.showDialogue(new Talk());
+			return false;
+		}
+	}
+
+	private class Talk : DialogueTalk {
+		public Talk() {
+			title = "Yurippe";
+			text = "Pois bem. Boa sorte!";
+		}
+		
+		public override bool selected(int index) {	
 			return true;
 		}
 	}

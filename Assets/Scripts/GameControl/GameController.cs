@@ -217,7 +217,7 @@ public class GameController : MonoBehaviour {
 		INSTANCE.uiCrosshair.SetActive(false);
 
 		Cursor.visible = !lockCursor;
-		Cursor.lockState = lockCursor ? CursorLockMode.Locked : CursorLockMode.Confined;
+		Cursor.lockState = lockCursor ? CursorLockMode.Locked : CursorLockMode.None;
 	}
 
 	private static void exitFocus() {
@@ -226,7 +226,7 @@ public class GameController : MonoBehaviour {
 		INSTANCE.uiCrosshair.SetActive(!isPaused);
 
 		Cursor.visible = isPaused;
-		Cursor.lockState = isPaused ? CursorLockMode.Confined : CursorLockMode.Locked;
+		Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
 	}
 
 	void OnApplicationQuit() {
