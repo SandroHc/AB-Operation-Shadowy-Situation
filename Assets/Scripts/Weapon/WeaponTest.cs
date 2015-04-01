@@ -11,5 +11,6 @@ public class WeaponTest : Weapon {
 		this.damage = 1f;
 
 		populateSounds(GameController.audioManager.weaponPistolShoot, GameController.audioManager.weaponPistolShootNoAmmo, GameController.audioManager.weaponPistolReload);
+		populateCraftingStatus();
 	}
 }

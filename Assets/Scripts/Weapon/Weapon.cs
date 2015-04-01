@@ -7,8 +7,12 @@ public abstract class Weapon {
 	protected GameObject weaponPrefab;
 	public GameObject weaponInstance;
 	
-	public enum WeaponType { Pistol, AssaultRifle, Shotgun, SniperRifle, Equipment };
+	public enum WeaponType { Pistol = 1, AssaultRifle = 2, Shotgun = 2, SniperRifle = 2, Knife = 3, Grenade = 4, Equipment = 5 };
 	protected WeaponType type;
+
+	protected bool isUnlocked;
+	protected bool isCrafted;
+	protected bool isEquipped; // Equipped as in the quick-bar (not the current one)
 
 	protected float damage = 1f;
 	protected float range = 50f;
@@ -29,6 +33,12 @@ public abstract class Weapon {
 
 	public Weapon() {
 
+	}
+
+	protected void populateCraftingStatus() {
+		isUnlocked = PlayerPrefs.GetInt("weapon_" + name + "_unlocked", 0) == 1;
+		isCrafted = PlayerPrefs.GetInt("weapon_" + name + "_crafted", 0) == 1;
+		isEquipped = PlayerPrefs.GetInt("weapon_" + name + "_equipped", 0) == 1;
 	}
 
 	public void targetHit(GameObject target, RaycastHit hit) {
