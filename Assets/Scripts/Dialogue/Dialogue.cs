@@ -3,9 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 
 public abstract class Dialogue {
+	public string name;
+
 	protected DialogueAbstract currentDialogue;
 
-	public Dialogue(DialogueAbstract startingDialogue) {
+	public Dialogue(DialogueAbstract startingDialogue, string npcName = "") {
+		name = npcName;
 		currentDialogue = startingDialogue;
 	}
 
@@ -22,10 +25,15 @@ public abstract class Dialogue {
 	 * e.g. returning false will keep the dialogue (used to show more conversations, etc)
 	 */
 	public void selected(int index) {
-		Debug.Log("Dialogue: selected " + index);
+		//Debug.Log("Dialogue: selected " + index);
 
-		if(currentDialogue.selected(index))
+		if(currentDialogue.selected(index)) {
 			GameController.dialogueManager.closeDialogue();
+
+			// Fire the dialogue finished event to the Quest System
+			// Do not fire on the close() method because the player might have canceled the dialogue
+			GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.ProgressType.DIALOGUE).setStr(name));
+		}
 	}
 
 	public void close() { }
@@ -38,10 +46,14 @@ public abstract class Dialogue {
 	public enum DialogueType { TALK, SELECTION } 
 
 	public abstract class DialogueAbstract {
+	//	protected Dialogue super;
+
 		private DialogueType type;
 
 		public DialogueAbstract(DialogueType type) {
 			this.type = type;
+
+		//	this.super = DialogueManager.currentDialogue;
 		}
 
 		abstract public void show();
@@ -92,7 +104,7 @@ public abstract class Dialogue {
 		}
 	}
 
-	public abstract class DialogueTalk : DialogueAbstract{
+	public abstract class DialogueTalk : DialogueAbstract {
 		protected string title;
 		protected string text;
 
@@ -106,7 +118,8 @@ public abstract class Dialogue {
 		}
 		
 		public override void show() {
-			GameController.dialogueManager.showTalk(title, text);
+			// If a title is available, use it. Else, use the Dialogue name (usually the NPC name)
+			GameController.dialogueManager.showTalk(title != null ? title : DialogueManager.currentDialogue.name, text);
 		}
 	}
 }

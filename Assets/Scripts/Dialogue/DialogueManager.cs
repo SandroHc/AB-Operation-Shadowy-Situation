@@ -7,7 +7,7 @@ public class DialogueManager : MonoBehaviour {
 	public static Dialogue currentDialogue = null;
 
 	public GameObject panelDialogue;
-	public GameObject panelTalk;
+	private GameObject panelTalk;
 	private GameObject panelSelection;
 
 	public GameObject buttonPrefab;
@@ -28,7 +28,7 @@ public class DialogueManager : MonoBehaviour {
 	}
 
 	public void showDialogue(Dialogue dialogue) {
-		Debug.Log("Opening dialogue " + dialogue.ToString());
+		//Debug.Log("Opening dialogue " + dialogue.ToString());
 		
 		panelDialogue.SetActive(true);
 
@@ -42,7 +42,7 @@ public class DialogueManager : MonoBehaviour {
 		if(currentDialogue == null)
 			return;
 
-		Debug.Log("Closing dialogue " + currentDialogue.ToString());
+		//Debug.Log("Closing dialogue " + currentDialogue.ToString());
 
 		// Send the event to the Dialogue class (to be able to rollback any changes)
 		currentDialogue.close();
@@ -64,8 +64,6 @@ public class DialogueManager : MonoBehaviour {
 	}
 
 	public void showSelection(string[] options) {
-		Debug.Log("Showing selection: " + options.Length + " elements");
-
 		panelTalk.SetActive(false);
 		panelSelection.SetActive(true);
 
@@ -93,7 +91,7 @@ public class DialogueManager : MonoBehaviour {
 
 
 		Text text = buttonObject.GetComponentInChildren<Text>();
-		text.text = (id+1) + ". " + str;	
+		text.text = "<b>" + (id+1) + ".</b> " + str;	
 
 		return buttonObject;
 	}

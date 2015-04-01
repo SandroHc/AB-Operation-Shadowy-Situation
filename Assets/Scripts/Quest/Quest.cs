@@ -33,17 +33,33 @@ public abstract class Quest {
 		if(status != QUEST_STATUS.ACTIVE) // Ignore progress calls if there is nothing to do here
 			return false;
 
-
-		Debug.Log("Quest " + name + " (" + id + ") update. " + progress.ToString());
-
-
 		if(currentStage < stageList.Count && stageList[currentStage].update(progress))
-			currentStage++;
-
-		if(currentStage >= stageList.Count)
-			setStatus(QUEST_STATUS.COMPLETED);
+			nextStage();
 
 		return true;
+	}
+
+	protected void nextStage() {
+		// Update the current stage pointer, so new progress events will be redirected to there.
+		currentStage++;
+
+		// Save the current stage in the preferences
+		PlayerPrefs.SetInt("quest-" + id + "-stage", currentStage);
+
+		// Fire the stage update event
+		GameController.questManager.stageUpdateEvent(stageList[currentStage]);
+
+		// Check if the current stage as the last one, and fire the quest finish event 
+		if(currentStage >= stageList.Count)
+			complete();
+	}
+
+	protected void complete() {
+		// Update the status to COMPLETED
+		setStatus(QUEST_STATUS.COMPLETED);
+
+		// Fire the quest finished event
+		GameController.questManager.questFinishedEvent(this);
 	}
 
 	/**

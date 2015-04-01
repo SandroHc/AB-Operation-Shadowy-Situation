@@ -7,23 +7,23 @@ public class QuestManager : MonoBehaviour {
 	private List<Quest> questList = new List<Quest>();
 
 	public GameObject panelJournal;
-	public GameObject panelList;
+	public RectTransform panelList;
 	public GameObject panelDescription;
 	public GameObject panelDescriptionStages;
 
-	void Awake() {
-		questList.Clear();
+	public Text checkpointText;
+
+	void Start() {
 		registerQuest(new QuestTest());
+	}
 
-		// Get the panel's RectTransform to get it's width
-		RectTransform panelListTransform = panelList.GetComponent<RectTransform>();
-
+	void Awake() {
 		foreach(Quest quest in questList) {
 			GameObject buttonObject = new GameObject("btn_" + quest.id);
 
 			Image image = buttonObject.AddComponent<Image>();
-			image.transform.SetParent(panelList.transform);
-			image.rectTransform.sizeDelta = new Vector2(panelListTransform.rect.width - 10, 50);
+			image.transform.SetParent(panelList);
+			image.rectTransform.sizeDelta = new Vector2(panelList.rect.width - 10, 50);
 			image.rectTransform.position = new Vector2(5, 0);
 			image.rectTransform.anchoredPosition = Vector3.zero;
 			image.color = new Color(1f, 1f, 1f, .5f);
@@ -46,14 +46,12 @@ public class QuestManager : MonoBehaviour {
 
 			button.onClick.AddListener(() => showInfo(getQuest(quest.id)));
 		}
+
+		// Populate the checkpoint list
+		updateCheckpoints();
 	}
 
 	public void LateUpdate() {
-		if(Input.GetKeyDown(KeyCode.U))
-			fireProgressEvent(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setStr("Interacting!"));
-		else if(Input.GetKeyDown(KeyCode.I))
-			fireProgressEvent(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setNumber(1337));
-
 		// If the Joural button is pressed, show it!
 		if(Input.GetKeyDown(InputManager.journal) && !GameController.isPausedOrFocused()) {
 			GameController.setFocused(true, false);
@@ -74,7 +72,7 @@ public class QuestManager : MonoBehaviour {
 		}
 
 		foreach(Quest obj in questList) {
-			if(obj != null && obj.id == quest.id) {
+			if(obj.id == quest.id) {
 				Debug.Log("Quest " + quest.name + " and " + obj.name + " both have the same id , " + quest.id + ". Ignoring.");
 				return false;
 			}
@@ -88,7 +86,6 @@ public class QuestManager : MonoBehaviour {
 		Debug.Log ("Firing event: " + progress.ToString());
 
 		foreach(Quest quest in questList) {
-			if(quest == null) continue;
 			quest.progress(progress);
 		}			
 	}
@@ -104,6 +101,10 @@ public class QuestManager : MonoBehaviour {
 			return false;
 
 		quest.setStatus(Quest.QUEST_STATUS.ACTIVE);
+
+		// Fire the event
+		questStartedEvent(quest);
+
 		return true;
 	}
 
@@ -172,6 +173,41 @@ public class QuestManager : MonoBehaviour {
 
 		// TODO For debug purposes
 		debugCurrentQuest = quest;
+	}
+
+	public void updateCheckpoints() {
+		Debug.Log ("Updating checkpoint list");
+
+		string str = "";
+
+		foreach(Quest quest in questList) {
+			if(quest.getStatus() == Quest.QUEST_STATUS.ACTIVE) {
+				str += "<b>" + quest.name + "</b>\n";
+
+				List<Quest.Stage> stages = quest.getStages();
+				int currentStage = quest.getCurrentStage();
+				for(int i=0; i < currentStage; i++)
+					str += "  <color=green>✓</color> " + stages[i].getText() + "\n";
+			
+				str += "  <color=red>✗</color> " + stages[currentStage].getText() + "\n\n";
+			}
+		}
+
+		checkpointText.text = str;
+	}
+
+	public void stageUpdateEvent(Quest.Stage stage) {
+		updateCheckpoints();
+	}
+
+	public void questStartedEvent(Quest quest) {
+		Debug.Log ("Quest started: " + quest.name + " (" + quest.id + ")");
+		updateCheckpoints();
+	}
+
+	public void questFinishedEvent(Quest quest) {
+		Debug.Log ("Quest finished: " + quest.name + " (" + quest.id + ")");
+		updateCheckpoints();
 	}
 
 	private Quest debugCurrentQuest = null;

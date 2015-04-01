@@ -9,6 +9,7 @@ public class QuestTest : Quest {
 
 	public override void initStages() {
 		stageList.Add(new StageTest());
+		stageList.Add(new Stage2());
 	}
 
 	protected class StageTest : Stage {
@@ -22,11 +23,34 @@ public class QuestTest : Quest {
 		public override bool update(QuestProgress progress) {
 			if(progress.type == QuestProgress.ProgressType.MATERIAL_PICKUP) {
 				current += (int) progress.getNumber();
-				Debug.Log(string.Format("Stage updated. {0} of {1} materials picked up", current, objective));
+
+				GameController.questManager.stageUpdateEvent(this);
 			}
 			return current >= objective;
 		}
 
+		public override string getText() {
+			return string.Format("Gathered {0} of {1} material.", current, objective);
+		}
+	}
+
+	protected class Stage2 : Stage {
+		private int current, objective;
+		
+		public Stage2() {
+			current = 0;
+			objective = 100;
+		}
+		
+		public override bool update(QuestProgress progress) {
+			if(progress.type == QuestProgress.ProgressType.MATERIAL_PICKUP) {
+				current += (int) progress.getNumber();
+
+				GameController.questManager.stageUpdateEvent(this);
+			}
+			return current >= objective;
+		}
+		
 		public override string getText() {
 			return string.Format("Gathered {0} of {1} material.", current, objective);
 		}

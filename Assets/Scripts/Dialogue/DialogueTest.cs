@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class DialogueTest : Dialogue {
 
-	public DialogueTest() : base(new Selection()) {
+	public DialogueTest() : base(new Selection(), "Yurippe") {
 		// NO-OP
 	}
 
@@ -53,7 +53,7 @@ public class DialogueTest : Dialogue {
 
 	private class Talk : DialogueTalk {
 		public Talk() {
-			title = "Yurippe";
+			//title = "Yurippe";
 			text = "Pois bem. Boa sorte!";
 		}
 		
