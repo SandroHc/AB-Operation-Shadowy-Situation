@@ -6,6 +6,8 @@ public class WeaponSelection : MonoBehaviour {
 	public RectTransform weaponSelection;
 	private Vector3 scale;
 
+	public RectTransform[] pieces;
+
 	public int index;
 	public float target;
 
@@ -18,6 +20,9 @@ public class WeaponSelection : MonoBehaviour {
 
 		scale = weaponSelection.localScale;
 		weaponSelection.localScale = Vector3.zero;
+
+		// TODO Load the weapon type selected
+		index = 2;
 	}
 
 	void Update() {
@@ -34,6 +39,8 @@ public class WeaponSelection : MonoBehaviour {
 			if(timer >= timerHide)
 				show = false;
 
+			int old = index;
+
 			if(scroll > 0) { // Up
 				index = Mathf.Max(1, index-1);
 				updateTarget();
@@ -42,6 +49,12 @@ public class WeaponSelection : MonoBehaviour {
 				updateTarget();
 			}
 
+			// Smooth transition to highlight current weapon
+			if(old != index)
+				pieces[old-1].transform.localScale = Vector3.one;
+			pieces[index-1].transform.localScale = Vector3.Slerp(pieces[index-1].transform.localScale, Vector3.one * 1.04f, Time.deltaTime * 10);
+
+			// Smooth the angle torwards the target
 			float targetSmooth = Mathf.Lerp(weaponSelection.localRotation.eulerAngles.z, target, Time.deltaTime * 25);
 
 			weaponSelection.localRotation = Quaternion.Euler(0, 0, targetSmooth);

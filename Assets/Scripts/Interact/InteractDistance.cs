@@ -2,48 +2,78 @@
 using System.Collections;
 
 public class InteractDistance : MonoBehaviour {
-	public bool isActive = true;
+	public bool active = true;
+	public bool cooldown = false;
 
 	public float range = 5f;
+	private bool inRange = false;
 	
 	void Awake() {
 		SphereCollider col = gameObject.GetComponent<SphereCollider>();
 		if(col == null)
 			col = gameObject.AddComponent<SphereCollider>();
 
-		col.radius = range / gameObject.transform.localScale.x;
+		col.radius = 10 / gameObject.transform.localScale.x;
 		col.isTrigger = true;
+
+
+		control = gameObject.GetComponent<InteractControl>();
+	}
+
+	void Update() {
+		if(inRange && !cooldown)
+			enable();
+		else
+			disable();
+	}
+
+	void OnTriggerStay(Collider other) {
+		if(!active) return;
+
+		if(Tags.player.Equals(other.tag)) {
+			inRange = Vector3.Distance(other.transform.position, transform.position) <= range;
+		}
 	}
 
 	void OnTriggerEnter(Collider other) {
-		if(!isActive) return;
-
 		if(Tags.player.Equals(other.tag)) {
-			InteractControl obj = gameObject.GetComponent<InteractControl>();
-			if(obj != null) {
-				// Enable the InputControl script
-				obj.enabled = true;
-				// Ligthen the UI color
-				obj.background.color = Color.white;
-			}
+			// Enable the InputControl script
+			control.active = true;
+
+			// Show the canvas
+			control.background.GetComponentInParent<Canvas>().enabled = true;
 		}
 	}
 	
 	void OnTriggerExit(Collider other) {
-		if(!isActive) return;
-
 		if(Tags.player.Equals(other.tag)) {
-			InteractControl obj = gameObject.GetComponent<InteractControl>();
-			if(obj != null) {
-				// Disable the InputControl script
-				obj.enabled = false;
-				// Darken the UI color
-				obj.background.color = Color.grey;
-			}
+			// Disable the InputControl script
+			control.active = false;
+
+			// Hide the canvas
+			control.background.GetComponentInParent<Canvas>().enabled = false;
 		}
 	}
 
-	public void setActive(bool state) {
-		isActive = state;
+	InteractControl control;
+
+	private void enable() {
+		if(control != null) {
+			// Enable the InputControl script
+			control.active = true;
+			// Ligthen the UI color
+			control.background.color = Color.white;
+			control.fill.color = Color.white;
+		}
+	}
+
+	private void disable() {
+		if(control != null) {
+			// Disable the InputControl script
+			control.active = false;
+			// Darken the UI color
+			control.background.color = Color.grey;
+			control.fill.color = Color.grey;
+		}
 	}
 }

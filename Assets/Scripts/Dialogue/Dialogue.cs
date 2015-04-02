@@ -141,7 +141,7 @@ public abstract class Dialogue {
 	}
 
 	public abstract class DialogueTalk : DialogueAbstract {
-		public enum Type { NPC = 0xFF0000, PLAYER = 0x0000FF, SYSTEM = 0xAA6622 }
+		public enum Type { NPC = 0xD71111, PLAYER = 0x4583FF, SYSTEM = 0xE68E00 }
 		protected Type type = Type.NPC;
 
 		protected string title;

@@ -18,6 +18,12 @@ public class DialogueManager : MonoBehaviour {
 	}
 
 	void LateUpdate() {
+		Image img = panelDialogue.GetComponent<Image>();
+		Color color = img.color;
+		color.a = Mathf.Lerp(color.a, currentDialogue == null ? 0 : 1, Time.deltaTime * 10);
+		img.color = color;
+
+
 		if(currentDialogue == null)
 			return;
 
@@ -55,7 +61,8 @@ public class DialogueManager : MonoBehaviour {
 		// Resume focus on the game
 		GameController.setFocused(false);
 
-		panelDialogue.gameObject.SetActive(false);
+		// Hide the dialogue 1/2 second asterwards to allow the fading out animation
+		Invoke("hideDialogue", .15f);
 	}
 
 	public void showTalk(Dialogue.DialogueTalk.Type type, string title, string text) {
@@ -69,8 +76,9 @@ public class DialogueManager : MonoBehaviour {
 
 		Text textComp = panelTalk.transform.FindChild("title").GetComponent<Text>();
 		textComp.text = title;
-		
-		Color color = new Color((((int) type) >> 16) & 0xff, (((int) type) >> 8) & 0xff, (((int) type) >> 0) & 0xff);
+
+		int col = (int) type;
+		Color color = new Color(((col >> 16) & 0xff) / 255f, ((col >> 8) & 0xff) / 255f, ((col >> 0) & 0xff) / 255f); // 0xRRGGBB
 		textComp.color = color;
 
 		panelTalk.transform.FindChild("text").GetComponent<Text>().text = text;
@@ -107,5 +115,9 @@ public class DialogueManager : MonoBehaviour {
 		text.text = "<b>" + (id+1) + ".</b> " + str;	
 
 		return buttonObject;
+	}
+
+	private void hideDialogue() {
+		panelDialogue.gameObject.SetActive(false);
 	}
 }

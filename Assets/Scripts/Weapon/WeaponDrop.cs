@@ -17,9 +17,8 @@ public class WeaponDrop : MonoBehaviour {
 		gameObject.transform.SetParent(null);
 
 
-		InteractDistance interactScript = GetComponent<InteractDistance>();
-		if(interactScript != null)
-			interactScript.setActive(true);
+		InteractDistance interact = GetComponent<InteractDistance>();
+		if(interact != null) interact.active = true;
 	}
 
 	public void pick() {
@@ -34,8 +33,7 @@ public class WeaponDrop : MonoBehaviour {
 		gameObject.transform.localRotation = Quaternion.Euler(Vector3.zero);
 
 
-		InteractDistance interactScript = GetComponent<InteractDistance>();
-		if(interactScript != null)
-			interactScript.setActive(false);
+		InteractDistance interact = GetComponent<InteractDistance>();
+		if(interact != null) interact.active = false;
 	}
 }

@@ -18,7 +18,7 @@ public class InputManager : MonoBehaviour {
 	public static KeyCode journal;
 	public static KeyCode crafting;
 
-	void Start() {
+	void Awake() {
 		if(validKeyCodes == null)
 			validKeyCodes = (KeyCode[]) System.Enum.GetValues(typeof(KeyCode));
 

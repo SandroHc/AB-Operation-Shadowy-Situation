@@ -81,10 +81,6 @@ public class DialogueQ_00_LEARN_1 : Dialogue {
 			text = "Those materials are used to craft from tools to weapons. But we’ll get to that later. There are multiple spots where you can collect materials around this world. You will now be guided to the nearest one.";
 			//nextDialogue = ""; // Terminate the dialogue
 		}
-		
-		public override bool selected(int index) {
-			return true;
-		}
 	}
 
 	private class Path2_1 : DialogueTalk {

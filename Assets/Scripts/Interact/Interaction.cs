@@ -7,6 +7,10 @@ public class Interaction : MonoBehaviour {
 
 	public new string name;		// Name of the final object of the interaction (like Door, NPC, ...)
 
+	public float cooldown = 1f; // 1 second cooldown
+	private bool isInCooldown = false;
+	private float currentCooldown;
+
 	/** Dialogue **/
 	public string dialogue;
 
@@ -29,6 +33,17 @@ public class Interaction : MonoBehaviour {
 	}
 
 	void Update() {
+		if(isInCooldown) {
+			if(currentCooldown > 0) {
+				currentCooldown -= Time.deltaTime;
+			} else { // If the cooldown... cooled down, break the link
+				isInCooldown = false;
+
+				InteractDistance interact = GetComponent<InteractDistance>();
+				if(interact != null) interact.cooldown = false;
+			}
+		}
+
 		switch(type) {
 		case Type.MaterialPickUp:
 			if(picksRemaining < picksMax)
@@ -77,5 +92,11 @@ public class Interaction : MonoBehaviour {
 			}
 			break;
 		}
+
+		isInCooldown = true;
+		currentCooldown = cooldown;
+
+		InteractDistance interact = GetComponent<InteractDistance>();
+		if(interact != null) interact.cooldown = true;
 	}
 }
