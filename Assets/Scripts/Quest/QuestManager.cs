@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class QuestManager : MonoBehaviour {
-	private List<Quest> questList = new List<Quest>();
+	private List<Quest> questList;
 
 	public GameObject panelJournal;
 	public RectTransform panelList;
@@ -13,12 +13,12 @@ public class QuestManager : MonoBehaviour {
 
 	public Text checkpointText;
 
-	void Start() {
-		registerQuest(new QuestTest());
-		registerQuest(new Quest_00_LEARN());
-	}
-
 	void Awake() {
+		if(questList == null) {
+			questList = new List<Quest>();
+			registerQuests();
+		}
+
 		foreach(Quest quest in questList) {
 			GameObject buttonObject = new GameObject("btn_" + quest.id);
 
@@ -69,6 +69,11 @@ public class QuestManager : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.Alpha9)) {
 			getQuest(1).reset();
 		}
+	}
+
+	private void registerQuests() {
+		registerQuest(new QuestTest());
+		registerQuest(new Quest_00_LEARN());
 	}
 
 	private bool registerQuest(Quest quest) {

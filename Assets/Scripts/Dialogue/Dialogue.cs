@@ -50,6 +50,8 @@ public abstract class Dialogue {
 
 		private DialogueType type;
 
+		protected string nextDialogue = "";
+
 		public DialogueAbstract(DialogueType type) {
 			this.type = type;
 
@@ -69,7 +71,22 @@ public abstract class Dialogue {
 		 * 	If true: close the dialogue window
 		 * 	If false: go to the next dialogue
 		 **/
-		abstract public bool selected(int index);
+		public virtual bool selected(int index) {
+			if(!nextDialogue.Equals("")) { // If a nextDialogue is provived, pass on to the next one!
+				next(nextDialogue);
+				return false;
+			} else { // Else, close the dialogue box
+				return true;
+			}
+		}
+
+		protected void next(string str) {
+			DialogueAbstract dialogue = System.Reflection.Assembly.GetExecutingAssembly().CreateInstance(str) as DialogueAbstract;
+			if(dialogue != null)
+				DialogueManager.currentDialogue.showDialogue(dialogue);
+			else
+				Debug.Log("Error while creating an instance for \"" + str + "\"");
+		}
 
 		public DialogueType getType() {
 			return type;
@@ -102,6 +119,25 @@ public abstract class Dialogue {
 		public override void show() {
 			GameController.dialogueManager.showSelection(options.ToArray());
 		}
+	}
+
+	public abstract class DialogueSelectionYesNo : DialogueSelection {
+		public DialogueSelectionYesNo() {
+			options.Add("Yes");
+			options.Add("No");
+		}
+
+		public override bool selected(int index) {
+			if(index == 0)
+				selectionYes();
+			else
+				selectionNo();
+
+			return base.selected(index);
+		}
+
+		abstract protected void selectionYes();
+		abstract protected void selectionNo();
 	}
 
 	public abstract class DialogueTalk : DialogueAbstract {

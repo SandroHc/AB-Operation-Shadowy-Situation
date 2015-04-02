@@ -25,6 +25,9 @@ public abstract class Quest {
 		this.currentStage = PlayerPrefs.GetInt("quest-" + id + "-stage", 0);
 
 		initStages();
+
+		if(status == QUEST_STATUS.ACTIVE)
+			stageList[currentStage].setup();
 	}
 
 	public abstract void initStages();
