@@ -15,6 +15,7 @@ public class QuestManager : MonoBehaviour {
 
 	void Start() {
 		registerQuest(new QuestTest());
+		registerQuest(new Quest_00_LEARN());
 	}
 
 	void Awake() {
@@ -62,6 +63,11 @@ public class QuestManager : MonoBehaviour {
 		if(panelJournal.activeSelf && Input.GetKeyDown(InputManager.cancel)) {
 			GameController.setFocused(false);
 			panelJournal.SetActive(false);
+		}
+
+		// TODO Debug code
+		if(Input.GetKeyDown(KeyCode.Alpha9)) {
+			getQuest(1).reset();
 		}
 	}
 
@@ -114,9 +120,7 @@ public class QuestManager : MonoBehaviour {
 	 **/
 	public Quest getQuest(int id) {
 		foreach(Quest quest in questList) {
-			if(quest == null)
-				continue;
-			else if(quest.id == id)
+			if(quest.id == id)
 				return quest;
 		}
 		return null;

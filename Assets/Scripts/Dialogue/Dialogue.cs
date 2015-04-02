@@ -105,6 +105,9 @@ public abstract class Dialogue {
 	}
 
 	public abstract class DialogueTalk : DialogueAbstract {
+		public enum Type { NPC = 0xFF0000, PLAYER = 0x0000FF, SYSTEM = 0xAA6622 }
+		protected Type type = Type.NPC;
+
 		protected string title;
 		protected string text;
 
@@ -119,7 +122,7 @@ public abstract class Dialogue {
 		
 		public override void show() {
 			// If a title is available, use it. Else, use the Dialogue name (usually the NPC name)
-			GameController.dialogueManager.showTalk(title != null ? title : DialogueManager.currentDialogue.name, text);
+			GameController.dialogueManager.showTalk(type, title != null ? title : DialogueManager.currentDialogue.name, text);
 		}
 	}
 }

@@ -28,8 +28,11 @@ public class DialogueManager : MonoBehaviour {
 	}
 
 	public void showDialogue(Dialogue dialogue) {
-		//Debug.Log("Opening dialogue " + dialogue.ToString());
-		
+		Debug.Log("Opening dialogue " + dialogue);
+
+		if(dialogue == null)
+			return;
+				
 		panelDialogue.SetActive(true);
 
 		GameController.setFocused(true, false);
@@ -55,11 +58,21 @@ public class DialogueManager : MonoBehaviour {
 		panelDialogue.gameObject.SetActive(false);
 	}
 
-	public void showTalk(string title, string text) {
+	public void showTalk(Dialogue.DialogueTalk.Type type, string title, string text) {
 		panelTalk.SetActive(true);
 		panelSelection.gameObject.SetActive(false);
 
-		panelTalk.transform.FindChild("title").GetComponent<Text>().text = title;
+		switch(type) {
+		case Dialogue.DialogueTalk.Type.PLAYER: title = "Player"; break;
+		case Dialogue.DialogueTalk.Type.SYSTEM: title = "System"; break;
+		}
+
+		Text textComp = panelTalk.transform.FindChild("title").GetComponent<Text>();
+		textComp.text = title;
+		
+		Color color = new Color((((int) type) >> 16) & 0xff, (((int) type) >> 8) & 0xff, (((int) type) >> 0) & 0xff);
+		textComp.color = color;
+
 		panelTalk.transform.FindChild("text").GetComponent<Text>().text = text;
 	}
 

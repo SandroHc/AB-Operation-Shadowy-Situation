@@ -3,7 +3,7 @@ using System.Collections;
 
 public class QuestTest : Quest {
 
-	public QuestTest() : base(1, "Test quest", "This is the description for the test quest that was setup just to test the... Quest System") {
+	public QuestTest() : base(0, "Test quest", "This is the description for the test quest that was setup just to test the... Quest System") {
 		// NO-OP
 	}
 
@@ -18,6 +18,9 @@ public class QuestTest : Quest {
 		public StageTest() {
 			current = 0;
 			objective = 10;
+		}
+
+		public override void setup() {
 		}
 
 		public override bool update(QuestProgress progress) {
@@ -40,6 +43,9 @@ public class QuestTest : Quest {
 		public Stage2() {
 			current = 0;
 			objective = 100;
+		}
+
+		public override void setup() {
 		}
 		
 		public override bool update(QuestProgress progress) {

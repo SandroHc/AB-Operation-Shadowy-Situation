@@ -46,12 +46,15 @@ public abstract class Quest {
 		// Save the current stage in the preferences
 		PlayerPrefs.SetInt("quest-" + id + "-stage", currentStage);
 
-		// Fire the stage update event
-		GameController.questManager.stageUpdateEvent(stageList[currentStage]);
-
 		// Check if the current stage as the last one, and fire the quest finish event 
-		if(currentStage >= stageList.Count)
+		if(currentStage >= stageList.Count) {
 			complete();
+		} else {
+			// Send the setup event to the new stage
+			stageList[currentStage].setup();
+
+			GameController.questManager.stageUpdateEvent(stageList[currentStage]);
+		}
 	}
 
 	protected void complete() {
@@ -60,6 +63,18 @@ public abstract class Quest {
 
 		// Fire the quest finished event
 		GameController.questManager.questFinishedEvent(this);
+	}
+
+	/**
+	 * Used to reset the Quest to it's starting point
+	 **/
+	public void reset() {
+		setStatus(QUEST_STATUS.ACTIVE);
+
+		currentStage = 0;
+		PlayerPrefs.SetInt("quest-" + id + "-stage", currentStage);
+
+		GameController.questManager.questStartedEvent(this);
 	}
 
 	/**
@@ -85,6 +100,13 @@ public abstract class Quest {
 	}
 
 	public abstract class Stage {
+
+		/**
+		 * Used to setup any stage-related mechanics.
+		 * Like spawn a mob, reset a door, etc.
+		 **/
+		abstract public void setup();
+
 		/**
 		 * Function to update the current objective inside the current stage.
 		 * Returns  true  if the objective was reached; false otherwise.

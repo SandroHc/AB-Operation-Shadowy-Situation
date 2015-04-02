@@ -8,7 +8,7 @@ public class Interaction : MonoBehaviour {
 	public new string name;		// Name of the final object of the interaction (like Door, NPC, ...)
 
 	/** Dialogue **/
-	public Dialogue dialogue;
+	public string dialogue;
 
 	/** Material pickup **/
 	public int picksMax = 3;
@@ -59,7 +59,7 @@ public class Interaction : MonoBehaviour {
 
 		switch(type) {
 		case Type.Dialogue:
-			GameController.dialogueManager.showDialogue(new DialogueTest());
+			GameController.dialogueManager.showDialogue(System.Reflection.Assembly.GetExecutingAssembly().CreateInstance(dialogue) as Dialogue);
 			break;
 		case Type.ItemPickUp:
 			// If the item is a weapon, use the appropriate methods

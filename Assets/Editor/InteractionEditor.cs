@@ -37,7 +37,7 @@ public class PropertyHolderEditor : Editor {
 
 		switch((Interaction.Type) type_prop.intValue) {
 		case Interaction.Type.Dialogue:
-			//instance.dialogue = EditorGUILayout.ObjectField(dialogue_prop.serializedObject, typeof(Dialogue), true) as Dialogue;
+			EditorGUILayout.PropertyField(dialogue_prop);
 			break;
 		case Interaction.Type.ItemPickUp: // Not yet implemented
 			break;

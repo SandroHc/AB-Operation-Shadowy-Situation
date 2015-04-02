@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class DialogueTest : Dialogue {
 
-	public DialogueTest() : base(new Selection(), "Yurippe") {
+	public DialogueTest() : base(new Talk(), "Yurippe") {
 		// NO-OP
 	}
 
