@@ -18,8 +18,8 @@ public class WeaponSelection : MonoBehaviour {
 	void Awake() {
 		target = weaponSelection.localRotation.eulerAngles.z;
 
-		scale = weaponSelection.localScale;
-		weaponSelection.localScale = Vector3.zero;
+		scale = Vector3.one * .35f;
+		//weaponSelection.localScale = Vector3.zero;
 
 		// TODO Load the weapon type selected
 		index = 2;
@@ -34,7 +34,7 @@ public class WeaponSelection : MonoBehaviour {
 			show = true;
 		}
 
-		if(show) {
+		if(show && !GameController.isPausedOrFocused()) {
 			timer += Time.deltaTime;
 			if(timer >= timerHide)
 				show = false;
@@ -52,7 +52,7 @@ public class WeaponSelection : MonoBehaviour {
 			// Smooth transition to highlight current weapon
 			if(old != index)
 				pieces[old-1].transform.localScale = Vector3.one;
-			pieces[index-1].transform.localScale = Vector3.Slerp(pieces[index-1].transform.localScale, Vector3.one * 1.04f, Time.deltaTime * 10);
+			pieces[index-1].transform.localScale = Vector3.Slerp(pieces[index-1].transform.localScale, Vector3.one * 1.03f, Time.deltaTime * 10);
 
 			// Smooth the angle torwards the target
 			float targetSmooth = Mathf.Lerp(weaponSelection.localRotation.eulerAngles.z, target, Time.deltaTime * 25);
