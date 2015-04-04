@@ -11,18 +11,18 @@ public class PlayerController : MonoBehaviour {
 	public float jumpSpeed;
 	public bool isFlying = false;
 	public bool isSprinting = false;
-	public bool isCrouching = false;
+	public bool isCrawling = false;
 	public bool isJumping = false;
 
 	public bool isMidJump = false;
 
-	private Vector3 spawnLocation = new Vector3(0, 1.1f, 0);
 	private float charHeight;
 
 	private CharacterController controller;
 	private Animator animator;
 
 	private Vector3 lastPos; // Used by the animator to get the speed
+	public float speed;
 
 	public int monsterCount; // Total monsters killed
 	public Text uiMonsterCount;
@@ -45,12 +45,12 @@ public class PlayerController : MonoBehaviour {
 
 	void Update() {
 		isSprinting = Input.GetKey(InputManager.sprint);
-		isCrouching = Input.GetKey(InputManager.crouch);
+		isCrawling = Input.GetKey(InputManager.crawl);
 		isJumping = Input.GetKey(InputManager.jump); // Not using GetKeyDown allows bunnyhops... so, intented feature?
 
 		if(!GameController.isPausedOrFocused()) {
 			if(Input.GetKeyUp(KeyCode.Home)) { // Reset the player when the key R is released
-				transform.position = spawnLocation;
+				transform.position = Vector3.zero;
 				transform.eulerAngles = Vector3.zero;
 			}
 
@@ -59,16 +59,17 @@ public class PlayerController : MonoBehaviour {
 
 		float previousHeight = controller.height;
 		// Update the camera position based on the crouching state
-		controller.height = Mathf.Lerp(controller.height, isCrouching ? charHeight * .5f : charHeight, 5 * Time.deltaTime);
+	//	controller.height = Mathf.Lerp(controller.height, isCrouching ? charHeight * .5f : charHeight, Time.deltaTime * 5);
 
 		// Fix vertical position; else, the player with fall though the ground
-		transform.position = new Vector3(transform.position.x, transform.position.y + (controller.height - previousHeight) / 2, transform.position.z);
+	//	transform.position = new Vector3(transform.position.x, transform.position.y + (controller.height - previousHeight) / 2, transform.position.z);
 
 		// Calculate the speed by calculating the distance travelled from last frame, and multiply it for four
-		animator.SetFloat("Speed", Vector3.Distance(lastPos, transform.position) * 4);
+		speed = Vector3.Distance(lastPos, transform.position) * 4;
+		animator.SetFloat("Speed", speed);
 
 		// Set the sneaking parameter to the sneak input.
-		animator.SetBool("Sneaking", isCrouching);
+		animator.SetBool("Sneaking", isCrawling);
 
 		playFootstepSound();
 
@@ -94,11 +95,11 @@ public class PlayerController : MonoBehaviour {
 		// Movement calculations
 		Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
-		if(isCrouching && controller.isGrounded)
+		if(isCrawling && controller.isGrounded)
 			movement *= .5f;
 
 		if(movement.z > 0) { // Check if there is movement forward
-			if((isSprinting && !isCrouching) && controller.isGrounded) // Only sprint if not crouching
+			if((isSprinting && !isCrawling) && controller.isGrounded) // Only sprint if not crouching
 				movement.z *= 2f; // Double the movement speed forward
 		}
 

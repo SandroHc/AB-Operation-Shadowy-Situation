@@ -204,7 +204,7 @@ public class MainMenu : MonoBehaviour {
 		drawInputOption("Interact", "interact", ref InputManager.interact);
 		drawInputOption("Jump", "jump", ref InputManager.jump);
 		drawInputOption("Sprint", "sprint", ref InputManager.sprint);
-		drawInputOption("Crouch", "crouch", ref InputManager.crouch);
+		drawInputOption("Crawl", "crawl", ref InputManager.crawl);
 		drawInputOption("Submit", "submit", ref InputManager.submit);
 		drawInputOption("Cancel", "cancel", ref InputManager.cancel);
 		drawInputOption("Quest Journal", "quest_journal", ref InputManager.journal);

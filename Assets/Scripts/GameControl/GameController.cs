@@ -236,18 +236,18 @@ public class GameController : MonoBehaviour {
 
 	private void loadPlayerPos() {
 		// Position
-		playerController.gameObject.transform.position = new Vector3(PlayerPrefs.GetFloat("player_pos_x"), PlayerPrefs.GetFloat("player_pos_y", 1.1f), PlayerPrefs.GetFloat("player_pos_z"));
+		playerController.transform.position = new Vector3(PlayerPrefs.GetFloat("player_pos_x"), PlayerPrefs.GetFloat("player_pos_y"), PlayerPrefs.GetFloat("player_pos_z"));
 		// Rotation
-		playerController.gameObject.transform.rotation = Quaternion.Euler(PlayerPrefs.GetFloat("player_rot_x"), PlayerPrefs.GetFloat("player_rot_y"), PlayerPrefs.GetFloat("player_rot_z"));
+		playerController.transform.rotation = Quaternion.Euler(PlayerPrefs.GetFloat("player_rot_x"), PlayerPrefs.GetFloat("player_rot_y"), PlayerPrefs.GetFloat("player_rot_z"));
 	}
 
 	private void savePlayerPos() {
-		Vector3 position = playerController.gameObject.transform.position;
+		Vector3 position = playerController.transform.position;
 		PlayerPrefs.SetFloat("player_pos_x", position.x);
 		PlayerPrefs.SetFloat("player_pos_y", position.y);
 		PlayerPrefs.SetFloat("player_pos_z", position.z);
 
-		Vector3 rotation = playerController.gameObject.transform.eulerAngles;
+		Vector3 rotation = playerController.transform.eulerAngles;
 		PlayerPrefs.SetFloat("player_rot_x", rotation.x);
 		PlayerPrefs.SetFloat("player_rot_y", rotation.y);
 		PlayerPrefs.SetFloat("player_rot_z", rotation.z);

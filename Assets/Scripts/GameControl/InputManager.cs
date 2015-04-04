@@ -12,7 +12,7 @@ public class InputManager : MonoBehaviour {
 	public static KeyCode interact;
 	public static KeyCode jump;
 	public static KeyCode sprint;
-	public static KeyCode crouch;
+	public static KeyCode crawl;
 	public static KeyCode submit;
 	public static KeyCode cancel;
 	public static KeyCode journal;
@@ -29,7 +29,7 @@ public class InputManager : MonoBehaviour {
 		interact = (KeyCode) PlayerPrefs.GetInt("input_interact", (int) KeyCode.E);
 		jump = (KeyCode) PlayerPrefs.GetInt("input_jump", (int) KeyCode.Space);
 		sprint = (KeyCode) PlayerPrefs.GetInt("input_sprint", (int) KeyCode.LeftShift);
-		crouch = (KeyCode) PlayerPrefs.GetInt("input_crouch", (int) KeyCode.LeftControl);
+		crawl = (KeyCode) PlayerPrefs.GetInt("input_crawl", (int) KeyCode.LeftControl);
 		submit = (KeyCode) PlayerPrefs.GetInt("input_submit", (int) KeyCode.Return);
 		cancel = (KeyCode) PlayerPrefs.GetInt("input_cancel", (int) KeyCode.Escape);
 		journal = (KeyCode) PlayerPrefs.GetInt("input_quest_journal", (int) KeyCode.J);

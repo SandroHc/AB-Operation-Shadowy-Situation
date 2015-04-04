@@ -19,7 +19,6 @@ public class WeaponSelection : MonoBehaviour {
 		target = weaponSelection.localRotation.eulerAngles.z;
 
 		scale = Vector3.one * .35f;
-		//weaponSelection.localScale = Vector3.zero;
 
 		// TODO Load the weapon type selected
 		index = 2;

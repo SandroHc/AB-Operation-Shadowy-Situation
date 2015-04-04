@@ -3,18 +3,22 @@ using System.Collections;
 using UnityStandardAssets.ImageEffects;
 
 public class CameraController : MonoBehaviour {
-	public GameObject target;
+	public GameObject targetRotation;
+	private Vector3 originalPosition;
+	private Vector3 crawlingPosition;
 	
 	public float lookSpeed;
 	private float rotationY;
 
 	private CharacterController controller;
+
+	public Vector3 lastPos;
 	
-	public float headbobSpeed;
+	public float headbobSpeed = .5f;
 	public float headbobStepCounter;
-	public Vector3 parentLastPos;
-	public float headbobAmountX;
-	public float headbobAmountY;
+	public float headbobAmountX = .2f;
+	public float headbobAmountY = .1f;
+
 	public float eyeHeightRacio;
 
 	bool effectsEnabled;
@@ -29,18 +33,23 @@ public class CameraController : MonoBehaviour {
 		effectsEnabled = PlayerPrefs.GetInt("settings_effects_enabled", 1) == 1;
 		if(!effectsEnabled) // Default is the effects are enabled. So, if this is false, apply the changes immediately
 			enableEffects(effectsEnabled);
+
+		originalPosition = transform.parent.localPosition;
+		crawlingPosition = new Vector3(0, .56f, .42f);
 	}
 	
 	void Awake() {
 		// Reset those variables, to prevent the camera from spinning when locking the cursor
 		Input.ResetInputAxes();
 		
-		parentLastPos = transform.parent.position;
+		lastPos = transform.parent.position;
 	}
 	
 	void Update() {
-		handleHeadbob();
+		//handleHeadbob();
+		handleCrawling();
 
+		// TODO Debug purposes
 		if(Input.GetKeyDown(KeyCode.Alpha0))
 			enableEffects(!effectsEnabled);
 
@@ -50,7 +59,7 @@ public class CameraController : MonoBehaviour {
 
 	private void handleHeadbob() {
 		if(controller.isGrounded)
-			headbobStepCounter += Vector3.Distance(parentLastPos, transform.parent.position) * headbobSpeed;
+			headbobStepCounter += Vector3.Distance(lastPos, transform.parent.position) * headbobSpeed;
 		
 		Vector3 temp = transform.localPosition;
 		temp.x = Mathf.Sin(headbobStepCounter) * headbobAmountX;
@@ -58,7 +67,14 @@ public class CameraController : MonoBehaviour {
 		transform.localPosition = temp;
 		
 		// Update the last position to this frame
-		parentLastPos = transform.parent.position;
+		lastPos = transform.parent.position;
+	}
+
+	private void handleCrawling() {
+		// If the player is walking/sprinting, take the camera a little forward
+		originalPosition.z = Mathf.Lerp(originalPosition.z, GameController.playerController.speed > .2f ? .5f : .25f, Time.deltaTime * 10);
+
+		transform.parent.localPosition = Vector3.Lerp(transform.parent.localPosition, GameController.playerController.isCrawling ? crawlingPosition : originalPosition, Time.deltaTime * 5);
 	}
 
 	private void handleMouseLook() {
@@ -82,7 +98,7 @@ public class CameraController : MonoBehaviour {
 			rot *= aimPrecision;
 		
 		rot *= Time.deltaTime;
-		target.transform.Rotate(0, rot, 0);
+		targetRotation.transform.Rotate(0, rot, 0);
 	}
 
 	public void enableEffects(bool enabled) {
