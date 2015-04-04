@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public abstract class Weapon {
@@ -6,6 +7,8 @@ public abstract class Weapon {
 
 	protected GameObject weaponPrefab;
 	public GameObject weaponInstance;
+
+	protected Image icon;
 	
 	public enum WeaponType { Pistol = 1, AssaultRifle = 2, Shotgun = 2, SniperRifle = 2, Knife = 3, Grenade = 4, Equipment = 5 };
 	protected WeaponType type;
@@ -32,7 +35,7 @@ public abstract class Weapon {
 	protected enum SoundLabel { SHOOT, SHOOT_NO_AMMO, RELOAD };
 
 	public Weapon() {
-
+		// NO-OP
 	}
 
 	protected void populateCraftingStatus() {
@@ -175,7 +178,15 @@ public abstract class Weapon {
 		return defaultMaxAmmunition;
 	}
 
+	public float getShootingCooldown() {
+		return cooldownShoot;
+	}
+
 	public GameObject getPrefab() {
 		return weaponPrefab;
+	}
+
+	public Image getIcon() {
+		return icon;
 	}
 }

@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class WeaponManager : MonoBehaviour {
-	public static List<Weapon> weaponList;
+	private static List<Weapon> weaponList;
 	public static Weapon equippedWeapon;
 	private static Weapon defaultWeapon;
 
@@ -26,11 +26,15 @@ public class WeaponManager : MonoBehaviour {
 
 	public CameraController cameraController;
 
+	public static float maxDamage;
+	public static float maxFireRate;
+	public static float maxRange;
+
 	void Start() {
 		defaultWeapon = new WeaponTest();
 
 		weaponList = new List<Weapon>();
-		weaponList.Add(defaultWeapon);
+		registerWeapon(defaultWeapon);
 
 
 		string equippedWeaponName = PlayerPrefs.GetString("weapon_equipped", "");
@@ -141,5 +145,32 @@ public class WeaponManager : MonoBehaviour {
 				return weaponList[i];
 
 		return null;
+	}
+
+	private void registerWeapon(Weapon weapon) {
+		if(weapon == null) {
+			Debug.Log("Tried to register invalid weapon.");
+			return;
+		}
+		
+		foreach(Weapon obj in weaponList) {
+			if(weapon.getName().Equals(obj.getName())) {
+				Debug.Log("Weapon " + weapon.getName() + " was already registered. Ignoring.");
+				return;
+			}
+		}
+
+		// Add the weapon to the main list
+		weaponList.Add(weapon);
+
+		// Refresh the stats
+		if(weapon.getDamage() > maxDamage)
+			maxDamage = weapon.getDamage();
+
+		if(weapon.getShootingCooldown() < maxFireRate)
+			maxFireRate = weapon.getShootingCooldown();
+
+		if(weapon.getRange() > maxRange)
+			maxRange = weapon.getRange();
 	}
 }
