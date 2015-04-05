@@ -10,31 +10,48 @@ public class CraftingSlot : MonoBehaviour {
 	private Image img;
 	private Text cost;
 
+	private Button btn;
+
 	private Image damage;
 	private Image rateOfFire;
 	private Image range;
-	
-	void Start() {
-		weapon = WeaponManager.getWeapon(weaponName);
-	}
 
-	void Akawe() {
+	void setup() {
+		weapon = WeaponManager.getWeapon(weaponName);
+
 		img = transform.FindChild("img").GetComponent<Image>();
 		cost = transform.FindChild("cost").GetComponent<Text>();
-
+		btn = transform.FindChild("btn").GetComponent<Button>();
+		
 		Transform stats = transform.FindChild("stats").transform;
 		damage	   = stats.FindChild("damage").FindChild("fill").GetComponent<Image>();
 		rateOfFire = stats.FindChild("rateOfFire").FindChild("fill").GetComponent<Image>();
 		range 	   = stats.FindChild("range").FindChild("fill").GetComponent<Image>();
 	}
 
-	void show() {
+	public void show() {
+		if(weapon == null) setup();
+
+		if(weapon == null) return;
+
 		img = weapon.getIcon();
 		if(img == null) img = GameController.spriteManager.weaponNoIcon;
+
+		cost.text = weapon.getCost().ToString();
 
 		damage.fillAmount = weapon.getDamage() / WeaponManager.maxDamage;
 		rateOfFire.fillAmount = weapon.getShootingCooldown() / WeaponManager.maxFireRate;
 		range.fillAmount = weapon.getRange() / WeaponManager.maxRange;
+
+		Text btnText = btn.transform.FindChild("text").GetComponent<Text>();
+		if(weapon.isEquipped)
+			btnText.text = "Refill ammo";
+		else if(weapon.isCrafted)
+			btnText.text = "Equip";
+		else if(weapon.isUnlocked)
+			btnText.text = "Craft";
+		else
+			btnText.text = "LOCKED";
 
 		/*
 		 * If locked:

@@ -36,6 +36,7 @@ public class WeaponManager : MonoBehaviour {
 	void Start() {
 		weaponList = new List<Weapon>();
 		registerWeapon(new WeaponTest());
+		registerWeapon(new WeaponM16());
 
 		// Show the equipped weapon model.
 		// Don't do this at the Awake event because at that time the weapons where not initialized yet (yup, Start() is called AFTER Awake())
@@ -56,7 +57,7 @@ public class WeaponManager : MonoBehaviour {
 		// Get the saved selected slot
 		currentSlot = PlayerPrefs.GetInt("weapon_slot", (int) SLOT.MAIN);
 
-		Debug.Log ("SLOT SELECTED: " + ((SLOT)currentSlot));
+		//Debug.Log ("SLOT SELECTED: " + ((SLOT)currentSlot));
 
 		// Update the weapon selection UI slot index
 		WeaponSelection.index = currentSlot;
@@ -94,8 +95,8 @@ public class WeaponManager : MonoBehaviour {
 			switchWeapon(getWeapon("M9"));
 		}
 		if(Input.GetKeyDown(KeyCode.Alpha7)) {
-			Debug.Log("Trying to change to slot SIDE");
-			switchSlot((int) SLOT.SIDE);
+			Debug.Log("Trying to equip M16");
+			switchWeapon(getWeapon("M16"));
 		}
 	}
 

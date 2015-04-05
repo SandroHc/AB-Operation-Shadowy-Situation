@@ -13,23 +13,25 @@ public abstract class Weapon {
 	public enum Type { Pistol = 0, AssaultRifle = 1, Shotgun = 1, SniperRifle = 1, Knife = 2, Grenade = 3, Equipment = 4 };
 	protected Type type;
 
-	protected bool isUnlocked;
-	protected bool isCrafted;
-	protected bool isEquipped; // Equipped as in the quick-bar (not the current one)
+	public bool isUnlocked;
+	public bool isCrafted;
+	public bool isEquipped; // Equipped as in the quick-bar (not the current one)
 
-	protected float damage = 1f;
-	protected float range = 50f;
+	protected float damage;
+	protected float range;
+
+	protected float recoil;
 	
 	protected float cooldownShoot = .3f;
 	protected float cooldownReload = 1f;
-
-	protected float recoil = 5f;
 
 	protected int defaultMagazines = 2;
 	protected int defaultMaxAmmunition = 10;
 
 	protected int currentMagazines;
 	protected int currentAmmunition;
+
+	protected float baseCost;
 
 	protected AudioClip[] sounds = new AudioClip[3];
 	protected enum SoundLabel { SHOOT, SHOOT_NO_AMMO, RELOAD };
@@ -208,5 +210,16 @@ public abstract class Weapon {
 
 	public int getSlot() {
 		return (int) type;
+	}
+
+	public float getCost() {
+		if(isEquipped) // Ammo = 5%
+			return baseCost * .05f;
+		else if(isCrafted) // Rebuild = 15%
+			return baseCost * .15f;
+		else if(isUnlocked) // First build = 100%
+			return baseCost * 1;
+		else // Can't build weapon
+			return -1;
 	}
 }

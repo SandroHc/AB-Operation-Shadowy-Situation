@@ -31,14 +31,14 @@ public class WeaponSelection : MonoBehaviour {
 		// Set this every update time in case a key is pressed, instead of only updating when showing the selection
 		int old = index;
 
-		// Reset the timer each time the scroll button is "pressed" (more like spinned?)
-		if(scroll != 0) {
-			timer = 0f;
-			show = true;
-		}
-
 		// Check for key input
 		if(!GameController.isPausedOrFocused()) {
+			// Reset the timer each time the scroll button is "pressed" (more like spinned?)
+			if(scroll != 0) {
+				timer = 0f;
+				show = true;
+			}
+
 			for(int i=1; i <= 5; i++) {
 				if(Input.GetKeyDown(i.ToString())) {
 					index = i-1; // Change the index here, so the change is detected below
@@ -49,39 +49,41 @@ public class WeaponSelection : MonoBehaviour {
 					show = true;
 				}
 			}
-		}
 
-		if(show && !GameController.isPausedOrFocused()) {
-			if(scroll > 0) { // Up
-				index = Mathf.Max(0, index-1);
-				updateTarget();
-			} else if(scroll < 0) { // Down
-				index = Mathf.Min(4, index+1);
-				updateTarget();
-			}
-
-			// Smooth transition to highlight current weapon
-			if(old != index) {
-				pieces[old].transform.localScale = Vector3.one;
-				changed = true;
-			}
-			pieces[index].transform.localScale = Vector3.Slerp(pieces[index].transform.localScale, Vector3.one * 1.03f, Time.deltaTime * 10);
-
-			// Smooth the angle torwards the target
-			float targetSmooth = Mathf.Lerp(weaponSelection.localRotation.eulerAngles.z, target, Time.deltaTime * 25);
-
-			weaponSelection.localRotation = Quaternion.Euler(0, 0, targetSmooth);
-			weaponSelection.localScale = Vector3.Slerp(weaponSelection.localScale, scale, Time.deltaTime * 10);
-
-			// Increment the timer
-			timer += Time.deltaTime;
-			if(timer >= timerHide) {
-				show = false;
-				
-				if(changed) {
-					indexChanged();
-					changed = false;
+			if(show) {
+				if(scroll > 0) { // Up
+					index = Mathf.Max(0, index-1);
+					updateTarget();
+				} else if(scroll < 0) { // Down
+					index = Mathf.Min(4, index+1);
+					updateTarget();
 				}
+				
+				// Smooth transition to highlight current weapon
+				if(old != index) {
+					pieces[old].transform.localScale = Vector3.one;
+					changed = true;
+				}
+				pieces[index].transform.localScale = Vector3.Slerp(pieces[index].transform.localScale, Vector3.one * 1.03f, Time.deltaTime * 10);
+				
+				// Smooth the angle torwards the target
+				float targetSmooth = Mathf.Lerp(weaponSelection.localRotation.eulerAngles.z, target, Time.deltaTime * 25);
+				
+				weaponSelection.localRotation = Quaternion.Euler(0, 0, targetSmooth);
+				weaponSelection.localScale = Vector3.Slerp(weaponSelection.localScale, scale, Time.deltaTime * 10);
+				
+				// Increment the timer
+				timer += Time.deltaTime;
+				if(timer >= timerHide) {
+					show = false;
+					
+					if(changed) {
+						indexChanged();
+						changed = false;
+					}
+				}
+			} else {
+				weaponSelection.localScale = Vector3.Slerp(weaponSelection.localScale, Vector3.zero, Time.deltaTime * 10);
 			}
 		} else {
 			weaponSelection.localScale = Vector3.Slerp(weaponSelection.localScale, Vector3.zero, Time.deltaTime * 10);

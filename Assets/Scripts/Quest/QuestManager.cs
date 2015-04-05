@@ -184,7 +184,7 @@ public class QuestManager : MonoBehaviour {
 	}
 
 	public void updateCheckpoints() {
-		Debug.Log ("Updating checkpoint list");
+		//Debug.Log ("Updating checkpoint list");
 
 		string str = "";
 

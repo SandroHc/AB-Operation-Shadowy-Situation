@@ -5,6 +5,7 @@ public class PrefabManager : MonoBehaviour {
 
 	/** WEAPONS **/
 	public GameObject weaponM9;
+	public GameObject weaponM16;
 
 
 	/** MISC **/

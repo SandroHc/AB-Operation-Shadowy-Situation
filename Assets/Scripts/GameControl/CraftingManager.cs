@@ -4,6 +4,7 @@ using System.Collections;
 
 public class CraftingManager : MonoBehaviour {
 	public GameObject panelCrafting;
+	public Transform craftingContents;
 
 	/**
 	 * To craft a weapon, one need material & blueprints.
@@ -24,6 +25,8 @@ public class CraftingManager : MonoBehaviour {
 	void LateUpdate() {
 		// If the Crafting button is pressed, show the panel!
 		if(Input.GetKeyDown(InputManager.crafting) && !GameController.isPausedOrFocused()) {
+			showCraftingPanel();
+
 			GameController.setFocused(true, false);
 			panelCrafting.SetActive(true);
 		}
@@ -32,6 +35,13 @@ public class CraftingManager : MonoBehaviour {
 		if(panelCrafting.activeSelf && Input.GetKeyDown(InputManager.cancel)) {
 			GameController.setFocused(false);
 			panelCrafting.SetActive(false);
+		}
+	}
+
+	private void showCraftingPanel() {
+		foreach(Transform child in craftingContents) {
+			CraftingSlot obj = child.GetComponent<CraftingSlot>();
+			if(obj != null) obj.show();
 		}
 	}
 }

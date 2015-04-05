@@ -11,6 +11,7 @@ public class SpriteManager : MonoBehaviour {
 
 	public Image weaponNoIcon;
 	public Image weaponM9;
+	public Image weaponM16;
 
 	public GameObject bulletPrefab;
 	private Renderer bulletMeshRenderer;
