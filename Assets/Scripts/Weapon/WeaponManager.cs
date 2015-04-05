@@ -57,6 +57,9 @@ public class WeaponManager : MonoBehaviour {
 		currentSlot = PlayerPrefs.GetInt("weapon_slot", (int) SLOT.MAIN);
 
 		Debug.Log ("SLOT SELECTED: " + ((SLOT)currentSlot));
+
+		// Update the weapon selection UI slot index
+		WeaponSelection.index = currentSlot;
 	}
 
 	void Update() {
@@ -92,7 +95,7 @@ public class WeaponManager : MonoBehaviour {
 		}
 		if(Input.GetKeyDown(KeyCode.Alpha7)) {
 			Debug.Log("Trying to change to slot SIDE");
-			switchSlot(getWeapon("M9"));
+			switchSlot((int) SLOT.SIDE);
 		}
 	}
 
@@ -146,19 +149,23 @@ public class WeaponManager : MonoBehaviour {
 		loadWeaponIntoSlot(weapon, true);
 	}
 
-	public static void switchSlot(Weapon newWeapon) {
-		if(newWeapon == null) return;
+	public static void switchSlot(int slot) {
+		if(slot < 0 || slot >= weaponSlots.Length) return;
+
+		if(slot == currentSlot)
+			return;
 
 		// Hide the old weapon model
 		Weapon weapon = getCurrentWeapon();
 		if(weapon != null) weapon.hide();
 
 		// Set the new selected slot
-		currentSlot = newWeapon.getSlot();
-		PlayerPrefs.SetInt("weapon_slot", currentSlot);
+		currentSlot = slot;
+		PlayerPrefs.SetInt("weapon_slot", slot);
 
 		// Show the new weapon model
-		newWeapon.show();
+		weapon = getCurrentWeapon();
+		if(weapon != null) weapon.show();
 
 		Debug.Log("New slot selected, " + ((SLOT) currentSlot));
 	}
