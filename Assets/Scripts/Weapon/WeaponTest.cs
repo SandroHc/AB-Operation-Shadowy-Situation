@@ -7,7 +7,7 @@ public class WeaponTest : Weapon {
 		this.name = "M9";
 		this.icon = GameController.spriteManager.weaponM9;
 		this.weaponPrefab = GameController.prefabManager.weaponM9;
-		this.type = WeaponType.Pistol;
+		this.type = Type.Pistol;
 
 		this.damage = 1f;
 

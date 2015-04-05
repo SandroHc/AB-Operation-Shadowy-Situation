@@ -6,34 +6,23 @@ public class PathfindHelper : MonoBehaviour {
 	private LineRenderer lineRenderer;
 
 	private Vector3 destination;
-	public Transform destTransform;
+	private bool hasDestination;
 
-	public float minDistance = 6f;
-	public bool eventFired = false;
+	public float minDistance = 5f;
 	
 	void Start() {
 		agent = gameObject.GetComponent<NavMeshAgent>();
 		lineRenderer = gameObject.GetComponent<LineRenderer>();
-
-		if(destTransform != null) {
-			destination = destTransform.position;
-			agent.SetDestination(destination);
-		}
 	}
 
 	void Update() {
-		if(Vector3.Distance(transform.position, destination) < minDistance) {
-			if(!eventFired) {
-				eventFired = true;
-				GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.ProgressType.POSITION).setPosition(destination));
-			}
-		} else {
-			eventFired = false;
-		}
+		if(hasDestination && Vector3.Distance(transform.position, destination) < minDistance)
+			hasDestination = false;
 	}
 
 	public void setDestination(Vector3 destination) {
 		this.destination = destination;
+
 		// Reset the NavAgent position to the parent
 		//gameObject.transform.position = Vector3.zero;
 
@@ -43,6 +32,8 @@ public class PathfindHelper : MonoBehaviour {
 
 
 		updateLine();
+
+		hasDestination = true;
 	}
 
 	public void updateLine() {

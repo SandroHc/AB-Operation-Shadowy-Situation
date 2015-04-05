@@ -14,11 +14,15 @@ public class Quest_00_LEARN : Quest {
 	
 	protected class Stage1 : Stage {
 		private Vector3 objective = new Vector3(0,0,0);
+		private GameObject sentinel;
 		
 		public Stage1() {
 		}
 
 		public override void setup() {
+			// Create a sentinel to check whenever the player sets foot on the target
+			sentinel = GameObject.Instantiate(GameController.prefabManager.marker, objective, Quaternion.Euler(0, 0, 0)) as GameObject;
+			sentinel.GetComponent<PositionSentinel>().setup();
 		}
 		
 		public override bool update(QuestProgress progress) {
@@ -30,6 +34,11 @@ public class Quest_00_LEARN : Quest {
 			}
 
 			return false;
+		}
+
+		public override void finish() {
+			// Destroy the sentinel when it is no longer needed
+			MonoBehaviour.Destroy(sentinel);
 		}
 		
 		public override string getText() {
@@ -55,6 +64,10 @@ public class Quest_00_LEARN : Quest {
 			}
 			
 			return false;
+		}
+
+		public override void finish() {
+			// NO-OP
 		}
 		
 		public override string getText() {

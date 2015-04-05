@@ -10,8 +10,8 @@ public abstract class Weapon {
 
 	protected Image icon;
 	
-	public enum WeaponType { Pistol = 1, AssaultRifle = 2, Shotgun = 2, SniperRifle = 2, Knife = 3, Grenade = 4, Equipment = 5 };
-	protected WeaponType type;
+	public enum Type { Pistol = 0, AssaultRifle = 1, Shotgun = 1, SniperRifle = 1, Knife = 2, Grenade = 3, Equipment = 4 };
+	protected Type type;
 
 	protected bool isUnlocked;
 	protected bool isCrafted;
@@ -42,6 +42,9 @@ public abstract class Weapon {
 		isUnlocked = PlayerPrefs.GetInt("weapon_" + name + "_unlocked", 0) == 1;
 		isCrafted = PlayerPrefs.GetInt("weapon_" + name + "_crafted", 0) == 1;
 		isEquipped = PlayerPrefs.GetInt("weapon_" + name + "_equipped", 0) == 1;
+
+		if(isEquipped)
+			WeaponManager.loadWeaponIntoSlot(this);
 	}
 
 	public void targetHit(GameObject target, RaycastHit hit) {
@@ -102,24 +105,15 @@ public abstract class Weapon {
 		currentMagazines = PlayerPrefs.GetInt("weapon_" + name + "_magazines", defaultMagazines);
 		currentAmmunition = PlayerPrefs.GetInt("weapon_" + name + "_ammo", defaultMaxAmmunition);
 
-		PlayerPrefs.SetString("weapon_equipped", name);
-
-
-		// If there is no instance (AND there is a prefab), create one
-		if(weaponInstance == null && weaponPrefab != null) {
-			// Instantiate the prefab
-			weaponInstance = GameObject.Instantiate(weaponPrefab);
-
-			// Setup the new instance
-			weaponInstance.gameObject.transform.SetParent(Camera.main.transform);
-
-			// Reset position and rotation (that might have changed with the change of parent)
-			weaponInstance.gameObject.transform.localPosition = Vector3.zero;
-			weaponInstance.gameObject.transform.localRotation = Quaternion.Euler(Vector3.zero);
-		}
+		// 
+		isEquipped = true;
+		PlayerPrefs.SetInt("weapon_" + name + "_equipped", 1);
 	}
 
 	public void unequip() {
+		isEquipped = false;
+		PlayerPrefs.SetInt("weapon_" + name + "_equipped", 0);
+
 		// Check if the save is redundant or not.
 		// Store the avaiable magazines
 		if(currentMagazines != defaultMagazines)
@@ -134,8 +128,26 @@ public abstract class Weapon {
 			PlayerPrefs.DeleteKey("weapon_" + name + "_ammo");
 	}
 
-	public void drop() {
-		
+	public void show() {
+		// If there is no instance (AND there is a prefab), create one
+		if(weaponInstance == null && weaponPrefab != null) {
+			// Instantiate the prefab
+			weaponInstance = GameObject.Instantiate(weaponPrefab);
+			
+			// Setup the new instance
+			weaponInstance.transform.SetParent(Camera.main.transform);
+			
+			// Reset position and rotation (that might have changed with the change of parent)
+			weaponInstance.transform.localPosition = Vector3.zero;
+			weaponInstance.transform.localRotation = Quaternion.Euler(Vector3.zero);
+		}
+
+		weaponInstance.SetActive(true);
+	}
+
+	public void hide() {
+		if(weaponInstance != null)
+			weaponInstance.SetActive(false);
 	}
 
 	private void playSound(SoundLabel label) {
@@ -188,5 +200,13 @@ public abstract class Weapon {
 
 	public Image getIcon() {
 		return icon;
+	}
+
+	public Type getWeaponType() {
+		return type;
+	}
+
+	public int getSlot() {
+		return (int) type;
 	}
 }

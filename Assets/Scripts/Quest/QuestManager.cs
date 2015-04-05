@@ -72,7 +72,6 @@ public class QuestManager : MonoBehaviour {
 	}
 
 	private void registerQuests() {
-		registerQuest(new QuestTest());
 		registerQuest(new Quest_00_LEARN());
 	}
 
@@ -217,6 +216,10 @@ public class QuestManager : MonoBehaviour {
 	public void questFinishedEvent(Quest quest) {
 		Debug.Log ("Quest finished: " + quest.name + " (" + quest.id + ")");
 		updateCheckpoints();
+	}
+
+	public void setWaypoint(Vector3 position) {
+		GameController.playerPathfind.setDestination(position);
 	}
 
 	private Quest debugCurrentQuest = null;

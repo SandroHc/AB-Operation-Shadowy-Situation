@@ -9,6 +9,7 @@ public class PrefabManager : MonoBehaviour {
 
 	/** MISC **/
 	public GameObject[] enemy;
+	public GameObject marker;
 
 	public GameObject interact;
 }

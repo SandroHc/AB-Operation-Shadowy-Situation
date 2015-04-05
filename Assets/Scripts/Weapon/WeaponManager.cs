@@ -5,8 +5,11 @@ using System.Collections.Generic;
 
 public class WeaponManager : MonoBehaviour {
 	private static List<Weapon> weaponList;
-	public static Weapon equippedWeapon;
-	private static Weapon defaultWeapon;
+	public static Weapon[] weaponSlots = new Weapon[5];
+	public enum SLOT { SIDE = 0, MAIN = 1, KNIFE = 2, GRENADE = 3, EQUIPMENT = 4 };
+
+	public static int currentSlot;
+
 
 	public static float weaponCooldown = 0;
 
@@ -17,7 +20,7 @@ public class WeaponManager : MonoBehaviour {
 	private float currentFieldOfView;
 	private float speedChangeFOV = 0.4f; // 40%/s
 
-	private bool isAimingLast;
+	private bool isAimingLast; // Used to fire aim enter/exit events
 
 	private RaycastShoot raycast;
 	public static AudioSource audioSource;
@@ -31,23 +34,13 @@ public class WeaponManager : MonoBehaviour {
 	public static float maxRange;
 
 	void Start() {
-		defaultWeapon = new WeaponTest();
-
 		weaponList = new List<Weapon>();
-		registerWeapon(defaultWeapon);
+		registerWeapon(new WeaponTest());
 
-
-		string equippedWeaponName = PlayerPrefs.GetString("weapon_equipped", "");
-		// If the weapon name is not equal to "", try to find the weapon instance
-		if(!"".Equals(equippedWeaponName))
-			equippedWeapon = getWeapon(equippedWeaponName);
-
-		// If no weapon instance was found, set the default one
-		if(equippedWeapon == null)
-			equippedWeapon = defaultWeapon;
-
-		// Prepare the weapon for use
-		equippedWeapon.equip();
+		// Show the equipped weapon model.
+		// Don't do this at the Awake event because at that time the weapons where not initialized yet (yup, Start() is called AFTER Awake())
+		Weapon weapon = getCurrentWeapon();
+		if(weapon != null) weapon.show();
 	}
 
 	void Awake() {
@@ -59,6 +52,11 @@ public class WeaponManager : MonoBehaviour {
 		currentFieldOfView = defaultFieldOfView;
 
 		isAimingLast = false; // Not aiming by default
+
+		// Get the saved selected slot
+		currentSlot = PlayerPrefs.GetInt("weapon_slot", (int) SLOT.MAIN);
+
+		Debug.Log ("SLOT SELECTED: " + ((SLOT)currentSlot));
 	}
 
 	void Update() {
@@ -76,11 +74,26 @@ public class WeaponManager : MonoBehaviour {
 		// Check Reload controls
 		handleReload();
 
-		// Cehck Fire controls
+		// Check Fire controls
 		handleShoot();
 
 		// TODO: Udate label based on events (instead of updating constantly)
-		weaponInfo.text = equippedWeapon.getAmmunition() + "/" + equippedWeapon.getAmmunitionPerMagazine() * (equippedWeapon.getMagazines() - 1);
+		Weapon weapon = getCurrentWeapon();
+		if(weapon != null)
+			weaponInfo.text = weapon.getAmmunition() + "/" + weapon.getAmmunitionPerMagazine() * (weapon.getMagazines() - 1);
+		else
+			weaponInfo.text = "NO WEAPON";
+
+
+		// TODO Debug purposes
+		if(Input.GetKeyDown(KeyCode.Alpha8)) {
+			Debug.Log("Trying to equip M9");
+			switchWeapon(getWeapon("M9"));
+		}
+		if(Input.GetKeyDown(KeyCode.Alpha7)) {
+			Debug.Log("Trying to change to slot SIDE");
+			switchSlot(getWeapon("M9"));
+		}
 	}
 
 	private void handleAim() {
@@ -88,11 +101,13 @@ public class WeaponManager : MonoBehaviour {
 		currentFieldOfView = isAiming ? defaultFieldOfView * .6f /* shrink the FOV by 60% */ : defaultFieldOfView;
 		
 		if(isAiming != isAimingLast) {
+			Weapon weapon = getCurrentWeapon();
+
 			if(isAiming) {
-				equippedWeapon.aimEnter();
+				if(weapon != null) weapon.aimEnter();
 				cameraController.aimEnter();
 			} else {
-				equippedWeapon.aimExit();
+				if(weapon != null) weapon.aimExit();
 				cameraController.aimExit();
 			}
 		}
@@ -104,18 +119,21 @@ public class WeaponManager : MonoBehaviour {
 	}
 
 	private void handleReload() {
-		if(Input.GetKeyUp(InputManager.reload)) // Only reload if the magazine is not full
-			equippedWeapon.reload();
+		if(Input.GetKeyUp(InputManager.reload)) { // Only reload if the magazine is not full
+			Weapon weapon = getCurrentWeapon();
+			if(weapon != null) weapon.reload();
+		}
 	}
 
 	private void handleShoot() {
 		if(Input.GetKeyDown(InputManager.fire1)) {
-			if(equippedWeapon.shoot()) {
-				cameraController.GetComponentInParent<RecoilHandler>().recoil(equippedWeapon.getRecoil());
+			Weapon weapon = getCurrentWeapon();
+			if(weapon != null && weapon.shoot()) {
+				cameraController.GetComponentInParent<RecoilHandler>().recoil(weapon.getRecoil());
 				
-				RaycastHit hit = raycast.raycast(equippedWeapon.getRange());
+				RaycastHit hit = raycast.raycast(weapon.getRange());
 				if(hit.transform != null)
-					equippedWeapon.targetHit(hit.transform.gameObject, hit);
+					weapon.targetHit(hit.transform.gameObject, hit);
 			}
 		}
 	}
@@ -124,19 +142,25 @@ public class WeaponManager : MonoBehaviour {
 		if(weapon == null)
 			return;
 
-		// Send the unequip event to the old weapon
-		if(equippedWeapon != null) {
-			equippedWeapon.unequip();
-			equippedWeapon.drop();
-		}
-
-		// Swap the weapons and send the equip event
-		equippedWeapon = weapon;
-		equippedWeapon.equip();
+		// Set the weapon to the respective slot
+		loadWeaponIntoSlot(weapon, true);
 	}
 
-	public static void dropWeapon() {
-		switchWeapon(defaultWeapon);
+	public static void switchSlot(Weapon newWeapon) {
+		if(newWeapon == null) return;
+
+		// Hide the old weapon model
+		Weapon weapon = getCurrentWeapon();
+		if(weapon != null) weapon.hide();
+
+		// Set the new selected slot
+		currentSlot = newWeapon.getSlot();
+		PlayerPrefs.SetInt("weapon_slot", currentSlot);
+
+		// Show the new weapon model
+		newWeapon.show();
+
+		Debug.Log("New slot selected, " + ((SLOT) currentSlot));
 	}
 
 	public static Weapon getWeapon(string name) {
@@ -145,6 +169,10 @@ public class WeaponManager : MonoBehaviour {
 				return weaponList[i];
 
 		return null;
+	}
+
+	public static Weapon getCurrentWeapon() {
+		return weaponSlots[currentSlot];
 	}
 
 	private void registerWeapon(Weapon weapon) {
@@ -172,5 +200,26 @@ public class WeaponManager : MonoBehaviour {
 
 		if(weapon.getRange() > maxRange)
 			maxRange = weapon.getRange();
+	}
+
+	public static void loadWeaponIntoSlot(Weapon weapon, bool overrideExistingWeapon = false) {
+		if(weapon == null) {
+			Debug.Log("Tried to equip invalid weapon.");
+			return;
+		}
+
+		int slot = weapon.getSlot();
+
+		if(weaponSlots[slot] != null && !overrideExistingWeapon) {
+			Debug.Log("Tried to equip weapon " + weapon.getName() + " into slot " + weapon.getWeaponType() + ", but the weapon " + weaponSlots[slot].getName() + " is already in that slot. Ignoring.");
+
+			weapon.unequip();
+			return;
+		}
+
+		weaponSlots[slot] = weapon;
+		weaponSlots[slot].equip();
+
+		Debug.Log("Loaded weapon " + weapon.getName() + " into slot " + weapon.getWeaponType());
 	}
 }

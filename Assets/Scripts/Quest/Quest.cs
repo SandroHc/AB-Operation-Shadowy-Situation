@@ -26,8 +26,10 @@ public abstract class Quest {
 
 		initStages();
 
-		if(status == QUEST_STATUS.ACTIVE)
-			stageList[currentStage].setup();
+		if(status == QUEST_STATUS.ACTIVE) {
+			if(stageList[currentStage] != null)
+				stageList[currentStage].setup();
+		}
 	}
 
 	public abstract void initStages();
@@ -43,6 +45,10 @@ public abstract class Quest {
 	}
 
 	protected void nextStage() {
+		// Fire the finish stage event
+		if(stageList[currentStage] != null)
+			stageList[currentStage].finish();
+
 		// Update the current stage pointer, so new progress events will be redirected to there.
 		currentStage++;
 
@@ -76,6 +82,9 @@ public abstract class Quest {
 
 		currentStage = 0;
 		PlayerPrefs.SetInt("quest-" + id + "-stage", currentStage);
+
+		if(stageList[currentStage] != null)
+			stageList[currentStage].setup();
 
 		GameController.questManager.questStartedEvent(this);
 	}
@@ -115,6 +124,11 @@ public abstract class Quest {
 		 * Returns  true  if the objective was reached; false otherwise.
 		 **/
 		abstract public bool update(QuestProgress progress);
+
+		/**
+		 * Function called when the stage is complete.
+		 **/
+		abstract public void finish();
 
 		/**
 		 * Used to generate a text that states the current status of this stage.
