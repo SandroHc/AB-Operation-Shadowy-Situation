@@ -105,14 +105,14 @@ public abstract class Weapon {
 		currentMagazines = PlayerPrefs.GetInt("weapon_" + name + "_magazines", defaultMagazines);
 		currentAmmunition = PlayerPrefs.GetInt("weapon_" + name + "_ammo", defaultMaxAmmunition);
 
-		// 
 		isEquipped = true;
 		PlayerPrefs.SetInt("weapon_" + name + "_equipped", 1);
 	}
 
 	public void unequip() {
 		isEquipped = false;
-		PlayerPrefs.SetInt("weapon_" + name + "_equipped", 0);
+		// Delete the preference to, 1) unclutter the registry; 2) the default value is false
+		PlayerPrefs.DeleteKey("weapon_" + name + "_equipped");
 
 		// Check if the save is redundant or not.
 		// Store the avaiable magazines
