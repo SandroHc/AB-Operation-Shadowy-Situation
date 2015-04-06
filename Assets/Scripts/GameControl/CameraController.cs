@@ -4,8 +4,9 @@ using UnityStandardAssets.ImageEffects;
 
 public class CameraController : MonoBehaviour {
 	public GameObject targetRotation;
-	private Vector3 originalPosition;
-	private Vector3 crawlingPosition;
+
+	public Transform reference;
+	public Vector3 offset;
 	
 	public float lookSpeed;
 	private float rotationY;
@@ -33,9 +34,6 @@ public class CameraController : MonoBehaviour {
 		effectsEnabled = PlayerPrefs.GetInt("settings_effects_enabled", 1) == 1;
 		if(!effectsEnabled) // Default is the effects are enabled. So, if this is false, apply the changes immediately
 			enableEffects(effectsEnabled);
-
-		originalPosition = transform.parent.localPosition;
-		crawlingPosition = new Vector3(0, .56f, .42f);
 	}
 	
 	void Awake() {
@@ -46,8 +44,7 @@ public class CameraController : MonoBehaviour {
 	}
 	
 	void Update() {
-		//handleHeadbob();
-		handleCrawling();
+		handleMotion();
 
 		// TODO Debug purposes
 		if(Input.GetKeyDown(KeyCode.Alpha0))
@@ -70,11 +67,8 @@ public class CameraController : MonoBehaviour {
 		lastPos = transform.parent.position;
 	}
 
-	private void handleCrawling() {
-		// If the player is walking/sprinting, take the camera a little forward
-		originalPosition.z = Mathf.Lerp(originalPosition.z, GameController.playerController.speed > .2f ? .5f : .25f, Time.deltaTime * 10);
-
-		transform.parent.localPosition = Vector3.Lerp(transform.parent.localPosition, GameController.playerController.isCrawling ? crawlingPosition : originalPosition, Time.deltaTime * 5);
+	private void handleMotion() {
+		transform.parent.position = Vector3.Lerp(transform.parent.position, reference.transform.position + reference.transform.TransformDirection(offset), Time.deltaTime * 5);
 	}
 
 	private void handleMouseLook() {
