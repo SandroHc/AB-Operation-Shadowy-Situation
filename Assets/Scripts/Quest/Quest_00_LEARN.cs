@@ -76,12 +76,10 @@ public class Quest_00_LEARN : Quest {
 		
 		public override bool update(QuestProgress progress) {
 			if(progress.type == QuestProgress.ProgressType.MATERIAL_PICKUP) {
-				current += (int) progress.getNumber();
+				setProgress((int) progress.getNumber());
 
-				if(current >= objective) {
-					GameController.questManager.stageUpdateEvent(this);
+				if(current >= objective)
 					return true;
-				}
 			}
 			
 			return false;
@@ -92,7 +90,15 @@ public class Quest_00_LEARN : Quest {
 		}
 		
 		public override string getText() {
-			return string.Format("Picked up {0} of {0} materials.", current, objective);
+			return string.Format("Gathered {0} of {1} materials.", current, objective);
+		}
+
+		private void setProgress(int number) {
+			current += number;
+
+			PlayerPrefs.SetInt("quest_00_stage3_current", current);
+
+			GameController.questManager.stageUpdateEvent(this);
 		}
 	}
 }

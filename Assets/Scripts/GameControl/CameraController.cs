@@ -48,7 +48,7 @@ public class CameraController : MonoBehaviour {
 	}
 
 	private void handleMotion() {
-		transform.parent.position = Vector3.Lerp(transform.parent.position, reference.transform.position + reference.transform.TransformDirection(offset), Time.deltaTime * 5);
+		transform.parent.position = Vector3.Lerp(transform.parent.position, reference.transform.position + reference.transform.TransformDirection(offset), Time.deltaTime * 10);
 	}
 
 	private void handleMouseLook() {
