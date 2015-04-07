@@ -14,13 +14,6 @@ public class CameraController : MonoBehaviour {
 	private CharacterController controller;
 
 	public Vector3 lastPos;
-	
-	public float headbobSpeed = .5f;
-	public float headbobStepCounter;
-	public float headbobAmountX = .2f;
-	public float headbobAmountY = .1f;
-
-	public float eyeHeightRacio;
 
 	bool effectsEnabled;
 
@@ -52,19 +45,6 @@ public class CameraController : MonoBehaviour {
 
 		if(!GameController.isPausedOrFocused())
 			handleMouseLook();
-	}
-
-	private void handleHeadbob() {
-		if(controller.isGrounded)
-			headbobStepCounter += Vector3.Distance(lastPos, transform.parent.position) * headbobSpeed;
-		
-		Vector3 temp = transform.localPosition;
-		temp.x = Mathf.Sin(headbobStepCounter) * headbobAmountX;
-		temp.y = (Mathf.Cos(headbobStepCounter * 2) * headbobAmountY * -1) + (transform.parent.localScale.y * eyeHeightRacio) - (transform.parent.localScale.y / 2);
-		transform.localPosition = temp;
-		
-		// Update the last position to this frame
-		lastPos = transform.parent.position;
 	}
 
 	private void handleMotion() {

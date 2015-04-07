@@ -117,7 +117,9 @@ public abstract class Quest {
 		 * Used to setup any stage-related mechanics.
 		 * Like spawn a mob, reset a door, etc.
 		 **/
-		abstract public void setup();
+		public virtual void setup() {
+			// NO-OP
+		}
 
 		/**
 		 * Function to update the current objective inside the current stage.
@@ -128,7 +130,9 @@ public abstract class Quest {
 		/**
 		 * Function called when the stage is complete.
 		 **/
-		abstract public void finish();
+		public virtual void finish() {
+			// NO-OP
+		}
 
 		/**
 		 * Used to generate a text that states the current status of this stage.
