@@ -10,7 +10,7 @@ public class DialogueManager : MonoBehaviour {
 	private GameObject panelTalk;
 	private GameObject panelSelection;
 
-	public GameObject buttonPrefab;
+	public GameObject dialogueButtonPrefab;
 
 	void Awake() {
 		panelTalk = panelDialogue.transform.FindChild("talk").gameObject;
@@ -88,23 +88,40 @@ public class DialogueManager : MonoBehaviour {
 		panelTalk.SetActive(false);
 		panelSelection.SetActive(true);
 
-		// Remove all previous added buttons 
+		// Remove all previously added buttons 
 		foreach(Transform child in panelSelection.transform)
 			GameObject.Destroy(child.gameObject);
 
+		RectTransform sel = panelSelection.GetComponent<RectTransform>();
+
+		int relativeHeight = options.Length * 30 + (options.Length-1) * 5;
+		int initialPos;
+
+		// Invert the value because negative numbers are "down", and positive ones are "up" in the UI position
+		if(relativeHeight > sel.rect.height)
+			initialPos = (int) (relativeHeight - sel.rect.height) + (options.Length) * 5;
+		else
+			initialPos = (int) ((sel.rect.height - relativeHeight) / 2);
+
+		GameObject[] list = new GameObject[options.Length];
+
 		for(int i=0; i < options.Length; i++) {
-			generateButton(i, options[i]);
+			list[i] = generateButton(i, options[i], initialPos);
+			initialPos -= 35; // 30px by height; 5px by padding
 		}
+
+		// Set the largest width to the whole list
+		setPreferredWidth(list, 200);
 	}
 
-	private GameObject generateButton(int id, string str) {
-		GameObject buttonObject = GameObject.Instantiate(buttonPrefab);
+	private GameObject generateButton(int id, string str, int y) {
+		GameObject buttonObject = GameObject.Instantiate(dialogueButtonPrefab);
 		buttonObject.name = "btn_selection_" + id;
 		buttonObject.transform.SetParent(panelSelection.transform);
 
 
 		RectTransform rect = buttonObject.GetComponent<RectTransform>();
-		rect.localPosition = new Vector3(0, -(id * 35) + 67.5f, 0);
+		rect.localPosition = new Vector3(0, y, 0);
 
 
 		Button button = buttonObject.GetComponent<Button>();
@@ -112,12 +129,83 @@ public class DialogueManager : MonoBehaviour {
 
 
 		Text text = buttonObject.GetComponentInChildren<Text>();
-		text.text = "<b>" + (id+1) + ".</b> " + str;	
+		text.text = "<b>" + (id+1) + ".</b> " + str;
 
 		return buttonObject;
 	}
 
+	private void setPreferredWidth(GameObject[] list, float minWidth) {
+		float largest = minWidth;
+
+		// Get the largest preferred width
+		for(int i=0; i < list.Length; i++) {
+			Text text = list[i].GetComponentInChildren<Text>();
+			if(text != null && text.preferredWidth > largest)
+				largest = text.preferredWidth;
+
+			ContentSizeFitter fitter = list[i].GetComponentInChildren<ContentSizeFitter>();
+			if(fitter != null) fitter.enabled = false;
+		}
+
+		// Apply the preferred width to all options
+		for(int i=0; i < list.Length; i++) {
+			RectTransform rt = list[i].GetComponent<RectTransform>();
+			if(rt != null) RectTransformExtensions.SetWidth(rt, largest + 20); // Left and right paddings are 10px; so sum 20
+		}
+	}
+
 	private void hideDialogue() {
 		panelDialogue.gameObject.SetActive(false);
+	}
+}
+
+public static class RectTransformExtensions {
+	public static void SetDefaultScale(this RectTransform trans) {
+		trans.localScale = Vector3.one;
+	}
+	public static void SetPivotAndAnchors(this RectTransform trans, Vector2 aVec) {
+		trans.pivot = aVec;
+		trans.anchorMin = aVec;
+		trans.anchorMax = aVec;
+	}
+	
+	public static Vector2 GetSize(this RectTransform trans) {
+		return trans.rect.size;
+	}
+	public static float GetWidth(this RectTransform trans) {
+		return trans.rect.width;
+	}
+	public static float GetHeight(this RectTransform trans) {
+		return trans.rect.height;
+	}
+	
+	public static void SetPositionOfPivot(this RectTransform trans, Vector2 newPos) {
+		trans.localPosition = new Vector3(newPos.x, newPos.y, trans.localPosition.z);
+	}
+	
+	public static void SetLeftBottomPosition(this RectTransform trans, Vector2 newPos) {
+		trans.localPosition = new Vector3(newPos.x + (trans.pivot.x * trans.rect.width), newPos.y + (trans.pivot.y * trans.rect.height), trans.localPosition.z);
+	}
+	public static void SetLeftTopPosition(this RectTransform trans, Vector2 newPos) {
+		trans.localPosition = new Vector3(newPos.x + (trans.pivot.x * trans.rect.width), newPos.y - ((1f - trans.pivot.y) * trans.rect.height), trans.localPosition.z);
+	}
+	public static void SetRightBottomPosition(this RectTransform trans, Vector2 newPos) {
+		trans.localPosition = new Vector3(newPos.x - ((1f - trans.pivot.x) * trans.rect.width), newPos.y + (trans.pivot.y * trans.rect.height), trans.localPosition.z);
+	}
+	public static void SetRightTopPosition(this RectTransform trans, Vector2 newPos) {
+		trans.localPosition = new Vector3(newPos.x - ((1f - trans.pivot.x) * trans.rect.width), newPos.y - ((1f - trans.pivot.y) * trans.rect.height), trans.localPosition.z);
+	}
+	
+	public static void SetSize(this RectTransform trans, Vector2 newSize) {
+		Vector2 oldSize = trans.rect.size;
+		Vector2 deltaSize = newSize - oldSize;
+		trans.offsetMin = trans.offsetMin - new Vector2(deltaSize.x * trans.pivot.x, deltaSize.y * trans.pivot.y);
+		trans.offsetMax = trans.offsetMax + new Vector2(deltaSize.x * (1f - trans.pivot.x), deltaSize.y * (1f - trans.pivot.y));
+	}
+	public static void SetWidth(this RectTransform trans, float newSize) {
+		SetSize(trans, new Vector2(newSize, trans.rect.size.y));
+	}
+	public static void SetHeight(this RectTransform trans, float newSize) {
+		SetSize(trans, new Vector2(trans.rect.size.x, newSize));
 	}
 }

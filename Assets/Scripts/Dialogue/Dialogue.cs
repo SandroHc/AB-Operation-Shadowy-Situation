@@ -158,7 +158,7 @@ public abstract class Dialogue {
 		
 		public override void show() {
 			// If a title is available, use it. Else, use the Dialogue name (usually the NPC name)
-			GameController.dialogueManager.showTalk(type, title != null ? title : DialogueManager.currentDialogue.name, text);
+			GameController.dialogueManager.showTalk(type, title ?? DialogueManager.currentDialogue.name, text);
 		}
 	}
 }
