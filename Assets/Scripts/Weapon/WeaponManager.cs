@@ -179,6 +179,10 @@ public class WeaponManager : MonoBehaviour {
 		return null;
 	}
 
+	public static Weapon[] getWeaponList() {
+		return weaponList.ToArray();
+	}
+
 	public static Weapon getCurrentWeapon() {
 		return weaponSlots[currentSlot];
 	}

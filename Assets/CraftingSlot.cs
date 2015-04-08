@@ -16,7 +16,7 @@ public class CraftingSlot : MonoBehaviour {
 	private Image rateOfFire;
 	private Image range;
 
-	void setup() {
+	public void setup() {
 		weapon = WeaponManager.getWeapon(weaponName);
 
 		img = transform.FindChild("img").GetComponent<Image>();
