@@ -27,11 +27,12 @@ public class CraftingSlot : MonoBehaviour {
 		damage	   = stats.FindChild("damage").FindChild("fill").GetComponent<Image>();
 		rateOfFire = stats.FindChild("rateOfFire").FindChild("fill").GetComponent<Image>();
 		range 	   = stats.FindChild("range").FindChild("fill").GetComponent<Image>();
+
+		Button button = transform.FindChild("btn").GetComponent<Button>();
+		button.onClick.AddListener(() => btnClick());
 	}
 
 	public void show() {
-		if(weapon == null) setup();
-
 		if(weapon == null) return;
 
 		img = weapon.getIcon();
@@ -68,5 +69,14 @@ public class CraftingSlot : MonoBehaviour {
 		 * 		option to buy ammo
 		 * 
 		 */
+	}
+
+	private void btnClick() {
+		if(weapon.isEquipped) // Refill ammo
+			btnText.text = "Refill ammo";
+		else if(weapon.isCrafted)
+			WeaponManager.switchWeapon(weapon);
+		else if(weapon.isUnlocked)
+			btnText.text = "Craft";
 	}
 }
