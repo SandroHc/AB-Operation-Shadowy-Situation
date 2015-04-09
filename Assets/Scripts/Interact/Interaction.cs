@@ -77,13 +77,7 @@ public class Interaction : MonoBehaviour {
 			GameController.dialogueManager.showDialogue(System.Reflection.Assembly.GetExecutingAssembly().CreateInstance(dialogue) as Dialogue);
 			break;
 		case Type.ItemPickUp:
-			// If the item is a weapon, use the appropriate methods
-			WeaponDrop weaponScript = GetComponent<WeaponDrop>();
-			if(weaponScript != null) {
-				weaponScript.pick();
-				return;
-			}
-
+			// Not yet implemented
 			break;
 		case Type.MaterialPickUp:			
 			if(picksRemaining >= 1) {

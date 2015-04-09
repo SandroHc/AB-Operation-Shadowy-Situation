@@ -13,6 +13,8 @@ public class QuestManager : MonoBehaviour {
 
 	public Text checkpointText;
 
+	public GameObject questButtonPrefab;
+
 	void Awake() {
 		if(questList == null) {
 			questList = new List<Quest>();
@@ -20,32 +22,7 @@ public class QuestManager : MonoBehaviour {
 		}
 
 		foreach(Quest quest in questList) {
-			GameObject buttonObject = new GameObject("btn_" + quest.id);
-
-			Image image = buttonObject.AddComponent<Image>();
-			image.transform.SetParent(panelList);
-			image.rectTransform.sizeDelta = new Vector2(panelList.rect.width - 10, 50);
-			image.rectTransform.position = new Vector2(5, 0);
-			image.rectTransform.anchoredPosition = Vector3.zero;
-			image.color = new Color(1f, 1f, 1f, .5f);
-			
-			Button button = buttonObject.AddComponent<Button>();
-			button.targetGraphic = image;
-
-			GameObject textObject = new GameObject("text");
-			textObject.transform.parent = buttonObject.transform;
-			Text text = textObject.AddComponent<Text>();
-			text.rectTransform.sizeDelta = Vector2.zero;
-			text.rectTransform.anchorMin = Vector2.zero;
-			text.rectTransform.anchorMax = Vector2.one;
-			text.rectTransform.anchoredPosition = new Vector2(.5f, .5f);
-			text.text = quest.name;
-			text.font = GameController.textManager.uiFont;
-			text.fontSize = 18;
-			text.color = Color.black;
-			text.alignment = TextAnchor.MiddleCenter;
-
-			button.onClick.AddListener(() => showInfo(getQuest(quest.id)));
+			generateButton(quest);
 		}
 
 		// Populate the checkpoint list
@@ -93,11 +70,11 @@ public class QuestManager : MonoBehaviour {
 	}
 
 	public void fireProgressEvent(QuestProgress progress) {
-		Debug.Log ("Firing event: " + progress.ToString());
+		if(progress.type != QuestProgress.ProgressType.INTERACTION)
+			Debug.Log("Firing event: " + progress.ToString());
 
-		foreach(Quest quest in questList) {
+		foreach(Quest quest in questList)
 			quest.progress(progress);
-		}			
 	}
 
 	/**
@@ -154,14 +131,14 @@ public class QuestManager : MonoBehaviour {
 		panelDescriptionName.text = quest.name;
 		panelDescriptionDesc.text = quest.description;
 		panelDescriptionStatus.text = quest.getStatus().ToString();
-		panelDescriptionStage.text = quest.getCurrentStage().ToString();
+		panelDescriptionStage.text = quest.currentStage.ToString();
 
 		// Delete any outdated stages from other Quest
 		foreach(Transform child in panelDescriptionStages.transform)
 			GameObject.Destroy(child.gameObject);
 
 		int index = 0;
-		foreach(Quest.Stage stage in quest.getStages()) {
+		foreach(Quest.Stage stage in quest.stages) {
 			GameObject textObject = new GameObject("stage_" + index + "_text");
 			textObject.transform.parent = panelDescriptionStages.transform;
 			Text text = textObject.AddComponent<Text>();
@@ -183,6 +160,25 @@ public class QuestManager : MonoBehaviour {
 		debugCurrentQuest = quest;
 	}
 
+	private GameObject generateButton(Quest quest) {
+		GameObject go = Object.Instantiate(questButtonPrefab);
+		go.name = "quest_" + quest.id;
+		go.transform.SetParent(panelList);
+		
+		RectTransform rt = go.GetComponent<RectTransform>();
+		RectTransformExtensions.SetDefaultScale(rt);
+		//RectTransformExtensions.SetWidth(rt, width);
+		//RectTransformExtensions.SetLeftTopPosition(rt, pos);
+
+		Text text = go.transform.FindChild("text").GetComponent<Text>();
+		text.text = quest.name;
+
+		Button button =  go.GetComponent<Button>();
+		button.onClick.AddListener(() => showInfo(quest));
+
+		return go;
+	}
+
 	public void updateCheckpoints() {
 		//Debug.Log ("Updating checkpoint list");
 
@@ -192,12 +188,11 @@ public class QuestManager : MonoBehaviour {
 			if(quest.getStatus() == Quest.QUEST_STATUS.ACTIVE) {
 				str += "<b>" + quest.name + "</b>\n";
 
-				List<Quest.Stage> stages = quest.getStages();
-				int currentStage = quest.getCurrentStage();
-				for(int i=0; i < currentStage; i++)
+				List<Quest.Stage> stages = quest.stages;
+				for(int i=0; i < quest.currentStage; i++)
 					str += "  <color=green>✓</color> " + stages[i].getText() + "\n";
 			
-				str += "  <color=red>✗</color> " + stages[currentStage].getText() + "\n\n";
+				str += "  <color=red>✗</color> " + stages[quest.currentStage].getText() + "\n\n";
 			}
 		}
 

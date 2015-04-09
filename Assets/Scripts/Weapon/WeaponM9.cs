@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class WeaponTest : Weapon {
+public class WeaponM9 : Weapon {
 
-	public WeaponTest() {
+	public WeaponM9() {
 		this.name = "M9";
 		this.icon = GameController.spriteManager.weaponM9;
 		this.weaponPrefab = GameController.prefabManager.weaponM9;
@@ -12,6 +12,11 @@ public class WeaponTest : Weapon {
 		this.damage = 1;
 		this.range = 50;
 		this.recoil = 5;
+
+		this.cooldownShoot = .5f;
+
+		this.defaultMagazines = 2;
+		this.defaultMaxAmmunition = 10;
 
 		this.baseCost = 160;
 

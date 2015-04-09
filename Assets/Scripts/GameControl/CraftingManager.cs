@@ -48,13 +48,13 @@ public class CraftingManager : MonoBehaviour {
 	private void buildCraftingPanel() {
 		float width = RectTransformExtensions.GetWidth(craftingContents.GetComponent<RectTransform>()) / 3;
 
-		Weapon[] list = WeaponManager.getWeaponList();
+		Weapon[] list = WeaponManager.weaponList.ToArray();
 
 		float currY = 0;
 
 		for(int i = 0; i < list.Length; i++) {
 			int mod = i % 3;
-			generatePanel(list[i].getName(), new Vector2((width * mod) - 416, -currY), width);
+			generatePanel(list[i].name, new Vector2(width * mod, -currY), width);
 
 			if(mod == 3)
 				currY += 200;
@@ -75,19 +75,14 @@ public class CraftingManager : MonoBehaviour {
 
 		RectTransform rt = panelObject.GetComponent<RectTransform>();
 		RectTransformExtensions.SetWidth(rt, width);
-		RectTransformExtensions.SetPivotAndAnchors(rt, Vector2.zero);
-		RectTransformExtensions.SetLeftTopPosition(rt, pos);
+		RectTransformExtensions.SetPivotAndAnchors(rt, new Vector2(0, 1));
+		RectTransformExtensions.SetPositionOfPivot(rt, pos);
 
 		CraftingSlot craftingScript = panelObject.GetComponent<CraftingSlot>();
 		craftingScript.weaponName = weaponName;
 		craftingScript.setup();
 
 		Debug.Log(weaponName + ": x=" + pos.x + ", y=" + pos.y + ", width=" + width);
-
-		
-		// Maybe configure the button on the CraftingSlot script?
-		//Button button = panelObject.GetComponent<Button>();
-		//button.onClick.AddListener(() => currentDialogue.selected(id));
 		
 		return panelObject;
 	}

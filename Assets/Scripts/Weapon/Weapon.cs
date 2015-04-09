@@ -3,33 +3,33 @@ using UnityEngine.UI;
 using System.Collections;
 
 public abstract class Weapon {
-	protected string name = "";
+	public string name { get; protected set; }
 
 	protected GameObject weaponPrefab;
 	public GameObject weaponInstance;
 
-	protected Image icon;
+	public Image icon { get; protected set; }
 	
 	public enum Type { Pistol = 0, AssaultRifle = 1, Shotgun = 1, SniperRifle = 1, Knife = 2, Grenade = 3, Equipment = 4 };
-	protected Type type;
+	public Type type { get; protected set; }
 
-	public bool isUnlocked;
-	public bool isCrafted;
-	public bool isEquipped; // Equipped as in the quick-bar (not the current one)
+	public bool isUnlocked { get; protected set; }
+	public bool isCrafted { get; protected set; }
+	public bool isEquipped { get; protected set; } // Equipped as in the quick-bar (not the current one)
 
-	protected float damage;
-	protected float range;
+	public float damage { get; protected set; }
+	public float range { get; protected set; }
 
-	protected float recoil;
+	public float recoil { get; protected set; }
 	
-	protected float cooldownShoot = .3f;
+	protected float cooldownShoot;
 	protected float cooldownReload = 1f;
 
-	protected int defaultMagazines = 2;
-	protected int defaultMaxAmmunition = 10;
+	protected int defaultMagazines;
+	protected int defaultMaxAmmunition;
 
-	protected int currentMagazines;
-	protected int currentAmmunition;
+	public int magazines { get; protected set; } // Current magazines
+	public int ammunition { get; protected set; } // Current ammunition
 
 	protected float baseCost;
 
@@ -37,7 +37,7 @@ public abstract class Weapon {
 	protected enum SoundLabel { SHOOT, SHOOT_NO_AMMO, RELOAD };
 
 	public Weapon() {
-		// NO-OP
+		name = "";
 	}
 
 	protected void populateCraftingStatus() {
@@ -59,31 +59,35 @@ public abstract class Weapon {
 
 		// Only shoot if ammunition is available
 		// Else, try to reload the weapon
-		if(currentAmmunition > 0) {
-			currentAmmunition--;
+		if(ammunition > 0) {
+			ammunition--;
+
+			saveAmmoStatus();
 
 			WeaponManager.weaponCooldown = cooldownShoot;
 
 			playSound(SoundLabel.SHOOT);
 			return true;
 		} else {
-			if(!reload())
+			if(!reload()) {
+				WeaponManager.weaponCooldown = cooldownShoot * 3;
+
 				playSound(SoundLabel.SHOOT_NO_AMMO);
+			}
 			return false;
 		}
 	}
 	
 	public bool reload() {
-		// TODO Testing code
-		if(Input.GetKey(KeyCode.Return))
-			currentAmmunition = defaultMaxAmmunition;
-
 		if(WeaponManager.weaponCooldown > 0)
 			return false;
 
-		if(currentMagazines > 1) {
-			currentMagazines--;
-			currentAmmunition = defaultMaxAmmunition;
+		// Only reload if there are magazines AND if the current one is not full
+		if(magazines > 1 && ammunition != defaultMaxAmmunition) {
+			magazines--;
+			ammunition = defaultMaxAmmunition;
+
+			saveAmmoStatus();
 
 			WeaponManager.weaponCooldown = cooldownReload;
 
@@ -104,8 +108,8 @@ public abstract class Weapon {
 
 	public void equip() {
 		// Populate the available magazines & ammunition
-		currentMagazines = PlayerPrefs.GetInt("weapon_" + name + "_magazines", defaultMagazines);
-		currentAmmunition = PlayerPrefs.GetInt("weapon_" + name + "_ammo", defaultMaxAmmunition);
+		magazines = PlayerPrefs.GetInt("weapon_" + name + "_magazines", defaultMagazines);
+		ammunition = PlayerPrefs.GetInt("weapon_" + name + "_ammo", defaultMaxAmmunition);
 
 		isEquipped = true;
 		PlayerPrefs.SetInt("weapon_" + name + "_equipped", 1);
@@ -116,25 +120,14 @@ public abstract class Weapon {
 		// Delete the preference to, 1) unclutter the registry; 2) the default value is false
 		PlayerPrefs.DeleteKey("weapon_" + name + "_equipped");
 
-		// Check if the save is redundant or not.
-		// Store the avaiable magazines
-		if(currentMagazines != defaultMagazines)
-			PlayerPrefs.SetInt("weapon_" + name + "_magazines", currentMagazines);
-		else
-			PlayerPrefs.DeleteKey("weapon_" + name + "_magazines");
-
-		// Store the available ammunition
-		if(currentAmmunition != defaultMaxAmmunition)
-			PlayerPrefs.SetInt("weapon_" + name + "_magazines", currentAmmunition);
-		else
-			PlayerPrefs.DeleteKey("weapon_" + name + "_ammo");
+		saveAmmoStatus();
 	}
 
 	public void show() {
 		// If there is no instance (AND there is a prefab), create one
 		if(weaponInstance == null && weaponPrefab != null) {
 			// Instantiate the prefab
-			weaponInstance = GameObject.Instantiate(weaponPrefab);
+			weaponInstance = Object.Instantiate(weaponPrefab);
 			
 			// Setup the new instance
 			weaponInstance.transform.SetParent(Camera.main.transform);
@@ -152,6 +145,44 @@ public abstract class Weapon {
 			weaponInstance.SetActive(false);
 	}
 
+	public bool refillAmmo() {
+		Debug.Log(name + ": Refilling ammo");
+
+		if(isEquipped) {
+			int cost = Mathf.RoundToInt(getCost());
+			if(MaterialManager.getMaterials() > cost) {
+				MaterialManager.decrease(cost);
+
+				magazines = defaultMagazines;
+				ammunition = defaultMaxAmmunition;
+
+				saveAmmoStatus();
+				
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public bool craft() {
+		Debug.Log(name + ": Crafting");
+
+		if(!isCrafted) {
+			int cost = Mathf.RoundToInt(getCost());
+			if(MaterialManager.getMaterials() > cost) {
+				MaterialManager.decrease(cost);
+
+				isCrafted = true;
+				PlayerPrefs.SetInt("weapon_" + name + "_crafted", 1);
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	private void playSound(SoundLabel label) {
 		AudioClip clip = sounds[(int) label];
 		if(clip != null)
@@ -164,48 +195,12 @@ public abstract class Weapon {
 		sounds[(int) SoundLabel.RELOAD] = reload;
 	} 
 
-	public float getDamage() {
-		return damage;
-	}
-
-	public float getRange() {
-		return range;
-	}
-
-	public float getRecoil() {
-		return recoil;
-	}
-
-	public string getName() {
-		return name;
-	}
-
-	public int getMagazines() {
-		return currentMagazines;
-	}
-
-	public int getAmmunition() {
-		return currentAmmunition;
-	}
-
 	public int getAmmunitionPerMagazine() {
 		return defaultMaxAmmunition;
 	}
 
 	public float getShootingCooldown() {
 		return cooldownShoot;
-	}
-
-	public GameObject getPrefab() {
-		return weaponPrefab;
-	}
-
-	public Image getIcon() {
-		return icon;
-	}
-
-	public Type getWeaponType() {
-		return type;
 	}
 
 	public int getSlot() {
@@ -221,5 +216,20 @@ public abstract class Weapon {
 			return baseCost * 1;
 		else // Can't build weapon
 			return -1;
+	}
+
+	private void saveAmmoStatus() {
+		// Check if the save is redundant or not.
+		// Store the avaiable magazines
+		if(magazines != defaultMagazines)
+			PlayerPrefs.SetInt("weapon_" + name + "_magazines", magazines);
+		else
+			PlayerPrefs.DeleteKey("weapon_" + name + "_magazines");
+		
+		// Store the available ammunition
+		if(ammunition != defaultMaxAmmunition)
+			PlayerPrefs.SetInt("weapon_" + name + "_ammo", ammunition);
+		else
+			PlayerPrefs.DeleteKey("weapon_" + name + "_ammo");
 	}
 }

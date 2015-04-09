@@ -8,9 +8,9 @@ public class Quest_00_LEARN : Quest {
 	}
 
 	public override void initStages() {
-		stageList.Add(new Stage1());
-		stageList.Add(new Stage2());
-		stageList.Add(new Stage3());
+		stages.Add(new Stage1());
+		stages.Add(new Stage2());
+		stages.Add(new Stage3());
 	}
 	
 	protected class Stage1 : Stage {
@@ -19,7 +19,7 @@ public class Quest_00_LEARN : Quest {
 
 		public override void setup() {
 			// Create a sentinel to check whenever the player sets foot on the target
-			sentinel = GameObject.Instantiate(GameController.prefabManager.marker, objective, Quaternion.Euler(0, 0, 0)) as GameObject;
+			sentinel = Object.Instantiate(GameController.prefabManager.marker, objective, Quaternion.Euler(0, 0, 0)) as GameObject;
 			sentinel.GetComponent<PositionSentinel>().setup();
 		}
 		
@@ -36,7 +36,7 @@ public class Quest_00_LEARN : Quest {
 
 		public override void finish() {
 			// Destroy the sentinel when it is no longer needed
-			MonoBehaviour.Destroy(sentinel);
+			Object.Destroy(sentinel);
 		}
 		
 		public override string getText() {

@@ -20,8 +20,6 @@ public class EnemyManager : MonoBehaviour {
 	}
 
 	public void kill() {
-		GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.ProgressType.MONSTER_KILL));
-
 		killCount++;
 		uiKillCounter.text = killCount.ToString();
 	}

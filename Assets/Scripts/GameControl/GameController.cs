@@ -114,6 +114,9 @@ public class GameController : MonoBehaviour {
 		if(Input.GetKey(KeyCode.E))
 			playerPathfind.updateLine();//setDestination(new Vector3(-100, 0, 0));
 
+		if(Input.GetKeyDown(KeyCode.M))
+			MaterialManager.increase(1000);
+
 		if(Input.GetKeyDown(KeyCode.L)) {
 			Cursor.visible = false;
 			Cursor.lockState = CursorLockMode.Locked;

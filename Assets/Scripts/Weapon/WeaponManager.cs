@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class WeaponManager : MonoBehaviour {
-	private static List<Weapon> weaponList;
+	public static List<Weapon> weaponList { get; private set; }
 	public static Weapon[] weaponSlots = new Weapon[5];
 	public enum SLOT { SIDE = 0, MAIN = 1, KNIFE = 2, GRENADE = 3, EQUIPMENT = 4 };
 
@@ -35,7 +35,7 @@ public class WeaponManager : MonoBehaviour {
 
 	void Start() {
 		weaponList = new List<Weapon>();
-		registerWeapon(new WeaponTest());
+		registerWeapon(new WeaponM9());
 		registerWeapon(new WeaponM16());
 
 		// Show the equipped weapon model.
@@ -84,7 +84,7 @@ public class WeaponManager : MonoBehaviour {
 		// TODO: Udate label based on events (instead of updating constantly)
 		Weapon weapon = getCurrentWeapon();
 		if(weapon != null)
-			weaponInfo.text = weapon.getAmmunition() + "/" + weapon.getAmmunitionPerMagazine() * (weapon.getMagazines() - 1);
+			weaponInfo.text = weapon.ammunition + "/" + weapon.getAmmunitionPerMagazine() * (weapon.magazines - 1);
 		else
 			weaponInfo.text = "NO WEAPON";
 
@@ -130,12 +130,12 @@ public class WeaponManager : MonoBehaviour {
 	}
 
 	private void handleShoot() {
-		if(Input.GetKeyDown(InputManager.fire1)) {
+		if(Input.GetKey(InputManager.fire1)) {
 			Weapon weapon = getCurrentWeapon();
 			if(weapon != null && weapon.shoot()) {
-				cameraController.GetComponentInParent<RecoilHandler>().recoil(weapon.getRecoil());
+				cameraController.GetComponentInParent<RecoilHandler>().recoil(weapon.recoil);
 				
-				RaycastHit hit = raycast.raycast(weapon.getRange());
+				RaycastHit hit = raycast.raycast(weapon.range);
 				if(hit.transform != null)
 					weapon.targetHit(hit.transform.gameObject, hit);
 			}
@@ -173,14 +173,10 @@ public class WeaponManager : MonoBehaviour {
 
 	public static Weapon getWeapon(string name) {
 		for(int i=0; i < weaponList.Count; i++)
-			if(weaponList[i].getName() == name)
+			if(weaponList[i].name.Equals(name))
 				return weaponList[i];
 
 		return null;
-	}
-
-	public static Weapon[] getWeaponList() {
-		return weaponList.ToArray();
 	}
 
 	public static Weapon getCurrentWeapon() {
@@ -194,8 +190,8 @@ public class WeaponManager : MonoBehaviour {
 		}
 		
 		foreach(Weapon obj in weaponList) {
-			if(weapon.getName().Equals(obj.getName())) {
-				Debug.Log("Weapon " + weapon.getName() + " was already registered. Ignoring.");
+			if(weapon.name.Equals(obj.name)) {
+				Debug.Log("Weapon " + weapon.name + " was already registered. Ignoring.");
 				return;
 			}
 		}
@@ -204,14 +200,14 @@ public class WeaponManager : MonoBehaviour {
 		weaponList.Add(weapon);
 
 		// Refresh the stats
-		if(weapon.getDamage() > maxDamage)
-			maxDamage = weapon.getDamage();
+		if(weapon.damage > maxDamage)
+			maxDamage = weapon.damage;
 
 		if(weapon.getShootingCooldown() < maxFireRate)
 			maxFireRate = weapon.getShootingCooldown();
 
-		if(weapon.getRange() > maxRange)
-			maxRange = weapon.getRange();
+		if(weapon.range > maxRange)
+			maxRange = weapon.range;
 	}
 
 	public static void loadWeaponIntoSlot(Weapon weapon, bool overrideExistingWeapon = false) {
@@ -223,7 +219,7 @@ public class WeaponManager : MonoBehaviour {
 		int slot = weapon.getSlot();
 
 		if(weaponSlots[slot] != null && !overrideExistingWeapon) {
-			Debug.Log("Tried to equip weapon " + weapon.getName() + " into slot " + weapon.getWeaponType() + ", but the weapon " + weaponSlots[slot].getName() + " is already in that slot. Ignoring.");
+			Debug.Log("Tried to equip weapon " + weapon.name + " into slot " + weapon.type + ", but the weapon " + weaponSlots[slot].name + " is already in that slot. Ignoring.");
 
 			weapon.unequip();
 			return;
@@ -232,6 +228,6 @@ public class WeaponManager : MonoBehaviour {
 		weaponSlots[slot] = weapon;
 		weaponSlots[slot].equip();
 
-		Debug.Log("Loaded weapon " + weapon.getName() + " into slot " + weapon.getWeaponType());
+		Debug.Log("Loaded weapon " + weapon.name + " into slot " + weapon.type);
 	}
 }

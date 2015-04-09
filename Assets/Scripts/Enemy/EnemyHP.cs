@@ -32,6 +32,8 @@ public class EnemyHP : MonoBehaviour {
 	}
 
 	void Died() {
+		GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.ProgressType.MONSTER_KILL).setPosition(transform.position));
+
 		GameController.enemyManager.kill();
 		Destroy(gameObject);
 	}

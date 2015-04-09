@@ -90,7 +90,7 @@ public class DialogueManager : MonoBehaviour {
 
 		// Remove all previously added buttons 
 		foreach(Transform child in panelSelection.transform)
-			GameObject.Destroy(child.gameObject);
+			Object.Destroy(child.gameObject);
 
 		RectTransform sel = panelSelection.GetComponent<RectTransform>();
 
@@ -115,7 +115,7 @@ public class DialogueManager : MonoBehaviour {
 	}
 
 	private GameObject generateButton(int id, string str, int y) {
-		GameObject buttonObject = GameObject.Instantiate(dialogueButtonPrefab);
+		GameObject buttonObject = Object.Instantiate(dialogueButtonPrefab);
 		buttonObject.name = "btn_selection_" + id;
 		buttonObject.transform.SetParent(panelSelection.transform);
 

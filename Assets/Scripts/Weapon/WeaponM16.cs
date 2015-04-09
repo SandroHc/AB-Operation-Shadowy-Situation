@@ -9,9 +9,14 @@ public class WeaponM16 : Weapon {
 		this.weaponPrefab = GameController.prefabManager.weaponM16;
 		this.type = Type.AssaultRifle;
 		
-		this.damage = 5;
+		this.damage = 1;
 		this.range = 100;
 		this.recoil = 10;
+
+		this.cooldownShoot = .05f;
+
+		this.defaultMagazines = 4;
+		this.defaultMaxAmmunition = 30;
 
 		this.baseCost = 1000;
 		

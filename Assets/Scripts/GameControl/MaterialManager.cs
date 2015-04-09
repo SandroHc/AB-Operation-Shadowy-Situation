@@ -8,7 +8,7 @@ public class MaterialManager : MonoBehaviour {
 	public Mesh stage1;
 	public Mesh stageDepleted;
 
-	private int materialCount; // Total material collected
+	private static int materialCount; // Total material collected
 	public Text uiMaterialCounter;
 
 	private float pickUpTime = 1;
@@ -20,21 +20,21 @@ public class MaterialManager : MonoBehaviour {
 		uiMaterialCounter.text = materialCount.ToString();
 	}
 
-	public void increase(int value) {
-		if(value == 0) return;
+	public static void increase(int value) {
+		if(value <= 0) return;
 
 		materialCount += value;
 
-		saveNewValues();
+		GameController.materialManager.saveMaterialCount();
 	}
 
-	public void decrease(int value) {
-		if(value == 0) return;
+	public static void decrease(int value) {
+		if(value <= 0) return;
 
 		materialCount -= value;
 		if(materialCount < 0) materialCount = 0;
 
-		saveNewValues();
+		GameController.materialManager.saveMaterialCount();
 	}
 
 	public void pickUp() {
@@ -59,9 +59,13 @@ public class MaterialManager : MonoBehaviour {
 		GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.ProgressType.MATERIAL_PICKUP).setNumber(materialCount));
 	}
 
-	private void saveNewValues() {
+	private void saveMaterialCount() {
 		uiMaterialCounter.text = materialCount.ToString();
 
 		PlayerPrefs.SetInt("material_count", materialCount);
+	}
+
+	public static int getMaterials() {
+		return materialCount;
 	}
 }

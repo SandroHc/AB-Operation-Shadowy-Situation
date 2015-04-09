@@ -7,14 +7,14 @@ using System.Collections.Generic;
  */
 public abstract class Quest {
 	public enum QUEST_STATUS { UNKNOWN = -1, INACTIVE = 0, ACTIVE = 1, COMPLETED = 2 };
-	public QUEST_STATUS status;
+	public QUEST_STATUS status { get; set; }
 
-	public int id;
-	public string name;
-	public string description;
+	public int id { get; protected set; }
+	public string name { get; protected set; }
+	public string description { get; protected set; }
 
-	protected List<Stage> stageList = new List<Stage>();
-	protected int currentStage;
+	public List<Stage> stages { get; protected set; }
+	public int currentStage { get; protected set; }
 
 	public Quest(int id, string name, string description) {
 		this.id = id;
@@ -24,11 +24,12 @@ public abstract class Quest {
 		this.status = (QUEST_STATUS) PlayerPrefs.GetInt("quest-" + id + "-status", (int) QUEST_STATUS.INACTIVE);
 		this.currentStage = PlayerPrefs.GetInt("quest-" + id + "-stage", 0);
 
+		this.stages = new List<Stage>();
 		initStages();
 
 		if(status == QUEST_STATUS.ACTIVE) {
-			if(stageList[currentStage] != null)
-				stageList[currentStage].setup();
+			if(stages[currentStage] != null)
+				stages[currentStage].setup();
 		}
 	}
 
@@ -38,7 +39,7 @@ public abstract class Quest {
 		if(status != QUEST_STATUS.ACTIVE) // Ignore progress calls if there is nothing to do here
 			return false;
 
-		if(currentStage < stageList.Count && stageList[currentStage].update(progress))
+		if(currentStage < stages.Count && stages[currentStage].update(progress))
 			nextStage();
 
 		return true;
@@ -46,8 +47,8 @@ public abstract class Quest {
 
 	protected void nextStage() {
 		// Fire the finish stage event
-		if(stageList[currentStage] != null)
-			stageList[currentStage].finish();
+		if(stages[currentStage] != null)
+			stages[currentStage].finish();
 
 		// Update the current stage pointer, so new progress events will be redirected to there.
 		currentStage++;
@@ -56,13 +57,13 @@ public abstract class Quest {
 		PlayerPrefs.SetInt("quest-" + id + "-stage", currentStage);
 
 		// Check if the current stage as the last one, and fire the quest finish event 
-		if(currentStage >= stageList.Count) {
+		if(currentStage >= stages.Count) {
 			complete();
 		} else {
 			// Send the setup event to the new stage
-			stageList[currentStage].setup();
+			stages[currentStage].setup();
 
-			GameController.questManager.stageUpdateEvent(stageList[currentStage]);
+			GameController.questManager.stageUpdateEvent(stages[currentStage]);
 		}
 	}
 
@@ -83,8 +84,8 @@ public abstract class Quest {
 		currentStage = 0;
 		PlayerPrefs.SetInt("quest-" + id + "-stage", currentStage);
 
-		if(stageList[currentStage] != null)
-			stageList[currentStage].setup();
+		if(stages[currentStage] != null)
+			stages[currentStage].setup();
 
 		GameController.questManager.questStartedEvent(this);
 	}
@@ -101,14 +102,6 @@ public abstract class Quest {
 
 		this.status = status;
 		PlayerPrefs.SetInt("quest-" + id + "-status", (int) status);
-	}
-
-	public List<Stage> getStages() {
-		return stageList;
-	}
-
-	public int getCurrentStage() {
-		return currentStage;
 	}
 
 	public abstract class Stage {
