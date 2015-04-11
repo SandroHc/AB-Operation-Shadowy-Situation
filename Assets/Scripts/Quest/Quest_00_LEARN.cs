@@ -24,7 +24,7 @@ public class Quest_00_LEARN : Quest {
 		}
 		
 		public override bool update(QuestProgress progress) {
-			if(progress.type == QuestProgress.ProgressType.POSITION) {
+			if(progress.type == QuestProgress.Type.POSITION) {
 				if(Vector3.Distance(progress.getPosition(), objective) <= 5f) {
 					GameController.questManager.stageUpdateEvent(this);
 					return true;
@@ -51,7 +51,7 @@ public class Quest_00_LEARN : Quest {
 		}
 		
 		public override bool update(QuestProgress progress) {
-			if(progress.type == QuestProgress.ProgressType.DIALOGUE) {
+			if(progress.type == QuestProgress.Type.DIALOGUE) {
 				if(progress.getStr().Equals("Yurippe")) {
 					GameController.questManager.stageUpdateEvent(this);
 					return true;
@@ -75,7 +75,7 @@ public class Quest_00_LEARN : Quest {
 		}
 		
 		public override bool update(QuestProgress progress) {
-			if(progress.type == QuestProgress.ProgressType.MATERIAL_PICKUP) {
+			if(progress.type == QuestProgress.Type.MATERIAL_PICKUP) {
 				setProgress((int) progress.getNumber());
 
 				if(current >= objective)

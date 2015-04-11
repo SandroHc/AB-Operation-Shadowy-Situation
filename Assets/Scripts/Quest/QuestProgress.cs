@@ -2,14 +2,14 @@
 using System.Collections;
 
 public class QuestProgress {
-	public enum ProgressType { MONSTER_KILL, INTERACTION, MATERIAL_PICKUP, DIALOGUE, CUTSCENE, POSITION };
-	public ProgressType type;
+	public enum Type { MONSTER_KILL, INTERACTION, MATERIAL_PICKUP, DIALOGUE, CUTSCENE, POSITION, ITEM_CRAFT, ITEM_UNLOCK, ITEM_EQUIP };
+	public Type type;
 
 	private string str = "";
 	private float number = 0;
 	private Vector3 pos = Vector3.zero;
 
-	public QuestProgress(ProgressType type) {
+	public QuestProgress(Type type) {
 		this.type = type;
 	}
 

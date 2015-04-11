@@ -113,6 +113,8 @@ public abstract class Weapon {
 
 		isEquipped = true;
 		PlayerPrefs.SetInt("weapon_" + name + "_equipped", 1);
+
+		GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.Type.ITEM_EQUIP).setStr(name));
 	}
 
 	public void unequip() {
@@ -148,7 +150,7 @@ public abstract class Weapon {
 	public bool refillAmmo() {
 		Debug.Log(name + ": Refilling ammo");
 
-		if(isEquipped) {
+		if(isEquipped && ammunition < defaultMaxAmmunition) {
 			int cost = Mathf.RoundToInt(getCost());
 			if(MaterialManager.getMaterials() > cost) {
 				MaterialManager.decrease(cost);
@@ -159,10 +161,10 @@ public abstract class Weapon {
 				saveAmmoStatus();
 				
 				return true;
-			}
-		}
-
-		return false;
+			} else
+				return false;
+		} else
+			return true; // Already equipped
 	}
 
 	public bool craft() {
@@ -176,11 +178,13 @@ public abstract class Weapon {
 				isCrafted = true;
 				PlayerPrefs.SetInt("weapon_" + name + "_crafted", 1);
 
-				return true;
-			}
-		}
+				GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.Type.ITEM_CRAFT).setStr(name));
 
-		return false;
+				return true;
+			} else
+				return false;
+		} else
+			return true; // Already crafted
 	}
 
 	private void playSound(SoundLabel label) {
