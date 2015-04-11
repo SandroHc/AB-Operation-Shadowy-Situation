@@ -70,8 +70,13 @@ public class QuestManager : MonoBehaviour {
 	}
 
 	public void fireProgressEvent(QuestProgress progress) {
-		if(progress.type != QuestProgress.ProgressType.INTERACTION)
-			Debug.Log("Firing event: " + progress.ToString());
+		if(questList == null) {
+			Debug.Log("Event not fired because the quest list has not been initialized yet. (" + progress + ")");
+			return;
+		}
+
+		// TODO Prevent floading the debug console
+		if(progress.type != QuestProgress.Type.INTERACTION) Debug.Log("Firing event: " + progress);
 
 		foreach(Quest quest in questList)
 			quest.progress(progress);

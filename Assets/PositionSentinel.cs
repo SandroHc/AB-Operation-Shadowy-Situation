@@ -22,7 +22,7 @@ public class PositionSentinel : MonoBehaviour {
 	void OnTriggerEnter(Collider other) {
 		if(other.tag == Tags.player) {
 			// Send a position event to the quest system 
-			GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.ProgressType.POSITION).setPosition(transform.position));
+			GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.Type.POSITION).setPosition(transform.position));
 		}
 	}
 }

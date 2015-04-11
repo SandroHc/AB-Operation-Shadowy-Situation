@@ -29,7 +29,8 @@ public abstract class Quest {
 
 		if(status == QUEST_STATUS.ACTIVE) {
 			if(stages[currentStage] != null)
-				stages[currentStage].setup();
+				if(stages[currentStage].setup()) // In case the stage was already completed on startup, to to the next one
+					nextStage();
 		}
 	}
 
@@ -109,9 +110,11 @@ public abstract class Quest {
 		/**
 		 * Used to setup any stage-related mechanics.
 		 * Like spawn a mob, reset a door, etc.
+		 * 
+		 * Returns true if this stage's requirements were already met in the setup phase.
 		 **/
-		public virtual void setup() {
-			// NO-OP
+		public virtual bool setup() {
+			return false;
 		}
 
 		/**
@@ -133,5 +136,147 @@ public abstract class Quest {
 		 * 		Picked up 3 out of 9 flowers.
 		 **/
 		abstract public string getText();
+	}
+
+	/**
+	 * 
+	 * PRE-CREATED STAGES
+	 * 
+	**/
+	
+	protected class GoTo : Stage {
+		private Vector3 objective;
+		private GameObject sentinel;
+
+		public GoTo(Vector3 pos) {
+			objective = pos;
+		}
+		
+		public override bool setup() {
+			// Create a sentinel to check whenever the player sets foot on the target
+			sentinel = Object.Instantiate(GameController.prefabManager.marker, objective, Quaternion.Euler(0, 0, 0)) as GameObject;
+			sentinel.GetComponent<PositionSentinel>().setup();
+
+			return false;
+		}
+		
+		public override bool update(QuestProgress progress) {
+			if(progress.type == QuestProgress.Type.POSITION) {
+				if(Vector3.Distance(progress.getPosition(), objective) <= 5f) {
+					GameController.questManager.stageUpdateEvent(this);
+					return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		public override void finish() {
+			// Destroy the sentinel when it is no longer needed
+			Object.Destroy(sentinel);
+		}
+		
+		public override string getText() {
+			return "Go to the indicated zone.";
+		}
+	}
+
+	protected class TalkTo : Stage {
+		Interaction npc;
+		string dialogue;
+
+		public TalkTo(Interaction npcScript, string dialogueClass) {
+			this.npc = npcScript;
+			this.dialogue = dialogueClass;
+		}
+		
+		public override bool setup() {
+			npc.dialogue = dialogue;
+
+			return false;
+		}
+		
+		public override bool update(QuestProgress progress) {
+			if(progress.type == QuestProgress.Type.DIALOGUE) {
+				if(progress.getStr().Equals(npc.name)) {
+					GameController.questManager.stageUpdateEvent(this);
+					return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		public override string getText() {
+			return "Talk to <b>" + npc.name + "</b>.";
+		}
+	}
+
+	protected class Craft : Stage {
+		Weapon weapon;
+		
+		public Craft(Weapon weapon) {
+			this.weapon = weapon;
+		}
+
+		public override bool setup() {
+			return weapon.isCrafted; // In case the weapon was already crafted, complete the stage
+		}
+		
+		public override bool update(QuestProgress progress) {
+			if(progress.type == QuestProgress.Type.ITEM_CRAFT) {
+				if(progress.getStr().Equals(weapon.name)) {
+					GameController.questManager.stageUpdateEvent(this);
+					return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		public override string getText() {
+			return "Craft <b>" + weapon.name + "</b>.";
+		}
+	}
+
+	protected class Collect : Stage {
+		private int current;
+		private int ammount;
+
+		private string key;
+
+		public Collect(string key, int ammount) {
+			this.ammount = ammount;
+		}
+		
+		public override bool setup() {
+			current = PlayerPrefs.GetInt(key, 0);
+
+			return current >= ammount; // Finish the stage incase the collected ammount is enough.
+		}
+		
+		public override bool update(QuestProgress progress) {
+			if(progress.type == QuestProgress.Type.MATERIAL_PICKUP) {
+				current += (int) progress.getNumber();
+				
+				PlayerPrefs.SetInt(key, current);
+
+
+				if(current >= ammount)
+					return true;
+
+				GameController.questManager.stageUpdateEvent(this);
+			}
+			
+			return false;
+		}
+		
+		public override void finish() {
+			PlayerPrefs.DeleteKey(key);
+		}
+		
+		public override string getText() {
+			return string.Format("Gathered {0} of {1} materials.", current, ammount);
+		}
 	}
 }

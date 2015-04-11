@@ -33,18 +33,14 @@ public class WeaponManager : MonoBehaviour {
 	public static float maxFireRate;
 	public static float maxRange;
 
-	void Start() {
-		weaponList = new List<Weapon>();
-		registerWeapon(new WeaponM9());
-		registerWeapon(new WeaponM16());
-
-		// Show the equipped weapon model.
-		// Don't do this at the Awake event because at that time the weapons where not initialized yet (yup, Start() is called AFTER Awake())
-		Weapon weapon = getCurrentWeapon();
-		if(weapon != null) weapon.show();
-	}
-
 	void Awake() {
+		// Do this here because Awake() is called BEFORE Start(). So, if a script tried to get a weapon instance in the Awake() event... he whould receive a NULL object.
+		if(weaponList == null) {
+			weaponList = new List<Weapon>();
+			registerWeapon(new WeaponM9());
+			registerWeapon(new WeaponM16());
+		}
+
 		raycast = cameraController.GetComponent<RaycastShoot>();
 		audioSource = raycast.GetComponent<AudioSource>();
 
@@ -61,6 +57,11 @@ public class WeaponManager : MonoBehaviour {
 
 		// Update the weapon selection UI slot index
 		WeaponSelection.index = currentSlot;
+
+
+		// Show the equipped weapon model.
+		Weapon weapon = getCurrentWeapon();
+		if(weapon != null) weapon.show();
 	}
 
 	void Update() {

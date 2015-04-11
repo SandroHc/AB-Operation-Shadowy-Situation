@@ -56,7 +56,7 @@ public class MaterialManager : MonoBehaviour {
 		increase(materialCount);
 
 		// Send a quest progress update with the number of materials picked.
-		GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.ProgressType.MATERIAL_PICKUP).setNumber(materialCount));
+		GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.Type.MATERIAL_PICKUP).setNumber(materialCount));
 	}
 
 	private void saveMaterialCount() {

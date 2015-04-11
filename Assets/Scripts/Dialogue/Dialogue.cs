@@ -32,7 +32,7 @@ public abstract class Dialogue {
 
 			// Fire the dialogue finished event to the Quest System
 			// Do not fire on the close() method because the player might have canceled the dialogue
-			GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.ProgressType.DIALOGUE).setStr(name));
+			GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.Type.DIALOGUE).setStr(name));
 		}
 	}
 

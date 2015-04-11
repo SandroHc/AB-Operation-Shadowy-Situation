@@ -70,7 +70,7 @@ public class Interaction : MonoBehaviour {
 	}
 
 	public void doAction() {
-		GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.ProgressType.INTERACTION).setStr(this.name).setPosition(gameObject.transform.position));
+		GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.Type.INTERACTION).setStr(this.name).setPosition(gameObject.transform.position));
 
 		switch(type) {
 		case Type.Dialogue:

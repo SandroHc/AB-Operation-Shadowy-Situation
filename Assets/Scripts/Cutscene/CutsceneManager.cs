@@ -45,7 +45,7 @@ public class CutsceneManager : MonoBehaviour {
 		//Debug.Log("Stopping cutscene");
 
 		// Send a quest progress update with the cutscene ID
-		GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.ProgressType.CUTSCENE).setStr(cutscene.getName()));
+		GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.Type.CUTSCENE).setStr(cutscene.getName()));
 		
 
 		cutscene.stopCutscene();

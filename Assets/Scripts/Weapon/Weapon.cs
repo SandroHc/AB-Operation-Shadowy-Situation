@@ -167,6 +167,17 @@ public abstract class Weapon {
 			return true; // Already equipped
 	}
 
+	public bool unlock() {
+		Debug.Log(name + ": Unlocked");
+		
+		isUnlocked = true;
+		PlayerPrefs.SetInt("weapon_" + name + "_unlocked", 1);
+
+		GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.Type.ITEM_UNLOCK).setStr(name));
+
+		return true;
+	}
+
 	public bool craft() {
 		Debug.Log(name + ": Crafting");
 
