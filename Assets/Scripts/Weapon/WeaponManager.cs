@@ -94,10 +94,14 @@ public class WeaponManager : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.Alpha8)) {
 			Debug.Log("Trying to equip M9");
 			switchWeapon(getWeapon("M9"));
+			getWeapon("M9").unlock();
+			getWeapon("M9").craft();
 		}
 		if(Input.GetKeyDown(KeyCode.Alpha7)) {
 			Debug.Log("Trying to equip M16");
 			switchWeapon(getWeapon("M16"));
+			getWeapon("M16").unlock();
+			getWeapon("M16").craft();
 		}
 	}
 

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Quest_00_LEARN : Quest {
 
-	public Quest_00_LEARN() : base(1, "Learning the Ropes", "This is the description for the test quest that was setup just to test the... Quest System") { }
+	public Quest_00_LEARN() : base(1, "Learning the Ropes", "This quest teaches the basic mechanics of the game.") { }
 
 	public override void initStages() {
 		Interaction npc = GameObject.FindGameObjectWithTag(Tags.npc).GetComponent<Interaction>();
@@ -12,7 +12,7 @@ public class Quest_00_LEARN : Quest {
 		stages.Add(new TalkTo(npc, "DialogueQ_00_LEARN_1"));
 		stages.Add(new Collect("quest_" + id + "_collect", 10));
 		stages.Add(new TalkTo_1(npc, "DialogueQ_00_LEARN_2"));
-		stages.Add(new Craft(WeaponManager.getWeapon("Scissors")));
+		stages.Add(new Craft(WeaponManager.getWeapon("M9"))); // Weapon: Scissors
 	}
 
 	protected class TalkTo_1 : TalkTo {
@@ -23,7 +23,7 @@ public class Quest_00_LEARN : Quest {
 			base.finish();
 
 			// Unlock the Scissors after this dialogue
-			Weapon weapon = WeaponManager.getWeapon("Scissors");
+			Weapon weapon = WeaponManager.getWeapon("M9"); // Weapon: Scissors
 			if(weapon != null) weapon.unlock();
 		}
 	}

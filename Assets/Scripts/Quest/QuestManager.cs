@@ -2,14 +2,14 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 
 public class QuestManager : MonoBehaviour {
 	private List<Quest> questList;
 
 	public GameObject panelJournal;
 	public RectTransform panelList;
-	public GameObject panelDescription;
-	public GameObject panelDescriptionStages;
+	public RectTransform panelDesc;
 
 	public Text checkpointText;
 
@@ -117,52 +117,47 @@ public class QuestManager : MonoBehaviour {
 		return target != null ? target.getStatus() : Quest.QUEST_STATUS.UNKNOWN;
 	}
 
-	public Text panelDescriptionName;
-	public Text panelDescriptionDesc;
-	public Text panelDescriptionStatus;
-	public Text panelDescriptionStage;
+	private Text panelDescName;
+	private Text panelDescDesc;
+	private Text panelDescStatus;
+	private Text panelDescStageList;
+
+	private Quest currentInfo;
 
 	/**
 	 * Populate the Journal panel with information about the desired quest
 	 **/
 	private void showInfo(Quest quest) {
-		if(quest == null) return;// TODO Clear UI quest description, to clear the content of the previously selected quest
+		currentInfo = quest;
 
-		// if is the first time showing quest info, activate the respective panel
-		if(!panelDescription.activeSelf)
-			panelDescription.SetActive(true);
+		// This way, if the Quest is invalid, the whole panel is hidden. Also hiding previous information from other quest.
+		panelDesc.gameObject.SetActive(quest != null);
 
-		// Populate the labels with information about this Quest
-		panelDescriptionName.text = quest.name;
-		panelDescriptionDesc.text = quest.description;
-		panelDescriptionStatus.text = quest.getStatus().ToString();
-		panelDescriptionStage.text = quest.currentStage.ToString();
+		if(quest == null) return;
 
-		// Delete any outdated stages from other Quest
-		foreach(Transform child in panelDescriptionStages.transform)
-			GameObject.Destroy(child.gameObject);
-
-		int index = 0;
-		foreach(Quest.Stage stage in quest.stages) {
-			GameObject textObject = new GameObject("stage_" + index + "_text");
-			textObject.transform.parent = panelDescriptionStages.transform;
-			Text text = textObject.AddComponent<Text>();
-			text.rectTransform.sizeDelta = Vector2.zero;
-			text.rectTransform.anchorMin = Vector2.zero;
-			text.rectTransform.anchorMax = Vector2.one;
-			text.rectTransform.anchoredPosition = new Vector2(.5f, .5f);
-			text.text = stage.getText();
-			text.font = GameController.textManager.uiFont;
-			text.fontSize = 20;
-			text.color = Color.black;
-			text.alignment = TextAnchor.MiddleCenter;
-
-			index++;
+		if(panelDescName == null) {
+			panelDescName = panelDesc.FindChild("name").GetComponent<Text>();
+			panelDescDesc = panelDesc.FindChild("description").GetComponent<Text>();
+			panelDescStatus = panelDesc.FindChild("status").GetComponent<Text>();
+			panelDescStageList = panelDesc.FindChild("stage_list").GetComponent<Text>();
 		}
 
+		// Populate the labels with information about this Quest
+		panelDescName.text = quest.name;
+		panelDescDesc.text = quest.description;
+		panelDescStatus.text = quest.getStatus().ToString();
 
-		// TODO For debug purposes
-		debugCurrentQuest = quest;
+		StringBuilder sb = new StringBuilder();
+		if(quest.status == Quest.QUEST_STATUS.COMPLETED) {
+			foreach(Quest.Stage stage in quest.stages)
+				sb.Append("  <color=green>✓</color> ").Append(stage.getText()).Append("\n");
+		} else {
+			for(int i=0; i < quest.currentStage; i++)
+				sb.Append("  <color=green>✓</color> ").Append(quest.stages[i].getText()).Append("\n");
+			sb.Append("  <color=red>✗</color> ").Append(quest.stages[quest.currentStage].getText());
+		}
+
+		panelDescStageList.text = sb.ToString();
 	}
 
 	private GameObject generateButton(Quest quest) {
@@ -187,21 +182,18 @@ public class QuestManager : MonoBehaviour {
 	public void updateCheckpoints() {
 		//Debug.Log ("Updating checkpoint list");
 
-		string str = "";
+		StringBuilder sb = new StringBuilder();
 
 		foreach(Quest quest in questList) {
 			if(quest.getStatus() == Quest.QUEST_STATUS.ACTIVE) {
-				str += "<b>" + quest.name + "</b>\n";
-
-				List<Quest.Stage> stages = quest.stages;
+				sb.Append("<b>").Append(quest.name).Append("</b>\n");
 				for(int i=0; i < quest.currentStage; i++)
-					str += "  <color=green>✓</color> " + stages[i].getText() + "\n";
-			
-				str += "  <color=red>✗</color> " + stages[quest.currentStage].getText() + "\n\n";
+					sb.Append("  <color=green>✓</color> ").Append(quest.stages[i].getText()).Append("\n");
+				sb.Append("  <color=red>✗</color> ").Append(quest.stages[quest.currentStage].getText());
 			}
 		}
 
-		checkpointText.text = str;
+		checkpointText.text = sb.ToString();
 	}
 
 	public void stageUpdateEvent(Quest.Stage stage) {
@@ -220,15 +212,6 @@ public class QuestManager : MonoBehaviour {
 
 	public void setWaypoint(Vector3 position) {
 		GameController.playerPathfind.setDestination(position);
-	}
-
-	private Quest debugCurrentQuest = null;
-
-	public void debugBtn() {
-		if(debugCurrentQuest == null) return;
-
-		debugCurrentQuest.setStatus(debugCurrentQuest.getStatus() == Quest.QUEST_STATUS.ACTIVE ? Quest.QUEST_STATUS.INACTIVE : Quest.QUEST_STATUS.ACTIVE);
-		panelDescriptionStatus.text = debugCurrentQuest.getStatus().ToString();
 	}
 }
  
