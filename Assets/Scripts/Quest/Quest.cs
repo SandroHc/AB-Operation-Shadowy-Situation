@@ -250,6 +250,7 @@ public abstract class Quest {
 
 		public Collect(string key, int ammount) {
 			this.ammount = ammount;
+			this.key = key;
 		}
 		
 		public override bool setup() {
