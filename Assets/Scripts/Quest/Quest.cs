@@ -28,9 +28,12 @@ public abstract class Quest {
 		initStages();
 
 		if(status == STATUS.ACTIVE) {
-			if(stages[currentStage] != null)
-				if(stages[currentStage].setup()) // In case the stage was already completed on startup, to to the next one
-					nextStage();
+			// Check if the current stage is bigger than the last stage ID.
+			// In that case, mark the quest as COMPLETED
+			if(currentStage >= stages.Count)
+				complete();
+			else if(stages[currentStage] != null && stages[currentStage].setup()) // In case the stage was already completed on startup, to to the next one
+				nextStage();
 		}
 	}
 

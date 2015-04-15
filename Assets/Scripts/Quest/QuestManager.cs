@@ -21,9 +21,41 @@ public class QuestManager : MonoBehaviour {
 			registerQuests();
 		}
 
+		// Separate the quest into two lists.
+		List<Quest> active = new List<Quest>(questList.Count / 2);
+		List<Quest> completed = new List<Quest>(questList.Count / 2);
+
 		foreach(Quest quest in questList) {
-			generateButton(quest);
+			switch(quest.status) {
+			case Quest.STATUS.ACTIVE: 	 active.Add(quest); break;
+			case Quest.STATUS.COMPLETED: completed.Add(quest); break;
+			}
+
 		}
+
+		float yPos = 50; // The initial Y pos equals height of the label
+
+		// Setup first the ACTIVE quests
+		foreach(Quest quest in active) {
+			generateButton(quest, new Vector2(0, -yPos));
+			yPos += 50;
+		}
+
+		// Set the height value for the "Completed" label
+		RectTransformExtensions.SetPositionOfPivot(panelList.FindChild("finished").GetComponent<RectTransform>(), new Vector2(0, -yPos));
+		yPos += 50;
+
+		// And finally set the COMPLETED quests
+		foreach(Quest quest in completed) {
+			generateButton(quest, new Vector2(0, -yPos));
+			yPos += 50;
+		}
+
+		//RectTransformExtensions.SetHeight(panelList, -yPos);
+
+		// Clear both lists. Not sure if this is necessary, as it may just be collected by GC later.
+		active.Clear();
+		completed.Clear();
 
 		// Populate the checkpoint list
 		updateCheckpoints();
@@ -119,7 +151,6 @@ public class QuestManager : MonoBehaviour {
 
 	private Text panelDescName;
 	private Text panelDescDesc;
-	private Text panelDescStatus;
 	private Text panelDescStageList;
 
 	private Quest currentInfo;
@@ -138,14 +169,12 @@ public class QuestManager : MonoBehaviour {
 		if(panelDescName == null) {
 			panelDescName = panelDesc.FindChild("name").FindChild("text").GetComponent<Text>();
 			panelDescDesc = panelDesc.FindChild("description").GetComponent<Text>();
-			panelDescStatus = panelDesc.FindChild("status").GetComponent<Text>();
 			panelDescStageList = panelDesc.FindChild("stage_list").GetComponent<Text>();
 		}
 
 		// Populate the labels with information about this Quest
 		panelDescName.text = quest.name;
 		panelDescDesc.text = quest.description;
-		panelDescStatus.text = quest.getStatus().ToString();
 
 		StringBuilder sb = new StringBuilder();
 		if(quest.status == Quest.STATUS.COMPLETED) {
@@ -160,15 +189,15 @@ public class QuestManager : MonoBehaviour {
 		panelDescStageList.text = sb.ToString();
 	}
 
-	private GameObject generateButton(Quest quest) {
+	private GameObject generateButton(Quest quest, Vector2 pos) {
 		GameObject go = Object.Instantiate(questButtonPrefab);
 		go.name = "quest_" + quest.id;
 		go.transform.SetParent(panelList);
 		
 		RectTransform rt = go.GetComponent<RectTransform>();
 		RectTransformExtensions.SetDefaultScale(rt);
-		//RectTransformExtensions.SetWidth(rt, width);
-		//RectTransformExtensions.SetLeftTopPosition(rt, pos);
+		RectTransformExtensions.SetSize(rt, new Vector2(125, 50));
+		RectTransformExtensions.SetPositionOfPivot(rt, pos);
 
 		Text text = go.transform.FindChild("text").GetComponent<Text>();
 		text.text = quest.name;
