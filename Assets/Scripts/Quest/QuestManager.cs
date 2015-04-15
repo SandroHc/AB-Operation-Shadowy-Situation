@@ -89,10 +89,10 @@ public class QuestManager : MonoBehaviour {
 		if(quest == null) return false;
 
 		// No need to update quests already completed
-		if(quest.status == Quest.QUEST_STATUS.COMPLETED)
+		if(quest.status == Quest.STATUS.COMPLETED)
 			return false;
 
-		quest.setStatus(Quest.QUEST_STATUS.ACTIVE);
+		quest.setStatus(Quest.STATUS.ACTIVE);
 
 		// Fire the event
 		questStartedEvent(quest);
@@ -112,9 +112,9 @@ public class QuestManager : MonoBehaviour {
 		return null;
 	}
 
-	public Quest.QUEST_STATUS getQuestStatus(int id) {
+	public Quest.STATUS getQuestStatus(int id) {
 		Quest target = getQuest(id);
-		return target != null ? target.getStatus() : Quest.QUEST_STATUS.UNKNOWN;
+		return target != null ? target.getStatus() : Quest.STATUS.UNKNOWN;
 	}
 
 	private Text panelDescName;
@@ -136,7 +136,7 @@ public class QuestManager : MonoBehaviour {
 		if(quest == null) return;
 
 		if(panelDescName == null) {
-			panelDescName = panelDesc.FindChild("name").GetComponent<Text>();
+			panelDescName = panelDesc.FindChild("name").FindChild("text").GetComponent<Text>();
 			panelDescDesc = panelDesc.FindChild("description").GetComponent<Text>();
 			panelDescStatus = panelDesc.FindChild("status").GetComponent<Text>();
 			panelDescStageList = panelDesc.FindChild("stage_list").GetComponent<Text>();
@@ -148,7 +148,7 @@ public class QuestManager : MonoBehaviour {
 		panelDescStatus.text = quest.getStatus().ToString();
 
 		StringBuilder sb = new StringBuilder();
-		if(quest.status == Quest.QUEST_STATUS.COMPLETED) {
+		if(quest.status == Quest.STATUS.COMPLETED) {
 			foreach(Quest.Stage stage in quest.stages)
 				sb.Append("  <color=green>✓</color> ").Append(stage.getText()).Append("\n");
 		} else {
@@ -185,7 +185,7 @@ public class QuestManager : MonoBehaviour {
 		StringBuilder sb = new StringBuilder();
 
 		foreach(Quest quest in questList) {
-			if(quest.getStatus() == Quest.QUEST_STATUS.ACTIVE) {
+			if(quest.getStatus() == Quest.STATUS.ACTIVE) {
 				sb.Append("<b>").Append(quest.name).Append("</b>\n");
 				for(int i=0; i < quest.currentStage; i++)
 					sb.Append("  <color=green>✓</color> ").Append(quest.stages[i].getText()).Append("\n");

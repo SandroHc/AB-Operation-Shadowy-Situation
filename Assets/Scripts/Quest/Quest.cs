@@ -6,8 +6,8 @@ using System.Collections.Generic;
  * Utility class to store information related to any quest.
  */
 public abstract class Quest {
-	public enum QUEST_STATUS { UNKNOWN = -1, INACTIVE = 0, ACTIVE = 1, COMPLETED = 2 };
-	public QUEST_STATUS status { get; set; }
+	public enum STATUS { UNKNOWN = -1, INACTIVE = 0, ACTIVE = 1, COMPLETED = 2 };
+	public STATUS status { get; set; }
 
 	public int id { get; protected set; }
 	public string name { get; protected set; }
@@ -21,13 +21,13 @@ public abstract class Quest {
 		this.name = name;
 		this.description = description;
 
-		this.status = (QUEST_STATUS) PlayerPrefs.GetInt("quest-" + id + "-status", (int) QUEST_STATUS.INACTIVE);
+		this.status = (STATUS) PlayerPrefs.GetInt("quest-" + id + "-status", (int) STATUS.INACTIVE);
 		this.currentStage = PlayerPrefs.GetInt("quest-" + id + "-stage", 0);
 
 		this.stages = new List<Stage>();
 		initStages();
 
-		if(status == QUEST_STATUS.ACTIVE) {
+		if(status == STATUS.ACTIVE) {
 			if(stages[currentStage] != null)
 				if(stages[currentStage].setup()) // In case the stage was already completed on startup, to to the next one
 					nextStage();
@@ -37,7 +37,7 @@ public abstract class Quest {
 	public abstract void initStages();
 
 	public bool progress(QuestProgress progress) {
-		if(status != QUEST_STATUS.ACTIVE) // Ignore progress calls if there is nothing to do here
+		if(status != STATUS.ACTIVE) // Ignore progress calls if there is nothing to do here
 			return false;
 
 		if(currentStage < stages.Count && stages[currentStage].update(progress))
@@ -70,7 +70,7 @@ public abstract class Quest {
 
 	protected void complete() {
 		// Update the status to COMPLETED
-		setStatus(QUEST_STATUS.COMPLETED);
+		setStatus(STATUS.COMPLETED);
 
 		// Fire the quest finished event
 		GameController.questManager.questFinishedEvent(this);
@@ -80,7 +80,7 @@ public abstract class Quest {
 	 * Used to reset the Quest to it's starting point
 	 **/
 	public void reset() {
-		setStatus(QUEST_STATUS.ACTIVE);
+		setStatus(STATUS.ACTIVE);
 
 		currentStage = 0;
 		PlayerPrefs.SetInt("quest-" + id + "-stage", currentStage);
@@ -94,12 +94,12 @@ public abstract class Quest {
 	/**
 	 * Return the current status of the quest.
 	 **/
-	public QUEST_STATUS getStatus() {
+	public STATUS getStatus() {
 		return status;
 	}
 
-	public void setStatus(QUEST_STATUS status) {
-		Debug.Log("Quest " + name + " (" + id + ") changed from " + this.status.ToString() + " to " + status.ToString());
+	public void setStatus(STATUS status) {
+		Debug.Log("Quest " + name + " (" + id + ") changed from " + this.status + " to " + status);
 
 		this.status = status;
 		PlayerPrefs.SetInt("quest-" + id + "-status", (int) status);

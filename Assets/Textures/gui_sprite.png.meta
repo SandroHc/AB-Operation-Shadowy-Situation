@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 85744ea3e1619c846b987475a0e4c80a
-timeCreated: 1428945363
+timeCreated: 1429089572
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName:
@@ -8,6 +8,10 @@ TextureImporter:
     21300002: gui_top_right
     21300004: gui_top_left_red
     21300006: gui_top_right_red
+    21300008: gui_top_bottom_left
+    21300010: gui_bottom_right
+    21300012: gui_top_bottom_right
+    21300014: gui_sprite_5
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -53,46 +57,66 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
+    - name: gui_top_bottom_left
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 86
+        width: 86
+        height: 86
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 43, y: 43, z: 43, w: 43}
     - name: gui_top_left
       rect:
         serializedVersion: 2
-        x: 0
-        y: 45
-        width: 45
-        height: 45
+        x: 86
+        y: 86
+        width: 86
+        height: 86
       alignment: 0
       pivot: {x: .5, y: .5}
-      border: {x: 22, y: 22, z: 22, w: 22}
+      border: {x: 43, y: 43, z: 43, w: 43}
+    - name: gui_bottom_right
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 86
+        width: 86
+        height: 86
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 43, y: 43, z: 43, w: 43}
+    - name: gui_top_bottom_right
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 86
+        height: 86
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 43, y: 43, z: 43, w: 43}
     - name: gui_top_right
       rect:
         serializedVersion: 2
-        x: 45
-        y: 45
-        width: 45
-        height: 45
+        x: 86
+        y: 0
+        width: 86
+        height: 86
       alignment: 0
       pivot: {x: .5, y: .5}
-      border: {x: 22, y: 22, z: 22, w: 22}
-    - name: gui_top_left_red
+      border: {x: 43, y: 43, z: 43, w: 43}
+    - name: gui_sprite_5
       rect:
         serializedVersion: 2
-        x: 0
+        x: 172
         y: 0
-        width: 45
-        height: 45
+        width: 86
+        height: 86
       alignment: 0
       pivot: {x: .5, y: .5}
-      border: {x: 22, y: 22, z: 22, w: 22}
-    - name: gui_top_right_red
-      rect:
-        serializedVersion: 2
-        x: 45
-        y: 0
-        width: 45
-        height: 45
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 22, y: 22, z: 22, w: 22}
+      border: {x: 43, y: 43, z: 43, w: 43}
   spritePackingTag: 
   userData: 
   assetBundleName: 
