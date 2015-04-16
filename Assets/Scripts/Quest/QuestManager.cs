@@ -21,41 +21,8 @@ public class QuestManager : MonoBehaviour {
 			registerQuests();
 		}
 
-		// Separate the quest into two lists.
-		List<Quest> active = new List<Quest>(questList.Count / 2);
-		List<Quest> completed = new List<Quest>(questList.Count / 2);
-
-		foreach(Quest quest in questList) {
-			switch(quest.status) {
-			case Quest.STATUS.ACTIVE: 	 active.Add(quest); break;
-			case Quest.STATUS.COMPLETED: completed.Add(quest); break;
-			}
-
-		}
-
-		float yPos = 50; // The initial Y pos equals height of the label
-
-		// Setup first the ACTIVE quests
-		foreach(Quest quest in active) {
-			generateButton(quest, new Vector2(0, -yPos));
-			yPos += 50;
-		}
-
-		// Set the height value for the "Completed" label
-		RectTransformExtensions.SetPositionOfPivot(panelList.FindChild("finished").GetComponent<RectTransform>(), new Vector2(0, -yPos));
-		yPos += 50;
-
-		// And finally set the COMPLETED quests
-		foreach(Quest quest in completed) {
-			generateButton(quest, new Vector2(0, -yPos));
-			yPos += 50;
-		}
-
-		//RectTransformExtensions.SetHeight(panelList, -yPos);
-
-		// Clear both lists. Not sure if this is necessary, as it may just be collected by GC later.
-		active.Clear();
-		completed.Clear();
+		// Populate the quest list
+		updateQuestButtons();
 
 		// Populate the checkpoint list
 		updateCheckpoints();
@@ -176,17 +143,68 @@ public class QuestManager : MonoBehaviour {
 		panelDescName.text = quest.name;
 		panelDescDesc.text = quest.description;
 
+		updateQuestDescription();
+	}
+
+	private void updateQuestDescription() {
+		if(currentInfo == null) return;
+
 		StringBuilder sb = new StringBuilder();
-		if(quest.status == Quest.STATUS.COMPLETED) {
-			foreach(Quest.Stage stage in quest.stages)
+		if(currentInfo.status == Quest.STATUS.COMPLETED) {
+			foreach(Quest.Stage stage in currentInfo.stages)
 				sb.Append("  <color=green>✓</color> ").Append(stage.getText()).Append("\n");
 		} else {
-			for(int i=0; i < quest.currentStage; i++)
-				sb.Append("  <color=green>✓</color> ").Append(quest.stages[i].getText()).Append("\n");
-			sb.Append("  <color=red>✗</color> ").Append(quest.stages[quest.currentStage].getText());
+			for(int i=0; i < currentInfo.currentStage; i++)
+				sb.Append("  <color=green>✓</color> ").Append(currentInfo.stages[i].getText()).Append("\n");
+			sb.Append("  <color=red>✗</color> ").Append(currentInfo.stages[currentInfo.currentStage].getText());
+		}
+		
+		panelDescStageList.text = sb.ToString();
+	}
+
+	private void updateQuestButtons() {
+		foreach(Transform child in panelList) {
+			if(child.GetComponent<Text>() != null)
+				continue;
+			else
+				Destroy(child.gameObject);
 		}
 
-		panelDescStageList.text = sb.ToString();
+		// Separate the quest into two lists.
+		List<Quest> active = new List<Quest>(questList.Count / 2);
+		List<Quest> completed = new List<Quest>(questList.Count / 2);
+		
+		foreach(Quest quest in questList) {
+			switch(quest.status) {
+			case Quest.STATUS.ACTIVE: 	 active.Add(quest); break;
+			case Quest.STATUS.COMPLETED: completed.Add(quest); break;
+			}
+			
+		}
+		
+		float yPos = 50; // The initial Y pos equals height of the label
+		
+		// Setup first the ACTIVE quests
+		foreach(Quest quest in active) {
+			generateButton(quest, new Vector2(0, -yPos));
+			yPos += 50;
+		}
+		
+		// Set the height value for the "Completed" label
+		RectTransformExtensions.SetPositionOfPivot(panelList.FindChild("finished").GetComponent<RectTransform>(), new Vector2(0, -yPos));
+		yPos += 50;
+		
+		// And finally set the COMPLETED quests
+		foreach(Quest quest in completed) {
+			generateButton(quest, new Vector2(0, -yPos));
+			yPos += 50;
+		}
+		
+		//RectTransformExtensions.SetHeight(panelList, -yPos);
+
+		// Clear both lists. Not sure if this is necessary, as it may just be collected by GC later.
+		active.Clear();
+		completed.Clear();
 	}
 
 	private GameObject generateButton(Quest quest, Vector2 pos) {
@@ -227,16 +245,19 @@ public class QuestManager : MonoBehaviour {
 
 	public void stageUpdateEvent(Quest.Stage stage) {
 		updateCheckpoints();
+		updateQuestDescription();
 	}
 
 	public void questStartedEvent(Quest quest) {
 		Debug.Log ("Quest started: " + quest.name + " (" + quest.id + ")");
 		updateCheckpoints();
+		updateQuestButtons();
 	}
 
 	public void questFinishedEvent(Quest quest) {
 		Debug.Log ("Quest finished: " + quest.name + " (" + quest.id + ")");
 		updateCheckpoints();
+		updateQuestButtons();
 	}
 
 	public void setWaypoint(Vector3 position) {
