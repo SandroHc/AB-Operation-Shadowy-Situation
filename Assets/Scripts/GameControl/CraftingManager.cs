@@ -46,18 +46,19 @@ public class CraftingManager : MonoBehaviour {
 	}
 
 	private void buildCraftingPanel() {
-		float width = RectTransformExtensions.GetWidth(craftingContents.GetComponent<RectTransform>()) / 3;
-
 		Weapon[] list = WeaponManager.weaponList.ToArray();
 
-		float currY = 0;
+		float width = RectTransformExtensions.GetWidth(craftingContents.GetComponent<RectTransform>());
+		float panelWidth = width / 3;
+
+		float posY = 0;
 
 		for(int i = 0; i < list.Length; i++) {
 			int mod = i % 3;
-			generatePanel(list[i].name, new Vector2(width * mod, -currY), width);
+			generatePanel(list[i].name, new Vector2(-(width/2) + panelWidth * mod, -posY), panelWidth);
 
-			if(mod == 3)
-				currY += 200;
+			// Every 3 slots, create a new row
+			if(mod == 3) posY += 200;
 		}
 	}
 

@@ -186,12 +186,12 @@ public class QuestManager : MonoBehaviour {
 		
 		// Setup first the ACTIVE quests
 		foreach(Quest quest in active) {
-			generateButton(quest, new Vector2(0, -yPos));
+			generateButton(quest, new Vector2(-62.5f, -yPos));
 			yPos += 50;
 		}
 		
 		// Set the height value for the "Completed" label
-		RectTransformExtensions.SetPositionOfPivot(panelList.FindChild("finished").GetComponent<RectTransform>(), new Vector2(0, -yPos));
+		RectTransformExtensions.SetPositionOfPivot(panelList.FindChild("finished").GetComponent<RectTransform>(), new Vector2(-62.5f, -yPos));
 		yPos += 50;
 		
 		// And finally set the COMPLETED quests
