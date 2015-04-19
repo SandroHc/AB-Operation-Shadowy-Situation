@@ -85,7 +85,7 @@ public class CraftingManager : MonoBehaviour {
 		craftingScript.weaponName = weaponName;
 		craftingScript.setup();
 
-		Debug.Log(weaponName + ": x=" + pos.x + ", y=" + pos.y + ", width=" + width);
+		//Debug.Log(weaponName + ": x=" + pos.x + ", y=" + pos.y + ", width=" + width);
 		
 		return panelObject;
 	}
