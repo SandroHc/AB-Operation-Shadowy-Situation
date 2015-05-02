@@ -73,7 +73,7 @@ struct v2f {
 		returnColor += tex2D(_MainTex, uv_ - blurDir.xy);
 		returnColor += tex2D(_MainTex, uv_ + float2(blurDir.x, -blurDir.y));
 		returnColor += tex2D(_MainTex, uv_ - float2(blurDir.x, -blurDir.y));
-
+		#pragma target 3.0
 		return returnColor * 0.2;
 	}
 	
