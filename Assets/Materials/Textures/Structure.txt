@@ -1,0 +1,3 @@
+﻿Albedo: DIFFUSE, COLOR
+Normal Map: NORMAL
+Height Map: SPECULAR (DISPLACEMENT?)
