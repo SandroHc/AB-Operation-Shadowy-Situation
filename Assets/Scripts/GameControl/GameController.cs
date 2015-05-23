@@ -169,7 +169,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	private void checkCancelInput() {
-		if(Input.GetKeyDown(InputManager.cancel)) {
+		if(InputManager.getKeyDown("cancel")) {
 			if(!isFocused) {
 				setPaused(!isPaused);
 			}

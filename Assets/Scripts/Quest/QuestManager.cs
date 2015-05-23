@@ -30,13 +30,13 @@ public class QuestManager : MonoBehaviour {
 
 	public void LateUpdate() {
 		// If the Joural button is pressed, show it!
-		if(Input.GetKeyDown(InputManager.journal) && !GameController.isPausedOrFocused()) {
+		if(InputManager.getKeyDown("journal") && !GameController.isPausedOrFocused()) {
 			GameController.setFocused(true, false);
 			panelJournal.SetActive(true);
 		}
 
 		// If the Journal is visible and the Cancel button is pressed, close the Journal.
-		if(panelJournal.activeSelf && Input.GetKeyDown(InputManager.cancel)) {
+		if(panelJournal.activeSelf && InputManager.getKeyDown("cancel")) {
 			GameController.setFocused(false);
 			panelJournal.SetActive(false);
 		}

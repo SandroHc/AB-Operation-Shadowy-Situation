@@ -1,43 +1,39 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 public class InputManager : MonoBehaviour {
 	private static KeyCode[] validKeyCodes;
 
-	public static KeyCode fire1;
-	public static KeyCode fire2;
-	public static KeyCode fire3;
-	public static KeyCode reload;
-	public static KeyCode interact;
-	public static KeyCode jump;
-	public static KeyCode sprint;
-	public static KeyCode crawl;
-	public static KeyCode submit;
-	public static KeyCode cancel;
-	public static KeyCode journal;
-	public static KeyCode crafting;
+	public static Dictionary<string, InputKey> keyList;
 
-	void Awake() {
+	void Start() {
 		if(validKeyCodes == null)
 			validKeyCodes = (KeyCode[]) System.Enum.GetValues(typeof(KeyCode));
 
-		fire1 = (KeyCode) PlayerPrefs.GetInt("input_fire1", (int) KeyCode.Mouse0);
-		fire2 = (KeyCode) PlayerPrefs.GetInt("input_fire2", (int) KeyCode.Mouse1);
-		fire3 = (KeyCode) PlayerPrefs.GetInt("input_fire3", (int) KeyCode.Mouse2);
-		reload = (KeyCode) PlayerPrefs.GetInt("input_reload", (int) KeyCode.R);
-		interact = (KeyCode) PlayerPrefs.GetInt("input_interact", (int) KeyCode.E);
-		jump = (KeyCode) PlayerPrefs.GetInt("input_jump", (int) KeyCode.Space);
-		sprint = (KeyCode) PlayerPrefs.GetInt("input_sprint", (int) KeyCode.LeftShift);
-		crawl = (KeyCode) PlayerPrefs.GetInt("input_crawl", (int) KeyCode.LeftControl);
-		submit = (KeyCode) PlayerPrefs.GetInt("input_submit", (int) KeyCode.Return);
-		cancel = (KeyCode) PlayerPrefs.GetInt("input_cancel", (int) KeyCode.Escape);
-		journal = (KeyCode) PlayerPrefs.GetInt("input_quest_journal", (int) KeyCode.J);
-		crafting = (KeyCode) PlayerPrefs.GetInt("input_crafting", (int) KeyCode.K);
+		if(keyList == null) {
+			keyList = new Dictionary<string, InputKey>();
+
+			addKey("Fire 1", "fire1", KeyCode.Mouse0);
+			addKey("Fire 2", "fire2", KeyCode.Mouse1);
+			addKey("Fire 3", "fire3", KeyCode.Mouse2);
+			addKey("Reload", "reload", KeyCode.R);
+			addKey("Interact", "interact", KeyCode.E);
+			addKey("Jump", "jump", KeyCode.Space);
+			addKey("Sprint", "sprint", KeyCode.LeftShift);
+			addKey("Crawl", "crawl", KeyCode.LeftControl);
+			addKey("Submit", "submit", KeyCode.Return);
+			addKey("Cancel", "cancel", KeyCode.Escape);
+			addKey("Quest Journal", "quest_journal", KeyCode.J);
+			addKey("Crafting", "crafting", KeyCode.K);
+		}
 	}
 
-	public static void saveKey(string name, int value) {
-		PlayerPrefs.SetInt("input_" + name, value);
+	void Awake() {
+		// Reload the keys
+		/*if(keyList.Count > 0) {
+			foreach(Dictionary<string, InputKey> key in keyList)
+				key.Value.load();
+		}*/
 	}
 
 	public static KeyCode fetchKey() {
@@ -48,11 +44,49 @@ public class InputManager : MonoBehaviour {
 		return KeyCode.None;
 	}
 
+	public static void addKey(string label, string name, KeyCode defaultKey) {
+		InputKey obj = new InputKey();
+
+		obj.label = label;
+		obj.name = name;
+		obj.defaultKey = defaultKey;
+
+		obj.load();
+
+		keyList.Add(name, obj);
+	}
+
+	public static KeyCode getKey(string key) {
+		if(keyList != null && keyList.ContainsKey(key))
+			return keyList[key].keyCode;
+		return KeyCode.None;
+	}
+
+	public static bool getKeyDown(string key) {
+		return Input.GetKeyDown(getKey(key));
+    }
+
 	private static List<InteractControl> interactList;
 
 	public static void register(InteractControl obj) {
 		if(interactList == null) interactList = new List<InteractControl>(1);
 
 		interactList.Add(obj);
+	}
+
+	public class InputKey {
+		public string label;
+		public string name;
+		public KeyCode keyCode;
+
+		public KeyCode defaultKey;
+
+		public void load() {
+			keyCode = (KeyCode) PlayerPrefs.GetInt("input_" + name, (int) defaultKey);
+		}
+
+		public void save() {
+			PlayerPrefs.SetInt("input_" + name, (int) keyCode);
+		}
 	}
 }

@@ -31,7 +31,7 @@ public class CraftingManager : MonoBehaviour {
 
 	void LateUpdate() {
 		// If the Crafting button is pressed, show the panel!
-		if(Input.GetKeyDown(InputManager.crafting) && !GameController.isPausedOrFocused()) {
+		if(InputManager.getKeyDown("crafting") && !GameController.isPausedOrFocused()) {
 			showCraftingPanel();
 
 			GameController.setFocused(true, false);
@@ -39,7 +39,7 @@ public class CraftingManager : MonoBehaviour {
 		}
 		
 		// If the Crafting panel is visible and the Cancel button is pressed, close it.
-		if(panelCrafting.activeSelf && Input.GetKeyDown(InputManager.cancel)) {
+		if(panelCrafting.activeSelf && InputManager.getKeyDown("cancel")) {
 			GameController.setFocused(false);
 			panelCrafting.SetActive(false);
 		}
@@ -72,7 +72,7 @@ public class CraftingManager : MonoBehaviour {
 	}
 
 	private GameObject generatePanel(string weaponName, Vector2 pos, float width) {
-		GameObject panelObject = Object.Instantiate(weaponPanelPrefab);
+		GameObject panelObject = Instantiate(weaponPanelPrefab);
 		panelObject.name = "weapon_" + weaponName;
 		panelObject.transform.SetParent(craftingContents);
 

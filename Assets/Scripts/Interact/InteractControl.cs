@@ -13,7 +13,7 @@ public class InteractControl : MonoBehaviour {
 	public bool active = false;
 
 	void Awake() {
-		key.text = InputManager.interact.ToString();
+		key.text = InputManager.getKey("interact").ToString();
 
 		// Try to get the target interaction
 		target = gameObject.GetComponent<Interaction>();
@@ -22,7 +22,7 @@ public class InteractControl : MonoBehaviour {
 	}
 	
 	void Update() {
-		if(active && Input.GetKey(InputManager.interact) && !GameController.isPausedOrFocused())
+		if(active && Input.GetKey(InputManager.getKey("interact")) && !GameController.isPausedOrFocused())
 			fill.fillAmount = (fill.fillAmount + Time.deltaTime * interactMultiplier) % 1; // Increment the fill amount. Reset after the number 1.
 		else
 			fill.fillAmount = Mathf.Lerp(fill.fillAmount, 0, Time.deltaTime * 10); // Decrement the fill amount back to 0

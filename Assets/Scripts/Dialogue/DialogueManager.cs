@@ -29,7 +29,7 @@ public class DialogueManager : MonoBehaviour {
 
 		currentDialogue.update();
 
-		if(Input.GetKeyDown(InputManager.cancel))
+		if(InputManager.getKeyDown("cancel"))
 			closeDialogue();
 	}
 

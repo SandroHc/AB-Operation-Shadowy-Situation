@@ -33,7 +33,7 @@ public class DialogueQ_00_LEARN_2 : Dialogue {
 	
 	private class Path1_1 : DialogueTalk {
 		public Path1_1() {
-			text = "To open the crafting menu, you must click in the shortkey <b>" + InputManager.crafting + "</b>.";
+			text = "To open the crafting menu, you must click in the shortkey <b>" + InputManager.getKey("crafting") + "</b>.";
 			nextDialogue = "DialogueQ_00_LEARN_2+Path1_2";
 		}
 	}

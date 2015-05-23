@@ -106,7 +106,7 @@ public class WeaponManager : MonoBehaviour {
 	}
 
 	private void handleAim() {
-		bool isAiming = Input.GetKey(InputManager.fire2);
+		bool isAiming = Input.GetKey(InputManager.getKey("fire2"));
 		currentFieldOfView = isAiming ? defaultFieldOfView * .6f /* shrink the FOV by 60% */ : defaultFieldOfView;
 		
 		if(isAiming != isAimingLast) {
@@ -128,14 +128,14 @@ public class WeaponManager : MonoBehaviour {
 	}
 
 	private void handleReload() {
-		if(Input.GetKeyUp(InputManager.reload)) { // Only reload if the magazine is not full
+		if(Input.GetKeyUp(InputManager.getKey("reload"))) { // Only reload if the magazine is not full
 			Weapon weapon = getCurrentWeapon();
 			if(weapon != null) weapon.reload();
 		}
 	}
 
 	private void handleShoot() {
-		if(Input.GetKey(InputManager.fire1)) {
+		if(Input.GetKey(InputManager.getKey("fire1"))) {
 			Weapon weapon = getCurrentWeapon();
 			if(weapon != null && weapon.shoot()) {
 				cameraController.GetComponentInParent<RecoilHandler>().recoil(weapon.recoil);

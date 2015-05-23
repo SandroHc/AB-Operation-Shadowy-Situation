@@ -45,9 +45,9 @@ public class PlayerController : MonoBehaviour {
 
 	void Update() {
 		if(!GameController.isPausedOrFocused()) {
-			isSprinting = Input.GetKey(InputManager.sprint);
-			isCrawling = Input.GetKey(InputManager.crawl);
-			isJumping = Input.GetKey(InputManager.jump); // Not using GetKeyDown allows bunnyhops... so, intented feature?
+			isSprinting = Input.GetKey(InputManager.getKey("sprint"));
+			isCrawling = Input.GetKey(InputManager.getKey("crawl"));
+			isJumping = Input.GetKey(InputManager.getKey("jump")); // Not using GetKeyDown allows bunnyhops... so, intented feature?
 
 			if(Input.GetKeyUp(KeyCode.Home)) { // Reset the player when the key R is released
 				transform.position = Vector3.zero;

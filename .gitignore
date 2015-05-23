@@ -2,6 +2,7 @@ Library/
 Temp/
 Build/
 Build_86/
+obj/
 
 *.pidb
 *.sln
