@@ -2,10 +2,9 @@
 using System.Collections;
 
 public class AudioManager : MonoBehaviour {
-	public static float masterVolume;
-	public static float effectsVolume;
-	public static float ambienceVolume;
-
+	private static float masterVolume;
+	private static float effectsVolume;
+	private static float ambienceVolume;
 
 	public AudioClip footstepWood;
 	public AudioClip footstepGrass;
@@ -20,6 +19,10 @@ public class AudioManager : MonoBehaviour {
 	public AudioClip weaponPistolReload;
 
 	void Start() {
+		load();
+	}
+
+	public static void load() {
 		masterVolume = PlayerPrefs.GetFloat("volume_master", 1);
 		effectsVolume = PlayerPrefs.GetFloat("volume_effects", .75f);
 		ambienceVolume = PlayerPrefs.GetFloat("volume_ambience", .25f);

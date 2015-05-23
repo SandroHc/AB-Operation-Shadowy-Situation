@@ -8,6 +8,8 @@ public class PanelGraphics : MonoBehaviour {
 
 	public Toggle fullscreen;
 
+	public Toggle postProcessEffects;
+
 	public void Start() {
 		// Populate resolution settings list
 		int size = Screen.resolutions.Length;
@@ -32,8 +34,6 @@ public class PanelGraphics : MonoBehaviour {
 		comboBoxResolution.AddItems(list);
 		comboBoxResolution.SelectedIndex = resIndex;
 
-		//comboBoxResolution.UpdateGraphics();
-
 		// Populate quality settings list
 		size = QualitySettings.names.Length;
 		list = new ComboBoxItem[size];
@@ -56,7 +56,11 @@ public class PanelGraphics : MonoBehaviour {
 		comboBoxQuality.AddItems(list);
 		comboBoxQuality.SelectedIndex = resIndex;
 
-		//comboBoxQuality.UpdateGraphics();
+		// Load the fullscreen toggle value
+		fullscreen.isOn = Screen.fullScreen;
+
+		// Load the post-process effects value
+		postProcessEffects.isOn = PlayerPrefs.GetInt("settings_effects_enabled", 1) == 1;
 	}
 
 	private void setResolution(Resolution res) {
@@ -73,5 +77,9 @@ public class PanelGraphics : MonoBehaviour {
 
 	public void setFullscreen() {
 		Screen.fullScreen = fullscreen.isOn;
+	}
+
+	public void setPostProcessEffects() {
+		PlayerPrefs.SetInt("settings_effects_enabled", postProcessEffects.isOn ? 1 : 0);
 	}
 }

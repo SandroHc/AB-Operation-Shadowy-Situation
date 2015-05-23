@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class SoundtrackController : MonoBehaviour {
 	public AudioClip[] soundtracks;
 	private int current = -1;
 
-	private AudioSource source;
+	private static AudioSource source;
 
 	void Start() {
-		source = GetComponent<AudioSource>();
+		if(source == null)
+			source = GetComponent<AudioSource>();
 		if(source == null)
 			gameObject.AddComponent<AudioSource>();
 		
@@ -46,5 +46,11 @@ public class SoundtrackController : MonoBehaviour {
 
 		current = index;
 		return soundtracks[index];
+	}
+
+	public static void ambienceVolumeChanged() {
+		// Update the AudioSource volume!
+		if(source != null)
+			source.volume = AudioManager.getAmbienceVolume();
 	}
 }

@@ -23,7 +23,7 @@ public class InputManager : MonoBehaviour {
 			addKey("Crawl", "crawl", KeyCode.LeftControl);
 			addKey("Submit", "submit", KeyCode.Return);
 			addKey("Cancel", "cancel", KeyCode.Escape);
-			addKey("Quest Journal", "quest_journal", KeyCode.J);
+			addKey("Quest Journal", "journal", KeyCode.J);
 			addKey("Crafting", "crafting", KeyCode.K);
 		}
 	}

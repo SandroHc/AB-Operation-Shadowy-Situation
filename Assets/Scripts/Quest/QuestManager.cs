@@ -30,7 +30,7 @@ public class QuestManager : MonoBehaviour {
 
 	public void LateUpdate() {
 		// If the Joural button is pressed, show it!
-		if(InputManager.getKeyDown("journal") && !GameController.isPausedOrFocused()) {
+		if(!GameController.isPausedOrFocused() && InputManager.getKeyDown("journal")) {
 			GameController.setFocused(true, false);
 			panelJournal.SetActive(true);
 		}
