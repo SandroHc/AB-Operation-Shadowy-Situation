@@ -62,6 +62,8 @@ ModelImporter:
     100112: school_block_a
     100114: school_block_b
     100116: prof_glass
+    100118: Bushes_01
+    100120: Bushes_02
     400000: Camera
     400002: //RootNode
     400004: school
@@ -121,6 +123,8 @@ ModelImporter:
     400112: school_block_a
     400114: school_block_b
     400116: prof_glass
+    400118: Bushes_01
+    400120: Bushes_02
     2300000: school
     2300002: teacher_zone
     2300004: walkroad
@@ -172,6 +176,8 @@ ModelImporter:
     2300096: school_bb_ground
     2300098: school_bb_walls
     2300100: prof_glass
+    2300102: Bushes_01
+    2300104: Bushes_02
     3300000: school
     3300002: teacher_zone
     3300004: walkroad
@@ -223,6 +229,8 @@ ModelImporter:
     3300096: school_bb_ground
     3300098: school_bb_walls
     3300100: prof_glass
+    3300102: Bushes_01
+    3300104: Bushes_02
     4300000: teacher_zone
     4300002: walkroad
     4300004: school
@@ -274,6 +282,8 @@ ModelImporter:
     4300096: school_ba_ground
     4300098: school_ba_glass
     4300100: prof_glass
+    4300102: Bushes_02
+    4300104: Bushes_01
     6400000: director_building
     6400002: school_door_001
     6400004: school_door_002
@@ -318,6 +328,8 @@ ModelImporter:
     6400082: school_bb_ground
     6400084: school_bb_walls
     6400086: prof_glass
+    6400088: Bushes_01
+    6400090: Bushes_02
     7400000: Default Take
     9500000: //RootNode
   materials:
