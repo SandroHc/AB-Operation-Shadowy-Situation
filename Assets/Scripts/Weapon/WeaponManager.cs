@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class WeaponManager : MonoBehaviour {
 	public static List<Weapon> weaponList { get; private set; }
@@ -37,8 +38,13 @@ public class WeaponManager : MonoBehaviour {
 		// Do this here because Awake() is called BEFORE Start(). So, if a script tried to get a weapon instance in the Awake() event... he whould receive a NULL object.
 		if(weaponList == null) {
 			weaponList = new List<Weapon>();
-			registerWeapon(new WeaponM9());
-			registerWeapon(new WeaponM16());
+
+			// Get all subclasses of Weapon, and register them
+			foreach(Type type in typeof(Weapon).Assembly.GetTypes()) {
+				if(type.IsSubclassOf(typeof(Weapon))) {
+					registerWeapon(Activator.CreateInstance(type) as Weapon);
+				}
+			}
 		}
 
 		raycast = cameraController.GetComponent<RaycastShoot>();
@@ -89,19 +95,20 @@ public class WeaponManager : MonoBehaviour {
 		else
 			weaponInfo.text = "NO WEAPON";
 
-
-		// TODO Debug purposes
-		if(Input.GetKeyDown(KeyCode.Alpha8)) {
-			Debug.Log("Trying to equip M9");
-			switchWeapon(getWeapon("M9"));
-			getWeapon("M9").unlock();
-			getWeapon("M9").craft();
-		}
-		if(Input.GetKeyDown(KeyCode.Alpha7)) {
-			Debug.Log("Trying to equip M16");
-			switchWeapon(getWeapon("M16"));
-			getWeapon("M16").unlock();
-			getWeapon("M16").craft();
+		if(Debug.isDebugBuild) {
+			// TODO Debug purposes
+			if(Input.GetKeyDown(KeyCode.Alpha8)) {
+				Debug.Log("Trying to equip M9");
+				switchWeapon(getWeapon("M9"));
+				getWeapon("M9").unlock();
+				getWeapon("M9").craft();
+			}
+			if(Input.GetKeyDown(KeyCode.Alpha7)) {
+				Debug.Log("Trying to equip M16");
+				switchWeapon(getWeapon("M16"));
+				getWeapon("M16").unlock();
+				getWeapon("M16").craft();
+			}
 		}
 	}
 
@@ -142,7 +149,7 @@ public class WeaponManager : MonoBehaviour {
 				
 				RaycastHit hit = raycast.raycast(weapon.range);
 				if(hit.transform != null)
-					weapon.targetHit(hit.transform.gameObject, hit);
+					weapon.targetHit(hit.transform.gameObject);
 			}
 		}
 	}

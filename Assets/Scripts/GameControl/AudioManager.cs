@@ -14,9 +14,12 @@ public class AudioManager : MonoBehaviour {
 	public AudioClip waterFlowing;
 	public AudioClip waterFlowingLoud;
 
-	public AudioClip weaponPistolShoot;
-	public AudioClip weaponPistolShootNoAmmo;
-	public AudioClip weaponPistolReload;
+	public AudioClip weapon_pistolShoot;
+	public AudioClip weapon_pistolShootNoAmmo;
+	public AudioClip weapon_pistolReload;
+
+	public AudioClip weapon_grenadeThrow;
+	public AudioClip weapon_grenadeExplode;
 
 	void Start() {
 		load();

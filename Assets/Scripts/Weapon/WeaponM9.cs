@@ -6,7 +6,7 @@ public class WeaponM9 : Weapon {
 	public WeaponM9() {
 		this.name = "M9";
 		this.icon = GameController.spriteManager.weaponM9;
-		this.weaponPrefab = GameController.prefabManager.weaponM9;
+		this.weaponPrefab = GameController.prefabManager.weapon_M9;
 		this.type = Type.Pistol;
 
 		this.damage = 1;
@@ -20,7 +20,7 @@ public class WeaponM9 : Weapon {
 
 		this.baseCost = 160;
 
-		populateSounds(GameController.audioManager.weaponPistolShoot, GameController.audioManager.weaponPistolShootNoAmmo, GameController.audioManager.weaponPistolReload);
+		populateSounds(GameController.audioManager.weapon_pistolShoot, GameController.audioManager.weapon_pistolShootNoAmmo, GameController.audioManager.weapon_pistolReload);
 		populateCraftingStatus();
 	}
 }

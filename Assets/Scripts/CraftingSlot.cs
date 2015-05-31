@@ -63,7 +63,7 @@ public class CraftingSlot : MonoBehaviour {
 			weapon.refillAmmo();
 		else if(weapon.isCrafted) // Equip weapon
 			WeaponManager.switchWeapon(weapon);
-		else if(weapon.isUnlocked) // Craft the weapon
+		else if(weapon.isUnlocked || Debug.isDebugBuild) // Craft the weapon
 			weapon.craft();
 
 		updateBtnText();

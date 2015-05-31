@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 public abstract class Weapon {
 	public string name { get; protected set; }
@@ -49,11 +48,11 @@ public abstract class Weapon {
 			WeaponManager.loadWeaponIntoSlot(this);
 	}
 
-	public void targetHit(GameObject target, RaycastHit hit) {
-		target.SendMessage("takeDamage", damage, SendMessageOptions.DontRequireReceiver);
+	public void targetHit(GameObject target, float damageCustom = -1) {
+		target.SendMessage("takeDamage", damageCustom == -1 ? damage : damageCustom, SendMessageOptions.DontRequireReceiver);
 	}
 
-	public bool shoot() {
+	public virtual bool shoot() {
 		if(WeaponManager.weaponCooldown > 0)
 			return false;
 
@@ -78,7 +77,7 @@ public abstract class Weapon {
 		}
 	}
 	
-	public bool reload() {
+	public virtual bool reload() {
 		if(WeaponManager.weaponCooldown > 0)
 			return false;
 
@@ -137,9 +136,15 @@ public abstract class Weapon {
 			// Reset position and rotation (that might have changed with the change of parent)
 			weaponInstance.transform.localPosition = Vector3.zero;
 			weaponInstance.transform.localRotation = Quaternion.Euler(Vector3.zero);
+
+			// If the weapon has a RigidBody, disable it's physics
+			if(weaponInstance.GetComponent<Rigidbody>())
+				weaponInstance.GetComponent<Rigidbody>().isKinematic = true;
 		}
 
-		weaponInstance.SetActive(true);
+		// Verify if the the weapon instance was loaded
+		if(weaponInstance != null)
+			weaponInstance.SetActive(true);
 	}
 
 	public void hide() {
@@ -198,7 +203,7 @@ public abstract class Weapon {
 			return true; // Already crafted
 	}
 
-	private void playSound(SoundLabel label) {
+	protected void playSound(SoundLabel label) {
 		AudioClip clip = sounds[(int) label];
 		if(clip != null)
 			WeaponManager.audioSource.PlayOneShot(clip);
