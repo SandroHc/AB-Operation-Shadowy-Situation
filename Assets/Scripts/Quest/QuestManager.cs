@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 
 public class QuestManager : MonoBehaviour {
-	private List<Quest> questList;
+	private Dictionary<string, Quest> questList;
 
 	public GameObject panelJournal;
 	public RectTransform panelList;
@@ -16,10 +16,7 @@ public class QuestManager : MonoBehaviour {
 	public GameObject questButtonPrefab;
 
 	void Awake() {
-		if(questList == null) {
-			questList = new List<Quest>();
-			registerQuests();
-		}
+		initQuests();
 
 		// Populate the quest list
 		updateQuestButtons();
@@ -43,12 +40,16 @@ public class QuestManager : MonoBehaviour {
 
 		// TODO Debug code
 		if(Input.GetKeyDown(KeyCode.Alpha9)) {
-			getQuest(1).reset();
+			getQuest("00_LEARN").reset();
 		}
 	}
 
-	private void registerQuests() {
-		registerQuest(new Quest_00_LEARN());
+	public void initQuests() {
+		if(questList == null) {
+			questList = new Dictionary<string, Quest>();
+
+			registerQuest(new Quest_00_LEARN());
+		}
 	}
 
 	private bool registerQuest(Quest quest) {
@@ -57,14 +58,14 @@ public class QuestManager : MonoBehaviour {
 			return false;
 		}
 
-		foreach(Quest obj in questList) {
-			if(obj.id == quest.id) {
-				Debug.Log("Quest " + quest.name + " and " + obj.name + " both have the same id , " + quest.id + ". Ignoring.");
-				return false;
-			}
+		if(questList.ContainsKey(quest.id)) {
+			Quest duplicate = questList[quest.id];
+
+			Debug.Log("Can't register quest \"" + quest.name + "\". The ID \"" + quest.id + "\" is already registered to \"" + duplicate.name + "\". Ignoring.");
+			return false;
 		}
 
-		questList.Add(quest);
+		questList.Add(quest.id, quest);
 		return true;
 	}
 
@@ -77,8 +78,8 @@ public class QuestManager : MonoBehaviour {
 		// TODO Prevent floading the debug console
 		if(progress.type != QuestProgress.Type.INTERACTION) Debug.Log("Firing event: " + progress);
 
-		foreach(Quest quest in questList)
-			quest.progress(progress);
+		foreach(KeyValuePair<string, Quest> quest in questList)
+			quest.Value.progress(progress);
 	}
 
 	/**
@@ -103,15 +104,14 @@ public class QuestManager : MonoBehaviour {
 	 * Returns the Quest with that ID.
 	 * If no quest with that ID is found, returns null.
 	 **/
-	public Quest getQuest(int id) {
-		foreach(Quest quest in questList) {
-			if(quest.id == id)
-				return quest;
-		}
-		return null;
+	public Quest getQuest(string id) {
+		if(questList != null && questList.ContainsKey(id))
+			return questList[id];
+		else
+			return null;
 	}
 
-	public Quest.STATUS getQuestStatus(int id) {
+	public Quest.STATUS getQuestStatus(string id) {
 		Quest target = getQuest(id);
 		return target != null ? target.getStatus() : Quest.STATUS.UNKNOWN;
 	}
@@ -174,10 +174,10 @@ public class QuestManager : MonoBehaviour {
 		List<Quest> active = new List<Quest>(questList.Count / 2);
 		List<Quest> completed = new List<Quest>(questList.Count / 2);
 		
-		foreach(Quest quest in questList) {
-			switch(quest.status) {
-			case Quest.STATUS.ACTIVE: 	 active.Add(quest); break;
-			case Quest.STATUS.COMPLETED: completed.Add(quest); break;
+		foreach(KeyValuePair<string, Quest> quest in questList) {
+			switch(quest.Value.status) {
+			case Quest.STATUS.ACTIVE: 	 active.Add(quest.Value); break;
+			case Quest.STATUS.COMPLETED: completed.Add(quest.Value); break;
 			}
 			
 		}
@@ -232,12 +232,12 @@ public class QuestManager : MonoBehaviour {
 
 		StringBuilder sb = new StringBuilder();
 
-		foreach(Quest quest in questList) {
-			if(quest.getStatus() == Quest.STATUS.ACTIVE) {
-				sb.Append("<b>").Append(quest.name).Append("</b>\n");
-				for(int i=0; i < quest.currentStage; i++)
-					sb.Append("  <color=green>✓</color> ").Append(quest.stages[i].getText()).Append("\n");
-				sb.Append("  <color=red>✗</color> ").Append(quest.stages[quest.currentStage].getText());
+		foreach(KeyValuePair<string, Quest> quest in questList) {
+			if(quest.Value.getStatus() == Quest.STATUS.ACTIVE) {
+				sb.Append("<b>").Append(quest.Value.name).Append("</b>\n");
+				for(int i=0; i < quest.Value.currentStage; i++)
+					sb.Append("  <color=green>✓</color> ").Append(quest.Value.stages[i].getText()).Append("\n");
+				sb.Append("  <color=red>✗</color> ").Append(quest.Value.stages[quest.Value.currentStage].getText());
 			}
 		}
 

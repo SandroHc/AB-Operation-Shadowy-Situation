@@ -16,8 +16,6 @@ public class PlayerController : MonoBehaviour {
 
 	public bool isMidJump;
 
-	private float charHeight;
-
 	private CharacterController controller;
 	private Animator animator;
 
@@ -31,8 +29,6 @@ public class PlayerController : MonoBehaviour {
 		controller = GetComponent<CharacterController>();
 		animator = GetComponent<Animator>();
 		audioSource = GetComponent<AudioSource>();
-		
-		charHeight = controller.height;
 
 		lastPos = transform.position;
 

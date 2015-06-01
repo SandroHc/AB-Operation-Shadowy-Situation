@@ -9,14 +9,14 @@ public abstract class Quest {
 	public enum STATUS { UNKNOWN = -1, INACTIVE = 0, ACTIVE = 1, COMPLETED = 2 };
 	public STATUS status { get; set; }
 
-	public int id { get; protected set; }
+	public string id { get; protected set; }
 	public string name { get; protected set; }
 	public string description { get; protected set; }
 
 	public List<Stage> stages { get; protected set; }
 	public int currentStage { get; protected set; }
 
-	public Quest(int id, string name, string description) {
+	public Quest(string id, string name, string description) {
 		this.id = id;
 		this.name = name;
 		this.description = description;

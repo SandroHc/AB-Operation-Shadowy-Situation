@@ -3,14 +3,14 @@ using System.Collections;
 
 public class Quest_00_LEARN : Quest {
 
-	public Quest_00_LEARN() : base(1, "Learning the Ropes", "This quest teaches the basic mechanics of the game.") { }
+	public Quest_00_LEARN() : base("00_LEARN", "Learning the Ropes", "This quest teaches the basic mechanics of the game.") { }
 
 	public override void initStages() {
 		Interaction npc = GameObject.FindGameObjectWithTag(Tags.npc).GetComponent<Interaction>();
 
 		stages.Add(new GoTo(new Vector3(0,0,0)));
 		stages.Add(new TalkTo(npc, "DialogueQ_00_LEARN_1"));
-		stages.Add(new Collect("quest_" + id + "_collect", 10));
+		stages.Add(new Collect("quest-" + id + "-collect", 10));
 		stages.Add(new TalkTo_Craft(npc, "DialogueQ_00_LEARN_2"));
 		stages.Add(new Craft(WeaponManager.getWeapon("M9"))); // Weapon: Scissors
 	}

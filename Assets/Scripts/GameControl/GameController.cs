@@ -23,8 +23,6 @@ public class GameController : MonoBehaviour {
 
 	private static bool isPaused = false;
 	private static bool isFocused = false;
-
-	private bool canCancelFocus;
 	
 	public float fadeSpeed;
 	public bool fade = true;
@@ -70,7 +68,11 @@ public class GameController : MonoBehaviour {
 		fade = true;
 		fadeIn = false;
 
+		// Load the player coordinates from the preferences
 		loadPlayerPos();
+
+		// Run first-launch settings
+		checkFirstRun();
 	}
 
 	void Update() {
@@ -110,16 +112,17 @@ public class GameController : MonoBehaviour {
 	
 		checkCancelInput();
 
+		if(Debug.isDebugBuild) {
+			if(Input.GetKey(KeyCode.E))
+				playerPathfind.updateLine();//setDestination(new Vector3(-100, 0, 0));
 
-		if(Input.GetKey(KeyCode.E))
-			playerPathfind.updateLine();//setDestination(new Vector3(-100, 0, 0));
+			if(Input.GetKeyDown(KeyCode.M))
+				MaterialManager.increase(1000);
 
-		if(Input.GetKeyDown(KeyCode.M))
-			MaterialManager.increase(1000);
-
-		if(Input.GetKeyDown(KeyCode.L)) {
-			Cursor.visible = false;
-			Cursor.lockState = CursorLockMode.Locked;
+			if(Input.GetKeyDown(KeyCode.L)) {
+				Cursor.visible = false;
+				Cursor.lockState = CursorLockMode.Locked;
+			}
 		}
 	}
 
@@ -143,6 +146,9 @@ public class GameController : MonoBehaviour {
 	}
 
 	private static void setPaused(bool state) {
+		// Prevent the same event being called more than one time in a row
+		if(state == isPaused) return;
+
 		isPaused = state;
 		if(isPaused)
 			enterPause();
@@ -155,9 +161,8 @@ public class GameController : MonoBehaviour {
 		return isFocused;
 	}
 
-	public static void setFocused(bool state, bool lockCursor = true, bool canCancelFocus = false) {
+	public static void setFocused(bool state, bool lockCursor = true) {
 		isFocused = state;
-		//this.canCancelFocus = canCancelFocus;
 		if(isFocused)
 			enterFocus(lockCursor);
 		else
@@ -220,7 +225,7 @@ public class GameController : MonoBehaviour {
 		INSTANCE.uiCrosshair.SetActive(false);
 
 		Cursor.visible = !lockCursor;
-		Cursor.lockState = lockCursor ? CursorLockMode.Locked : CursorLockMode.None;
+		Cursor.lockState = lockCursor ? CursorLockMode.Locked : CursorLockMode.Confined;
 	}
 
 	private static void exitFocus() {
@@ -229,7 +234,7 @@ public class GameController : MonoBehaviour {
 		INSTANCE.uiCrosshair.SetActive(!isPaused);
 
 		Cursor.visible = isPaused;
-		Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
+		Cursor.lockState = isPaused ? CursorLockMode.Confined : CursorLockMode.Locked;
 	}
 
 	void OnApplicationQuit() {
@@ -254,5 +259,17 @@ public class GameController : MonoBehaviour {
 		PlayerPrefs.SetFloat("player_rot_x", rotation.x);
 		PlayerPrefs.SetFloat("player_rot_y", rotation.y);
 		PlayerPrefs.SetFloat("player_rot_z", rotation.z);
+	}
+
+	private void checkFirstRun() {
+		if(!PlayerPrefs.HasKey("first-run")) {
+			// Initialize the quest list first, because the GameController script is called before the QuestManager one.
+			questManager.initQuests();
+			// And start the forst quest
+            questManager.getQuest("00_LEARN").reset();
+
+			// Set anything in the first run preference to lock this method from being called in future game launches.
+			PlayerPrefs.SetInt("first-run", 0);
+        }
 	}
 }

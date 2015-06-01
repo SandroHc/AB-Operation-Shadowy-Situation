@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 public class CraftingSlot : MonoBehaviour {
 
@@ -21,14 +20,8 @@ public class CraftingSlot : MonoBehaviour {
 		weapon = WeaponManager.getWeapon(weaponName);
 
 		img = transform.FindChild("img").GetComponent<Image>();
-		cost = transform.FindChild("cost").GetComponent<Text>();
 		btn = transform.FindChild("btn").GetComponent<Button>();
 		btnText = btn.transform.FindChild("text").GetComponent<Text>();
-		
-		Transform stats = transform.FindChild("stats").transform;
-		damage	   = stats.FindChild("damage/fill").GetComponent<Image>();
-		rateOfFire = stats.FindChild("rateOfFire/fill").GetComponent<Image>();
-		range 	   = stats.FindChild("range/fill").GetComponent<Image>();
 
 		Text name = transform.FindChild("name").GetComponent<Text>();
 		name.text = weapon.name;
@@ -42,11 +35,18 @@ public class CraftingSlot : MonoBehaviour {
 
 		img = weapon.icon ?? GameController.spriteManager.weaponNoIcon;
 
-		cost.text = weapon.getCost().ToString();
+		transform.FindChild("cost").GetComponent<Text>().text = weapon.getCost().ToString();
 
-		damage.fillAmount = weapon.damage / WeaponManager.maxDamage;
-		rateOfFire.fillAmount = weapon.getShootingCooldown() / WeaponManager.maxFireRate;
-		range.fillAmount = weapon.range / WeaponManager.maxRange;
+		Transform stats = transform.FindChild("stats").transform;
+
+		// Damage
+		stats.FindChild("damage/fill").GetComponent<Image>().fillAmount = weapon.damage / WeaponManager.maxDamage;
+
+		// Rate of fire
+		stats.FindChild("rateOfFire/fill").GetComponent<Image>().fillAmount = weapon.getShootingCooldown() / WeaponManager.maxFireRate;
+		
+		// Range
+		stats.FindChild("range/fill").GetComponent<Image>().fillAmount = weapon.range / WeaponManager.maxRange;
 
 		updateBtnText();
 

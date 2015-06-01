@@ -61,7 +61,7 @@ public class DialogueManager : MonoBehaviour {
 		// Resume focus on the game
 		GameController.setFocused(false);
 
-		// Hide the dialogue 1/2 second asterwards to allow the fading out animation
+		// Hide the dialogue 1/2 second afterwards to allow the fading out animation
 		Invoke("hideDialogue", .15f);
 	}
 
