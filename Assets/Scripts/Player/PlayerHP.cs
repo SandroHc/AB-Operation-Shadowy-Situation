@@ -3,14 +3,15 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerHP : MonoBehaviour {
-	public float maxHealth = 100f;
+	public float maxHealth;
 	private float currHealth;
 	
 	public Image hpBarImg;
 	private bool updateBar = false;
 	
 	void Awake() {
-		currHealth = maxHealth;
+		maxHealth = PlayerPrefs.GetFloat("player_health_max", 100f);
+		currHealth = PlayerPrefs.GetFloat("player_health_current", maxHealth);
 	}
 	
 	void Update() {
@@ -49,5 +50,14 @@ public class PlayerHP : MonoBehaviour {
 				updateBar = false;
 			}
 		}
+	}
+
+	public void save() {
+		// Only save if value differs from the default
+		if(maxHealth != 100)
+			PlayerPrefs.SetFloat("player_health_max", maxHealth);
+
+		// Save current health, always
+		PlayerPrefs.SetFloat("player_health_current", currHealth);
 	}
 }

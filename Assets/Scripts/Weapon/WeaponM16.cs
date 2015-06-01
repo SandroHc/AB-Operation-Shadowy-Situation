@@ -6,7 +6,7 @@ public class WeaponM16 : Weapon {
 	public WeaponM16() {
 		this.name = "M16";
 		this.icon = GameController.spriteManager.weaponM16;
-		this.weaponPrefab = GameController.prefabManager.weaponM16;
+		this.weaponPrefab = GameController.prefabManager.weapon_M16;
 		this.type = Type.AssaultRifle;
 		
 		this.damage = 1;
@@ -20,7 +20,7 @@ public class WeaponM16 : Weapon {
 
 		this.baseCost = 1000;
 		
-		populateSounds(GameController.audioManager.weaponPistolShoot, GameController.audioManager.weaponPistolShootNoAmmo, GameController.audioManager.weaponPistolReload);
+		populateSounds(GameController.audioManager.weapon_pistolShoot, GameController.audioManager.weapon_pistolShootNoAmmo, GameController.audioManager.weapon_pistolReload);
 		populateCraftingStatus();
 	}
 }

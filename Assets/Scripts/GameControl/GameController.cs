@@ -69,7 +69,7 @@ public class GameController : MonoBehaviour {
 		fadeIn = false;
 
 		// Load the player coordinates from the preferences
-		loadPlayerPos();
+		loadPlayerState();
 
 		// Run first-launch settings
 		checkFirstRun();
@@ -238,18 +238,18 @@ public class GameController : MonoBehaviour {
 	}
 
 	void OnApplicationQuit() {
-		savePlayerPos();
+		savePlayerState();
 		PlayerPrefs.Save();
 	}
 
-	private void loadPlayerPos() {
+	private void loadPlayerState() {
 		// Position
 		playerController.transform.position = new Vector3(PlayerPrefs.GetFloat("player_pos_x"), PlayerPrefs.GetFloat("player_pos_y"), PlayerPrefs.GetFloat("player_pos_z"));
 		// Rotation
 		playerController.transform.rotation = Quaternion.Euler(PlayerPrefs.GetFloat("player_rot_x"), PlayerPrefs.GetFloat("player_rot_y"), PlayerPrefs.GetFloat("player_rot_z"));
 	}
 
-	private void savePlayerPos() {
+	private void savePlayerState() {
 		Vector3 position = playerController.transform.position;
 		PlayerPrefs.SetFloat("player_pos_x", position.x);
 		PlayerPrefs.SetFloat("player_pos_y", position.y);
@@ -259,6 +259,9 @@ public class GameController : MonoBehaviour {
 		PlayerPrefs.SetFloat("player_rot_x", rotation.x);
 		PlayerPrefs.SetFloat("player_rot_y", rotation.y);
 		PlayerPrefs.SetFloat("player_rot_z", rotation.z);
+
+		// Trigger save event on the PlayerHP script
+		playerController.GetComponent<PlayerHP>().save();
 	}
 
 	private void checkFirstRun() {
