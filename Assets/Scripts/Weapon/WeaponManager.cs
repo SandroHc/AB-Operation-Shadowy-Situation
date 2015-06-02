@@ -184,6 +184,9 @@ public class WeaponManager : MonoBehaviour {
 	}
 
 	public static Weapon getWeapon(string name) {
+		if(weaponList == null)
+			return null;
+
 		for(int i=0; i < weaponList.Count; i++)
 			if(weaponList[i].name.Equals(name))
 				return weaponList[i];

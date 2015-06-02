@@ -2,7 +2,7 @@
 using UnityEngine;
 
 public class WeaponGrenade : Weapon {
-	public float throwForce = 10f;
+	public float throwForce = 500;
 
 	public WeaponGrenade() {
 		this.name = "Grenade";
@@ -10,10 +10,9 @@ public class WeaponGrenade : Weapon {
 		this.weaponPrefab = GameController.prefabManager.weapon_grenade;
 		this.type = Type.Grenade;
 
-		this.damage = 1;
 		this.recoil = 5;
 
-		this.cooldownShoot = 3f;
+		this.cooldownShoot = .5f;
 
 		this.defaultMagazines = 1;
 		this.defaultMaxAmmunition = 2;
@@ -31,7 +30,7 @@ public class WeaponGrenade : Weapon {
 			grenadeObj = Object.Instantiate(GameController.prefabManager.weapon_grenade);
 
 			grenadeObj.transform.position = Camera.main.transform.position;
-			grenadeObj.transform.localPosition += Vector3.forward * 3;
+			grenadeObj.transform.localPosition += grenadeObj.transform.forward * 3;
 			
 			// Initialize the explosion timer
 			grenadeObj.GetComponent<GrenadeTimer>().activate();
@@ -49,7 +48,10 @@ public class WeaponGrenade : Weapon {
 
 		// Enable physics
 		body.isKinematic = false;
+
+		Vector3 force = Vector3.forward * throwForce + Vector3.up * throwForce / 4;
+
 		// And launch the grenade!
-        body.AddRelativeForce(Vector3.forward * throwForce);
+        body.AddRelativeForce(force);
 	}
 }

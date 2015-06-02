@@ -56,7 +56,7 @@ public class GameController : MonoBehaviour {
 
 		GameObject player = GameObject.FindGameObjectWithTag(Tags.player);
 		playerController = player.GetComponent<PlayerController>();
-		playerPathfind = player.transform.FindChild("pathfind").GetComponent<PathfindHelper>();
+		//playerPathfind = player.transform.FindChild("pathfind").GetComponent<PathfindHelper>();
 
 		guiTexture.color = Color.black;
 		guiTexture.pixelInset = new Rect(0f, 0f, Screen.width, Screen.height);
@@ -113,8 +113,8 @@ public class GameController : MonoBehaviour {
 		checkCancelInput();
 
 		if(Debug.isDebugBuild) {
-			if(Input.GetKey(KeyCode.E))
-				playerPathfind.updateLine();//setDestination(new Vector3(-100, 0, 0));
+			//if(Input.GetKey(KeyCode.E))
+			//	playerPathfind.updateLine();//setDestination(new Vector3(-100, 0, 0));
 
 			if(Input.GetKeyDown(KeyCode.M))
 				MaterialManager.increase(1000);

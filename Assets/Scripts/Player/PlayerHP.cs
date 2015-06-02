@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 public class PlayerHP : MonoBehaviour {
 	public float maxHealth;
-	private float currHealth;
+	public float currHealth;
 	
 	public Image hpBarImg;
 	private bool updateBar = false;
@@ -12,6 +11,12 @@ public class PlayerHP : MonoBehaviour {
 	void Awake() {
 		maxHealth = PlayerPrefs.GetFloat("player_health_max", 100f);
 		currHealth = PlayerPrefs.GetFloat("player_health_current", maxHealth);
+
+		if(currHealth <= 0)
+			Died();
+
+		updateBar = true; // Force a update
+		updateHpBar();
 	}
 	
 	void Update() {
@@ -27,7 +32,7 @@ public class PlayerHP : MonoBehaviour {
 		// Don't let the current HP be over the maximum or under zero!
 		currHealth = Mathf.Max(Mathf.Min(currHealth, maxHealth), 0);
 		
-		if(currHealth == 0)
+		if(currHealth <= 0)
 			Died();
 		
 		// Request an update to the HP bar
@@ -37,7 +42,7 @@ public class PlayerHP : MonoBehaviour {
 	public Text infoText;
 	
 	void Died() {
-		infoText.text = "Oh noes! You died.";
+		//infoText.text = "Oh noes! You died.";
 	}
 	
 	private void updateHpBar() {
