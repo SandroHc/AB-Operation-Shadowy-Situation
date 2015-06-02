@@ -233,7 +233,7 @@ public class QuestManager : MonoBehaviour {
 	}
 
 	private GameObject generateButton(Quest quest, Vector2 pos) {
-		GameObject go = Object.Instantiate(questButtonPrefab);
+		GameObject go = Instantiate(questButtonPrefab);
 		go.name = "quest_" + quest.id;
 		go.transform.SetParent(panelList);
 		
