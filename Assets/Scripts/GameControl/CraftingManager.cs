@@ -46,7 +46,7 @@ public class CraftingManager : MonoBehaviour {
 	}
 
 	private void buildCraftingPanel() {
-		Weapon[] list = WeaponManager.weaponList.ToArray();
+		Weapon[] list = WeaponManager.getAllWeapons();
 
 		int slotsPerRow = 3;
 

@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System;
 
 public class QuestManager : MonoBehaviour {
-	private Dictionary<string, Quest> questList;
+	private static Dictionary<string, Quest> quests;
 
 	public GameObject panelJournal;
 	public RectTransform panelList;
@@ -44,33 +44,41 @@ public class QuestManager : MonoBehaviour {
 		}
 	}
 
-	public void initQuests() {
-		if(questList == null) {
-			questList = new Dictionary<string, Quest>();
+	public static void initQuests() {
+		if(quests == null) {
+			quests = new Dictionary<string, Quest>();
 
-			registerQuest(new Quest_00_LEARN());
+			// Get all subclasses of Quest, and register them
+			foreach(Type type in typeof(Quest).Assembly.GetTypes()) {
+				if(type.IsSubclassOf(typeof(Quest))) {
+					register(Activator.CreateInstance(type) as Quest);
+				}
+			}
 		}
 	}
 
-	private bool registerQuest(Quest quest) {
+	/**
+	 * Register the following quest to the pool.
+	 */
+	private static bool register(Quest quest) {
 		if(quest == null) {
 			Debug.Log("Tried to register invalid quest.");
 			return false;
 		}
 
-		if(questList.ContainsKey(quest.id)) {
-			Quest duplicate = questList[quest.id];
+		if(quests.ContainsKey(quest.id)) {
+			Quest duplicate = quests[quest.id];
 
 			Debug.Log("Can't register quest \"" + quest.name + "\". The ID \"" + quest.id + "\" is already registered to \"" + duplicate.name + "\". Ignoring.");
 			return false;
+		} else {
+			quests.Add(quest.id, quest);
+			return true;
 		}
-
-		questList.Add(quest.id, quest);
-		return true;
 	}
 
 	public void fireProgressEvent(QuestProgress progress) {
-		if(questList == null) {
+		if(quests == null) {
 			Debug.Log("Event not fired because the quest list has not been initialized yet. (" + progress + ")");
 			return;
 		}
@@ -78,7 +86,7 @@ public class QuestManager : MonoBehaviour {
 		// TODO Prevent floading the debug console
 		if(progress.type != QuestProgress.Type.INTERACTION) Debug.Log("Firing event: " + progress);
 
-		foreach(KeyValuePair<string, Quest> quest in questList)
+		foreach(KeyValuePair<string, Quest> quest in quests)
 			quest.Value.progress(progress);
 	}
 
@@ -104,11 +112,27 @@ public class QuestManager : MonoBehaviour {
 	 * Returns the Quest with that ID.
 	 * If no quest with that ID is found, returns null.
 	 **/
-	public Quest getQuest(string id) {
-		if(questList != null && questList.ContainsKey(id))
-			return questList[id];
+	public static Quest getQuest(string id) {
+		if(quests != null && quests.ContainsKey(id))
+			return quests[id];
 		else
 			return null;
+	}
+
+	public static Quest[] getAllQuests() {
+		Quest[] list = new Quest[quests.Count];
+
+		quests.Values.CopyTo(list, 0);
+
+		return list;
+	}
+
+	public static string[] getAllQuestNames() {
+		string[] list = new string[quests.Count];
+
+		quests.Keys.CopyTo(list, 0);
+
+		return list;
 	}
 
 	public Quest.STATUS getQuestStatus(string id) {
@@ -171,10 +195,10 @@ public class QuestManager : MonoBehaviour {
 		}
 
 		// Separate the quest into two lists.
-		List<Quest> active = new List<Quest>(questList.Count / 2);
-		List<Quest> completed = new List<Quest>(questList.Count / 2);
+		List<Quest> active = new List<Quest>(quests.Count / 2);
+		List<Quest> completed = new List<Quest>(quests.Count / 2);
 		
-		foreach(KeyValuePair<string, Quest> quest in questList) {
+		foreach(KeyValuePair<string, Quest> quest in quests) {
 			switch(quest.Value.status) {
 			case Quest.STATUS.ACTIVE: 	 active.Add(quest.Value); break;
 			case Quest.STATUS.COMPLETED: completed.Add(quest.Value); break;
@@ -232,7 +256,7 @@ public class QuestManager : MonoBehaviour {
 
 		StringBuilder sb = new StringBuilder();
 
-		foreach(KeyValuePair<string, Quest> quest in questList) {
+		foreach(KeyValuePair<string, Quest> quest in quests) {
 			if(quest.Value.getStatus() == Quest.STATUS.ACTIVE) {
 				sb.Append("<b>").Append(quest.Value.name).Append("</b>\n");
 				for(int i=0; i < quest.Value.currentStage; i++)

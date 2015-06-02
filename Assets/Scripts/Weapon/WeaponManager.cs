@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System;
 
 public class WeaponManager : MonoBehaviour {
-	public static List<Weapon> weaponList { get; private set; }
+	public static Dictionary<string, Weapon> weapons;
 	public static Weapon[] weaponSlots = new Weapon[5];
 	public enum SLOT { SIDE = 0, MAIN = 1, KNIFE = 2, GRENADE = 3, EQUIPMENT = 4 };
 
@@ -36,13 +36,13 @@ public class WeaponManager : MonoBehaviour {
 
 	void Awake() {
 		// Do this here because Awake() is called BEFORE Start(). So, if a script tried to get a weapon instance in the Awake() event... he whould receive a NULL object.
-		if(weaponList == null) {
-			weaponList = new List<Weapon>();
+		if(weapons == null) {
+			weapons = new Dictionary<string, Weapon>();
 
 			// Get all subclasses of Weapon, and register them
 			foreach(Type type in typeof(Weapon).Assembly.GetTypes()) {
 				if(type.IsSubclassOf(typeof(Weapon))) {
-					registerWeapon(Activator.CreateInstance(type) as Weapon);
+					register(Activator.CreateInstance(type) as Weapon);
 				}
 			}
 		}
@@ -94,22 +94,6 @@ public class WeaponManager : MonoBehaviour {
 			weaponInfo.text = weapon.ammunition + "/" + weapon.getAmmunitionPerMagazine() * (weapon.magazines - 1);
 		else
 			weaponInfo.text = "NO WEAPON";
-
-		if(Debug.isDebugBuild) {
-			// TODO Debug purposes
-			if(Input.GetKeyDown(KeyCode.Alpha8)) {
-				Debug.Log("Trying to equip M9");
-				switchWeapon(getWeapon("M9"));
-				getWeapon("M9").unlock();
-				getWeapon("M9").craft();
-			}
-			if(Input.GetKeyDown(KeyCode.Alpha7)) {
-				Debug.Log("Trying to equip M16");
-				switchWeapon(getWeapon("M16"));
-				getWeapon("M16").unlock();
-				getWeapon("M16").craft();
-			}
-		}
 	}
 
 	private void handleAim() {
@@ -184,35 +168,50 @@ public class WeaponManager : MonoBehaviour {
 	}
 
 	public static Weapon getWeapon(string name) {
-		if(weaponList == null)
+		if(weapons == null)
 			return null;
 
-		for(int i=0; i < weaponList.Count; i++)
-			if(weaponList[i].name.Equals(name))
-				return weaponList[i];
+		if(weapons.ContainsKey(name))
+			return weapons[name];
 
 		return null;
+	}
+
+	public static Weapon[] getAllWeapons() {
+		Weapon[] list = new Weapon[weapons.Count];
+
+		weapons.Values.CopyTo(list, 0);
+
+		return list;
+	}
+
+	public static string[] getAllWeaponNames() {
+		string[] list = new string[weapons.Count];
+
+		weapons.Keys.CopyTo(list, 0);
+
+		return list;
 	}
 
 	public static Weapon getCurrentWeapon() {
 		return weaponSlots[currentSlot];
 	}
 
-	private void registerWeapon(Weapon weapon) {
+	/**
+	 * Register the following weapon to the pool.
+	 */
+	private void register(Weapon weapon) {
 		if(weapon == null) {
 			Debug.Log("Tried to register invalid weapon.");
 			return;
 		}
-		
-		foreach(Weapon obj in weaponList) {
-			if(weapon.name.Equals(obj.name)) {
-				Debug.Log("Weapon " + weapon.name + " was already registered. Ignoring.");
-				return;
-			}
-		}
 
-		// Add the weapon to the main list
-		weaponList.Add(weapon);
+		if(weapons.ContainsKey(weapon.name)) {
+			Debug.Log("A weapon with the name \"" + weapon.name + "\" is already registered. Ignoring.");
+			return;
+		} else {
+			weapons.Add(weapon.name, weapon);
+		}
 
 		// Refresh the stats
 		if(weapon.damage > maxDamage)

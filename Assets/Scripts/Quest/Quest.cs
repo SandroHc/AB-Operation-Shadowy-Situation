@@ -71,7 +71,7 @@ public abstract class Quest {
 		}
 	}
 
-	protected void complete() {
+	public void complete() {
 		// Update the status to COMPLETED
 		setStatus(STATUS.COMPLETED);
 

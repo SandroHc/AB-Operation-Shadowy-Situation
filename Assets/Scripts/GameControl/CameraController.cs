@@ -39,12 +39,13 @@ public class CameraController : MonoBehaviour {
 	void Update() {
 		handleMotion();
 
-		// TODO Debug purposes
-		if(Input.GetKeyDown(KeyCode.Alpha0))
-			enableEffects(!effectsEnabled);
-
-		if(!GameController.isPausedOrFocused())
+		if(!GameController.isPausedOrFocused()) {
 			handleMouseLook();
+
+			// Only enable/disable effects if not focused (meaning we're not on a GUI/cutscene)
+			if(Input.GetKeyDown(KeyCode.Alpha0))
+				enableEffects(!effectsEnabled);
+		}
 	}
 
 	private void handleMotion() {

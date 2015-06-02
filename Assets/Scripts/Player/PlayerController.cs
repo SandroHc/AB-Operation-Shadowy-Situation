@@ -45,11 +45,6 @@ public class PlayerController : MonoBehaviour {
 			isCrawling = Input.GetKey(InputManager.getKey("crawl"));
 			isJumping = Input.GetKey(InputManager.getKey("jump")); // Not using GetKeyDown allows bunnyhops... so, intented feature?
 
-			if(Input.GetKeyUp(KeyCode.Home)) { // Reset the player when the key R is released
-				transform.position = Vector3.zero;
-				transform.eulerAngles = Vector3.zero;
-			}
-
 			handleMovement();
 		}
 
@@ -102,6 +97,14 @@ public class PlayerController : MonoBehaviour {
 		movement.y = momentumY;
 
 		controller.Move(movement * Time.deltaTime);
+	}
+
+	/**
+	 * Reset the player coordinates and rotation.
+	 */
+	public void respawn() {
+		transform.position = Vector3.zero;
+		transform.eulerAngles = Vector3.zero;
 	}
 
 	void OnControllerColliderHit(ControllerColliderHit hit) {
