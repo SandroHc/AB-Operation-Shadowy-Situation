@@ -20,6 +20,9 @@ public class ConsoleManager : MonoBehaviour {
 	private bool isShowing = false;
 	
 	void Start() {
+		if(!Debug.isDebugBuild)
+			gameObject.SetActive(false);
+
 		INSTANCE = this;
 
 		commands = new Dictionary<string, Command>();
