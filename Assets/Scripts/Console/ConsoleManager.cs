@@ -25,8 +25,8 @@ public class ConsoleManager : MonoBehaviour {
 		commands = new Dictionary<string, Command>();
 		// Get all subclasses of Command, and register them
 		foreach(Type type in typeof(Command).Assembly.GetTypes()) {
-			if(type.IsSubclassOf(typeof(Command)))
-				registerCommand(Activator.CreateInstance(type) as Command);
+			if(type.BaseType == typeof(Command))
+				register(Activator.CreateInstance(type) as Command);
 		}
 
 		logs = new Queue<string>(maxLogs);
@@ -110,9 +110,9 @@ public class ConsoleManager : MonoBehaviour {
 		}
 	}
 
-	private static void registerCommand(Command cmd) {
-		if(!commands.ContainsValue(cmd))
-			commands.Add(cmd.name.ToUpper(), cmd);
+	private static void register(Command cmd) {
+		if(!commands.ContainsKey(cmd.name))
+			commands.Add(cmd.name, cmd);
 	}
 
 	private static string[] getList() {
