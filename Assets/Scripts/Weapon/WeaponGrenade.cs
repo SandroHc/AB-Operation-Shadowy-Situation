@@ -1,5 +1,4 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
 public class WeaponGrenade : Weapon {
 	public float throwForce = 500;
@@ -27,7 +26,7 @@ public class WeaponGrenade : Weapon {
 
 	public override bool shoot() {
 		if(base.shoot()) {
-			grenadeObj = Object.Instantiate(GameController.prefabManager.weapon_grenade);
+			grenadeObj = Object.Instantiate(GameController.prefabManager.weapon_grenade_object);
 
 			grenadeObj.transform.rotation = Camera.main.transform.rotation;
 			grenadeObj.transform.position = Camera.main.transform.position;

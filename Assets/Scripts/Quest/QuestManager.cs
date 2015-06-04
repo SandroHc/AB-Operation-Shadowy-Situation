@@ -37,11 +37,6 @@ public class QuestManager : MonoBehaviour {
 			GameController.setFocused(false);
 			panelJournal.SetActive(false);
 		}
-
-		// TODO Debug code
-		if(Input.GetKeyDown(KeyCode.Alpha9)) {
-			getQuest("00_LEARN").reset();
-		}
 	}
 
 	public static void initQuests() {
@@ -79,7 +74,7 @@ public class QuestManager : MonoBehaviour {
 
 	public void fireProgressEvent(QuestProgress progress) {
 		if(quests == null) {
-			Debug.Log("Event not fired because the quest list has not been initialized yet. (" + progress + ")");
+			//Debug.Log("Event not fired because the quest list has not been initialized yet. (" + progress + ")");
 			return;
 		}
 

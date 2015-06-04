@@ -31,7 +31,7 @@ public class GrenadeTimer : MonoBehaviour {
 		AudioSource source = GetComponent<AudioSource>();
 		if(source == null) source = gameObject.AddComponent<AudioSource>();
 
-		source.PlayOneShot(GameController.audioManager.weapon_grenadeExplode);
+		AudioManager.playOn(source, GameController.audioManager.weapon_grenadeExplode, AudioManager.TYPE.EFFECTS);
     }
 
 	public void causeDamage() {

@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 using System.Collections.Generic;
 using System;
 
@@ -41,9 +40,8 @@ public class WeaponManager : MonoBehaviour {
 
 			// Get all subclasses of Weapon, and register them
 			foreach(Type type in typeof(Weapon).Assembly.GetTypes()) {
-				if(type.IsSubclassOf(typeof(Weapon))) {
+				if(type.IsSubclassOf(typeof(Weapon)))
 					register(Activator.CreateInstance(type) as Weapon);
-				}
 			}
 		}
 
@@ -58,8 +56,6 @@ public class WeaponManager : MonoBehaviour {
 
 		// Get the saved selected slot
 		currentSlot = PlayerPrefs.GetInt("weapon_slot", (int) SLOT.MAIN);
-
-		//Debug.Log ("SLOT SELECTED: " + ((SLOT)currentSlot));
 
 		// Update the weapon selection UI slot index
 		WeaponSelection.index = currentSlot;
@@ -242,6 +238,6 @@ public class WeaponManager : MonoBehaviour {
 		weaponSlots[slot] = weapon;
 		weaponSlots[slot].equip();
 
-		Debug.Log("Loaded weapon " + weapon.name + " into slot " + weapon.type);
+		//Debug.Log("Loaded weapon " + weapon.name + " into slot " + weapon.type);
 	}
 }

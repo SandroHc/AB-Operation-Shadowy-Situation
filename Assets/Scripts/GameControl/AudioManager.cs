@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class AudioManager : MonoBehaviour {
+	public enum TYPE { EFFECTS, AMBIENCE }
+
 	private static float masterVolume;
 	private static float effectsVolume;
 	private static float ambienceVolume;
@@ -41,5 +42,20 @@ public class AudioManager : MonoBehaviour {
 
 	public static float getAmbienceVolume() {
 		return ambienceVolume * masterVolume;
+	}
+
+	public static void playOn(AudioSource source, AudioClip clip, TYPE type) {
+		float volume = 1f;
+		switch(type) {
+		case TYPE.AMBIENCE:	volume = getAmbienceVolume(); break;
+		case TYPE.EFFECTS:	volume = getEffectsVolume(); break;
+		}
+
+		//float oldVolume = source.volume;
+
+		source.volume = volume;
+		source.PlayOneShot(clip);
+
+		//source.volume = oldVolume;
 	}
 }

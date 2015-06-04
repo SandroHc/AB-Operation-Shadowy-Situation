@@ -7,6 +7,7 @@ public class PrefabManager : MonoBehaviour {
 	public GameObject weapon_M9;
 	public GameObject weapon_M16;
 	public GameObject weapon_grenade;
+	public GameObject weapon_grenade_object; // Used when throwing
 
 	/** PARTICLES **/
 	public GameObject particles_fireworks;

@@ -27,9 +27,6 @@ public class PlayerHP : MonoBehaviour {
 	}
 	
 	void Update() {
-		if(Input.GetKeyDown(KeyCode.T)) takeDamage(10f);
-		if(Input.GetKeyDown(KeyCode.Y)) takeDamage(-10f);
-		
 		updateHpBar();
 	}
 	
