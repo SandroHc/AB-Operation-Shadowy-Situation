@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 
 public class CraftingManager : MonoBehaviour {
 	public GameObject panelCrafting;
@@ -32,6 +30,7 @@ public class CraftingManager : MonoBehaviour {
 	void LateUpdate() {
 		// If the Crafting button is pressed, show the panel!
 		if(InputManager.getKeyDown("crafting") && !GameController.isPausedOrFocused()) {
+			// Fire event to all sub-panels
 			showCraftingPanel();
 
 			GameController.setFocused(true, false);

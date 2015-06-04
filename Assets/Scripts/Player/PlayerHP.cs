@@ -2,17 +2,24 @@
 using UnityEngine.UI;
 
 public class PlayerHP : MonoBehaviour {
-	public float maxHealth;
-	public float currHealth;
+	public static float maxHealth { get; protected set; }
+
+	private static float _health;
+	public static float health {
+		get { return _health; }
+		set { _health = Mathf.Max(Mathf.Min(value, maxHealth), 0); updateBar = true; }
+	}
+
+	private static bool godMode = false;
 	
 	public Image hpBarImg;
-	private bool updateBar = false;
+	private static bool updateBar = false;
 	
 	void Awake() {
 		maxHealth = PlayerPrefs.GetFloat("player_health_max", 100f);
-		currHealth = PlayerPrefs.GetFloat("player_health_current", maxHealth);
+		health = PlayerPrefs.GetFloat("player_health_current", maxHealth);
 
-		if(currHealth <= 0)
+		if(health <= 0)
 			Died();
 
 		updateBar = true; // Force a update
@@ -27,27 +34,25 @@ public class PlayerHP : MonoBehaviour {
 	}
 	
 	public void takeDamage(float damage) {
-		currHealth -= damage;
+		// In god mode, all damage is ignored
+		if(godMode) return;
+
+		// The property controls the min and max values and updates the bar.
+		health -= damage;
 		
-		// Don't let the current HP be over the maximum or under zero!
-		currHealth = Mathf.Max(Mathf.Min(currHealth, maxHealth), 0);
-		
-		if(currHealth <= 0)
+		if(health <= 0)
 			Died();
-		
-		// Request an update to the HP bar
-		updateBar = true;
 	}
 	
 	public Text infoText;
 	
-	void Died() {
+	public static void Died() {
 		//infoText.text = "Oh noes! You died.";
 	}
 	
 	private void updateHpBar() {
 		if(updateBar) {
-			float currAmount = currHealth / maxHealth;
+			float currAmount = health / maxHealth;
 			hpBarImg.fillAmount = Mathf.Lerp(hpBarImg.fillAmount, currAmount, Time.deltaTime * 5);
 			
 			if(Mathf.Abs(hpBarImg.fillAmount - currAmount) < .001f) {
@@ -57,12 +62,16 @@ public class PlayerHP : MonoBehaviour {
 		}
 	}
 
-	public void save() {
+	public static bool god() {
+		return godMode = !godMode;
+    }
+
+	public static void save() {
 		// Only save if value differs from the default
 		if(maxHealth != 100)
 			PlayerPrefs.SetFloat("player_health_max", maxHealth);
 
 		// Save current health, always
-		PlayerPrefs.SetFloat("player_health_current", currHealth);
+		PlayerPrefs.SetFloat("player_health_current", health);
 	}
 }

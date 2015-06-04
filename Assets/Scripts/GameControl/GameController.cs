@@ -261,7 +261,7 @@ public class GameController : MonoBehaviour {
 		PlayerPrefs.SetFloat("player_rot_z", rotation.z);
 
 		// Trigger save event on the PlayerHP script
-		playerController.GetComponent<PlayerHP>().save();
+		PlayerHP.save();
 	}
 
 	private void checkFirstRun() {

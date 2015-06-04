@@ -15,7 +15,7 @@ public class WeaponGrenade : Weapon {
 		this.cooldownShoot = .5f;
 
 		this.defaultMagazines = 1;
-		this.defaultMaxAmmunition = 2;
+		this.defaultMaxAmmunition = 20;
 
 		this.baseCost = 150;
 
@@ -29,12 +29,12 @@ public class WeaponGrenade : Weapon {
 		if(base.shoot()) {
 			grenadeObj = Object.Instantiate(GameController.prefabManager.weapon_grenade);
 
+			grenadeObj.transform.rotation = Camera.main.transform.rotation;
 			grenadeObj.transform.position = Camera.main.transform.position;
-			grenadeObj.transform.localPosition += grenadeObj.transform.forward * 3;
+			grenadeObj.transform.position += grenadeObj.transform.forward * .5f;
 			
 			// Initialize the explosion timer
 			grenadeObj.GetComponent<GrenadeTimer>().activate();
-
 
 			throwGrenade();
 
