@@ -6,6 +6,7 @@ public class PrefabManager : MonoBehaviour {
 	/** WEAPONS **/
 	public GameObject weapon_M9;
 	public GameObject weapon_M16;
+	public GameObject weapon_Railgun;
 	public GameObject weapon_grenade;
 	public GameObject weapon_grenade_object; // Used when throwing
 
@@ -21,5 +22,11 @@ public class PrefabManager : MonoBehaviour {
 	public GameObject[] enemy;
 	public GameObject marker;
 
+	public GameObject lightningEmitter;
+
 	public GameObject interact;
+
+	public static GameObject createLightningEmitter() {
+		return Instantiate(GameController.prefabManager.lightningEmitter);
+	}
 }

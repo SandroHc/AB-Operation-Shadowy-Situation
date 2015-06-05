@@ -55,11 +55,10 @@ public class CraftingManager : MonoBehaviour {
 		float posY = 0;
 
 		for(int i = 0; i < list.Length; i++) {
-			int mod = i % slotsPerRow;
-			generatePanel(list[i].name, new Vector2(-(width/2) + panelWidth * mod, -posY), panelWidth);
+			generatePanel(list[i].name, new Vector2(-(width/2) + panelWidth * (i % slotsPerRow), -posY), panelWidth);
 
 			// Every 3 slots, create a new row
-			if(mod == slotsPerRow) posY += 200;
+			if((i+1) % slotsPerRow == 0) posY += 200;
 		}
 	}
 

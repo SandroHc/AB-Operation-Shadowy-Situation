@@ -230,11 +230,16 @@ public class WeaponManager : MonoBehaviour {
 
 		int slot = weapon.getSlot();
 
-		if(weaponSlots[slot] != null && !overrideExistingWeapon) {
-			Debug.Log("Tried to equip weapon " + weapon.name + " into slot " + weapon.type + ", but the weapon " + weaponSlots[slot].name + " is already in that slot. Ignoring.");
+		if(weaponSlots[slot] != null) {
+			if(overrideExistingWeapon) {
+				// Unequip the old weapon
+				weaponSlots[slot].unequip();
+			} else {
+				Debug.Log("Tried to equip weapon " + weapon.name + " into slot " + weapon.type + ", but the weapon " + weaponSlots[slot].name + " is already in that slot. Ignoring.");
 
-			weapon.unequip();
-			return;
+				weapon.unequip();
+				return;
+			}
 		}
 
 		weaponSlots[slot] = weapon;

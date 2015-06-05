@@ -35,7 +35,7 @@ public class CraftingSlot : MonoBehaviour {
 
 		img = weapon.icon ?? GameController.spriteManager.weaponNoIcon;
 
-		transform.FindChild("cost").GetComponent<Text>().text = weapon.getCost().ToString();
+		transform.FindChild("cost").GetComponent<Text>().text = weapon.cost.ToString();
 
 		Transform stats = transform.FindChild("stats").transform;
 

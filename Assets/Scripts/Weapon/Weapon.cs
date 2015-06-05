@@ -6,6 +6,7 @@ public abstract class Weapon {
 
 	protected GameObject weaponPrefab;
 	public GameObject weaponInstance;
+	public Transform gunMuzzle;
 
 	public Image icon { get; protected set; }
 	
@@ -30,7 +31,26 @@ public abstract class Weapon {
 	public int magazines { get; protected set; } // Current magazines
 	public int ammunition { get; protected set; } // Current ammunition
 
+	private bool _unlimitedAmmo = false;
+	public bool unlimitedAmmo {
+		get { return _unlimitedAmmo; }
+		protected set { _unlimitedAmmo = value; }
+	}
+
 	protected float baseCost;
+	public float cost {
+		get {
+			if(isEquipped) // Ammo = 5%
+				return baseCost * .05f;
+			else if(isCrafted) // Rebuild = 15%
+				return baseCost * .15f;
+			else if(isUnlocked) // First build = 100%
+				return baseCost * 1;
+			else // Can't build weapon
+				return -1;
+		}
+		protected set { baseCost = value; }
+	}
 
 	protected AudioClip[] sounds = new AudioClip[3];
 	protected enum SoundLabel { SHOOT, SHOOT_NO_AMMO, RELOAD };
@@ -54,10 +74,12 @@ public abstract class Weapon {
 
 		// Only shoot if ammunition is available
 		// Else, try to reload the weapon
-		if(ammunition > 0) {
-			ammunition--;
-
-			saveAmmoStatus();
+		if(ammunition > 0 || unlimitedAmmo) {
+			// No need to save current ammo count if the weapon has unlimited ammo
+			if(!unlimitedAmmo) {
+				ammunition--;
+				saveAmmoStatus();
+			}
 
 			WeaponManager.weaponCooldown = cooldownShoot;
 
@@ -139,9 +161,12 @@ public abstract class Weapon {
 			weaponInstance.transform.localPosition = Vector3.zero;
 			weaponInstance.transform.localRotation = Quaternion.Euler(Vector3.zero);
 
+			// Get the muzzle, if available. Used to create the muzzle effects
+			gunMuzzle = weaponInstance.transform.Find("offset/muzzle");
+
 			// If the weapon has a RigidBody, disable it's physics
-			if(weaponInstance.GetComponent<Rigidbody>())
-				weaponInstance.GetComponent<Rigidbody>().isKinematic = true;
+			Rigidbody rb = weaponInstance.GetComponent<Rigidbody>();
+            if(rb != null) rb.isKinematic = true;
 		}
 
 		// Verify if the the weapon instance was loaded
@@ -158,7 +183,7 @@ public abstract class Weapon {
 		Debug.Log(name + ": Refilling ammo");
 
 		if(isEquipped && ammunition < defaultMaxAmmunition) {
-			int cost = Mathf.RoundToInt(getCost());
+			int cost = Mathf.RoundToInt(this.cost);
 			if(MaterialManager.getMaterials() > cost) {
 				MaterialManager.decrease(cost);
 
@@ -189,7 +214,7 @@ public abstract class Weapon {
 		Debug.Log(name + ": Crafting");
 
 		if(!isCrafted) {
-			int cost = Mathf.RoundToInt(getCost());
+			int cost = Mathf.RoundToInt(this.cost);
 			if(MaterialManager.getMaterials() > cost) {
 				MaterialManager.decrease(cost);
 
@@ -227,17 +252,6 @@ public abstract class Weapon {
 
 	public int getSlot() {
 		return (int) type;
-	}
-
-	public float getCost() {
-		if(isEquipped) // Ammo = 5%
-			return baseCost * .05f;
-		else if(isCrafted) // Rebuild = 15%
-			return baseCost * .15f;
-		else if(isUnlocked) // First build = 100%
-			return baseCost * 1;
-		else // Can't build weapon
-			return -1;
 	}
 
 	private void saveAmmoStatus() {
