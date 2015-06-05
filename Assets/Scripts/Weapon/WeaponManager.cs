@@ -126,10 +126,12 @@ public class WeaponManager : MonoBehaviour {
 			Weapon weapon = getCurrentWeapon();
 			if(weapon != null && weapon.shoot()) {
 				cameraController.GetComponentInParent<RecoilHandler>().recoil(weapon.recoil);
-				
+
 				RaycastHit hit = raycast.raycast(weapon.range);
 				if(hit.transform != null)
-					weapon.targetHit(hit.transform.gameObject);
+					weapon.targetHit(hit);
+				else
+					weapon.targetMiss();
 			}
 		}
 	}

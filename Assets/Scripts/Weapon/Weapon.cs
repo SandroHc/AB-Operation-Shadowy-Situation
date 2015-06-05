@@ -48,10 +48,6 @@ public abstract class Weapon {
 			WeaponManager.loadWeaponIntoSlot(this);
 	}
 
-	public void targetHit(GameObject target, float damageCustom = -1) {
-		target.SendMessage("takeDamage", damageCustom == -1 ? damage : damageCustom, SendMessageOptions.DontRequireReceiver);
-	}
-
 	public virtual bool shoot() {
 		if(WeaponManager.weaponCooldown > 0)
 			return false;
@@ -76,7 +72,13 @@ public abstract class Weapon {
 			return false;
 		}
 	}
-	
+
+	public virtual void targetHit(RaycastHit target, float damageCustom = -1) {
+		target.transform.gameObject.SendMessage("takeDamage", damageCustom == -1 ? damage : damageCustom, SendMessageOptions.DontRequireReceiver);
+	}
+
+	public virtual void targetMiss() { }
+
 	public virtual bool reload() {
 		if(WeaponManager.weaponCooldown > 0)
 			return false;

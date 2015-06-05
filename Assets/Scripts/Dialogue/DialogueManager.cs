@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
 
 public class DialogueManager : MonoBehaviour {
 	public static Dialogue currentDialogue = null;
@@ -23,14 +21,12 @@ public class DialogueManager : MonoBehaviour {
 		color.a = Mathf.Lerp(color.a, currentDialogue == null ? 0 : 1, Time.deltaTime * 10);
 		img.color = color;
 
+		if(currentDialogue != null) {
+			currentDialogue.update();
 
-		if(currentDialogue == null)
-			return;
-
-		currentDialogue.update();
-
-		if(InputManager.getKeyDown("cancel"))
-			closeDialogue();
+			if(InputManager.getKeyDown("cancel"))
+				closeDialogue();
+		}
 	}
 
 	public void showDialogue(Dialogue dialogue) {
@@ -65,6 +61,10 @@ public class DialogueManager : MonoBehaviour {
 		Invoke("hideDialogue", .15f);
 	}
 
+	private void hideDialogue() {
+		panelDialogue.gameObject.SetActive(false);
+	}
+
 	public void showTalk(Dialogue.DialogueTalk.Type type, string title, string text) {
 		panelTalk.SetActive(true);
 		panelSelection.gameObject.SetActive(false);
@@ -90,14 +90,13 @@ public class DialogueManager : MonoBehaviour {
 
 		// Remove all previously added buttons 
 		foreach(Transform child in panelSelection.transform)
-			Object.Destroy(child.gameObject);
-
-		RectTransform sel = panelSelection.GetComponent<RectTransform>();
+			Destroy(child.gameObject);
 
 		int relativeHeight = options.Length * 30 + (options.Length-1) * 5;
 		int initialPos;
 
 		// Invert the value because negative numbers are "down", and positive ones are "up" in the UI position
+		RectTransform sel = panelSelection.GetComponent<RectTransform>();
 		if(relativeHeight > sel.rect.height)
 			initialPos = (int) (relativeHeight - sel.rect.height) + (options.Length) * 5;
 		else
@@ -150,11 +149,7 @@ public class DialogueManager : MonoBehaviour {
 		// Apply the preferred width to all options
 		for(int i=0; i < list.Length; i++) {
 			RectTransform rt = list[i].GetComponent<RectTransform>();
-			if(rt != null) RectTransformExtensions.SetWidth(rt, largest + 20); // Left and right paddings are 10px; so sum 20
+			if(rt != null) RectTransformExtensions.SetWidth(rt, largest + 20); // Left and right paddings are 10px each
 		}
-	}
-
-	private void hideDialogue() {
-		panelDialogue.gameObject.SetActive(false);
 	}
 }

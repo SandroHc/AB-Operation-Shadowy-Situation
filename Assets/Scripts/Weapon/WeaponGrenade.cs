@@ -5,7 +5,7 @@ public class WeaponGrenade : Weapon {
 
 	public WeaponGrenade() {
 		this.name = "Grenade";
-		//this.icon = GameController.spriteManager.weaponM9;
+		this.icon = GameController.spriteManager.weaponM9;
 		this.weaponPrefab = GameController.prefabManager.weapon_grenade;
 		this.type = Type.Grenade;
 
@@ -15,6 +15,10 @@ public class WeaponGrenade : Weapon {
 
 		this.defaultMagazines = 1;
 		this.defaultMaxAmmunition = 20;
+
+		// Those values are not used in grenades
+		this.range = 0;
+		this.damage = 0;
 
 		this.baseCost = 150;
 
