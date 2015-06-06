@@ -8,6 +8,7 @@ obj/
 *.sln
 *.userprefs
 *.csproj
+*.suo
 *.orig
 
 *Thumbs.db*
