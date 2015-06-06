@@ -1,51 +1,83 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class PathfindHelper : MonoBehaviour {
-	private NavMeshAgent agent;
-	private LineRenderer lineRenderer;
+	public NavMeshAgent agent;
+	public LineRenderer line;
 
-	private Vector3 destination;
-	private bool hasDestination;
+	private bool targetUpdated = false;
 
-	public float minDistance = 5f;
+	private Vector3 _target;
+	public Vector3 target {
+		get { return _target; }
+		set { _target = value;
+			targetUpdated = true;
+			agent.enabled = true;
+		}
+	}
 	
 	void Start() {
-		agent = gameObject.GetComponent<NavMeshAgent>();
-		lineRenderer = gameObject.GetComponent<LineRenderer>();
+		//agent = gameObject.GetComponent<NavMeshAgent>();
+		line = agent.GetComponent<LineRenderer>();
 	}
 
 	void Update() {
-		if(hasDestination && Vector3.Distance(transform.position, destination) < minDistance)
-			hasDestination = false;
-	}
+		if(targetUpdated) {
+			targetUpdated = false;
 
-	public void setDestination(Vector3 destination) {
-		this.destination = destination;
+			getPath();
+		} else if(agent.enabled && transform.hasChanged) {
+			agent.transform.localPosition = Vector3.zero;
 
-		// Reset the NavAgent position to the parent
-		//gameObject.transform.position = Vector3.zero;
-
-		//agent.CalculatePath(destination, agent.path);
-		agent.SetDestination(destination);
-		//agent.Stop();
-
-
-		updateLine();
-
-		hasDestination = true;
-	}
-
-	public void updateLine() {
-		lineRenderer.enabled = true;
-		
-		switch(agent.path.status) {
-		case NavMeshPathStatus.PathComplete: lineRenderer.SetColors(Color.blue, Color.blue); break;
-		case NavMeshPathStatus.PathInvalid:  lineRenderer.SetColors(Color.red, Color.red); break;
-		case NavMeshPathStatus.PathPartial:  lineRenderer.SetColors(Color.yellow, Color.yellow); break;
+			// The agent updates the path to the target automatically
+			drawPath(agent.path);
 		}
-		
-		lineRenderer.SetVertexCount(agent.path.corners.Length);
-		for(int i=0; i < agent.path.corners.Length; i++)
-			lineRenderer.SetPosition(i, agent.path.corners[i]);
+	}
+
+	private void getPath() {
+		// Create the path
+		agent.SetDestination(target);
+
+		// Wait until path has been generated (on the next frame)
+		//yield return null;
+
+		drawPath(agent.path);
+
+		// Add this if you don't want to move the agent
+		agent.Stop();
+	}
+
+	private void drawPath(NavMeshPath path) {
+		// If the path has 1 or no corners, there is no need to draw lines
+		if(path.corners.Length < 2) 
+			return;
+
+		switch(path.status) {
+			//case NavMeshPathStatus.PathComplete:line.SetColors(Color.blue, Color.blue); break;
+			case NavMeshPathStatus.PathInvalid:	line.SetColors(Color.red, Color.red); break;
+			case NavMeshPathStatus.PathPartial:	line.SetColors(Color.yellow, Color.yellow); break;
+		}
+
+		// Re-enable the line
+		if(!line.enabled) line.enabled = true;
+
+		// Set the array of positions to the amount of corners
+		line.SetVertexCount(path.corners.Length);
+
+		// Set the line's origin
+		line.SetPosition(0, transform.position);
+
+		for(var i = 1; i < path.corners.Length; i++) {
+			// Lift up a bit, to stay above the ground
+			path.corners[i].y += .01f;
+
+			// Go through each corner and set that to the line renderer's position
+			line.SetPosition(i, path.corners[i]);
+		}
+	}
+
+	public void complete() {
+		agent.enabled = false;
+		line.enabled = false;
 	}
 }

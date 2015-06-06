@@ -5,7 +5,7 @@ using System.Collections;
 public class EnemyManager : MonoBehaviour {
 	public GameObject prefabGroup;
 
-	private int killCount; // Total material collected
+	private int killCount; // Total enemies killed
 	public Text uiKillCounter;
 
 	void Awake() {
@@ -15,8 +15,7 @@ public class EnemyManager : MonoBehaviour {
 	}
 
 	public void spawn(Vector3 pos) {
-		GameObject go = Instantiate(prefabGroup) as GameObject;
-		go.transform.position = pos;
+		GameObject go = Instantiate(prefabGroup, pos, Quaternion.Euler(Vector3.zero)) as GameObject;
 	}
 
 	public void kill() {

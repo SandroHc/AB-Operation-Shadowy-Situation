@@ -3,50 +3,54 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class EnemyHP : MonoBehaviour {
-	public float maxHealth = 100f;
-	private float currHealth;
+	private float _maxHealth = 100f;
+	public float maxHealth {
+		get { return _maxHealth; }
+		protected set { _maxHealth = value; }
+	}
+
+	private float _health;
+	public float health {
+		get { return _health; }
+		set { _health = Mathf.Max(Mathf.Min(value, maxHealth), 0); updateBar = true; }
+	}
+
+	//public float maxHealth = 100f;
 	
 	public Image hpBarImg;
 	private bool updateBar = false;
 	
 	void Awake() {
-		currHealth = maxHealth;
+		health = maxHealth;
 	}
 
 	void Update() {
-		if(hpBarImg != null)
+		if(hpBarImg != null && updateBar)
 			updateHpBar();
 	}
 	
 	public void takeDamage(float damage) {
-		currHealth -= damage;
+		// The property controls the min and max values and updates the bar.
+		health -= damage;
 		
-		// Don't let the current HP be over the maximum or under zero!
-		currHealth = Mathf.Max(Mathf.Min(currHealth, maxHealth), 0);
-		
-		if(currHealth <= 0)
+		if(health == 0)
 			Died();
-
-		// Request an update to the HP bar
-		updateBar = true;
 	}
 
-	void Died() {
+	public void Died() {
 		GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.Type.MONSTER_KILL).setPosition(transform.position));
-
 		GameController.enemyManager.kill();
+
 		Destroy(gameObject);
 	}
 
 	private void updateHpBar() {
-		if(updateBar) {
-			float currAmount = currHealth / maxHealth;
-			hpBarImg.fillAmount = Mathf.Lerp(hpBarImg.fillAmount, currAmount, Time.deltaTime * 5);
+		float currAmount = health / maxHealth;
+		hpBarImg.fillAmount = Mathf.Lerp(hpBarImg.fillAmount, currAmount, Time.deltaTime * 5);
 			
-			if(Mathf.Abs(hpBarImg.fillAmount - currAmount) < .001f) {
-				hpBarImg.fillAmount = currAmount;
-				updateBar = false;
-			}
+		if(Mathf.Abs(hpBarImg.fillAmount - currAmount) < .001f) {
+			hpBarImg.fillAmount = currAmount;
+			updateBar = false;
 		}
 	}
 }

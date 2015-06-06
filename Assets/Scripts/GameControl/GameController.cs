@@ -21,6 +21,8 @@ public class GameController : MonoBehaviour {
 	public static PlayerController playerController;
 	public static PathfindHelper playerPathfind;
 
+	public static FPSCounter fpsCounter;
+
 	private static bool isPaused = false;
 	private static bool isFocused = false;
 	
@@ -56,7 +58,9 @@ public class GameController : MonoBehaviour {
 
 		GameObject player = GameObject.FindGameObjectWithTag(Tags.player);
 		playerController = player.GetComponent<PlayerController>();
-		//playerPathfind = player.transform.FindChild("pathfind").GetComponent<PathfindHelper>();
+		playerPathfind = player.GetComponent<PathfindHelper>();
+
+		fpsCounter = transform.Find("ui/fps_counter").GetComponent<FPSCounter>();
 
 		guiTexture.color = Color.black;
 		guiTexture.pixelInset = new Rect(0f, 0f, Screen.width, Screen.height);
@@ -111,19 +115,6 @@ public class GameController : MonoBehaviour {
 		}
 	
 		checkCancelInput();
-
-		if(Debug.isDebugBuild) {
-			//if(Input.GetKey(KeyCode.E))
-			//	playerPathfind.updateLine();//setDestination(new Vector3(-100, 0, 0));
-
-			if(Input.GetKeyDown(KeyCode.M))
-				MaterialManager.increase(1000);
-
-			if(Input.GetKeyDown(KeyCode.L)) {
-				Cursor.visible = false;
-				Cursor.lockState = CursorLockMode.Locked;
-			}
-		}
 	}
 
 	void OnGUI() {

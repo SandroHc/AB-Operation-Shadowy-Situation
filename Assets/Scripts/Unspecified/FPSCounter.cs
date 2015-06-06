@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 public class FPSCounter : MonoBehaviour {
 	
@@ -15,7 +14,7 @@ public class FPSCounter : MonoBehaviour {
 	// correct overall FPS even if the interval renders something like
 	// 5.5 frames.
 
-	private Text display;
+	public Text display;
 	
 	public float updateInterval = 0.5F;
 	public byte decimals = 0;
@@ -43,7 +42,7 @@ public class FPSCounter : MonoBehaviour {
 		if(timeLeft <= 0) {
 			// display two fractional digits (f2 format)
 			float fps = accum/frames;
-			string format = System.String.Format("{0:F" + decimals + "} FPS",fps);
+			string format = string.Format("{0:F" + decimals + "} FPS",fps);
 			display.text = format;
 			
 			if(fps < 30)

@@ -19,7 +19,7 @@ public class PlayerHP : MonoBehaviour {
 		maxHealth = PlayerPrefs.GetFloat("player_health_max", 100f);
 		health = PlayerPrefs.GetFloat("player_health_current", maxHealth);
 
-		if(health <= 0)
+		if(health == 0)
 			Died();
 
 		updateBar = true; // Force a update

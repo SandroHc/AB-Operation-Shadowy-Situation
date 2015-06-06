@@ -7,7 +7,7 @@ public class Quest_00_LEARN : Quest {
 	public override void initStages() {
 		Interaction npc = GameObject.FindGameObjectWithTag(Tags.npc).GetComponent<Interaction>();
 
-		stages.Add(new GoTo(new Vector3(0,0,0)));
+		stages.Add(new GoTo(new Vector3(-7, 0, 0)));
 		stages.Add(new TalkTo(npc, "DialogueQ_00_LEARN_1"));
 		stages.Add(new Collect("quest-" + id + "-collect", 10));
 		stages.Add(new TalkTo_Craft(npc, "DialogueQ_00_LEARN_2"));

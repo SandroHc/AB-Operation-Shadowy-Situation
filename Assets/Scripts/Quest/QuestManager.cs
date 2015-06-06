@@ -280,8 +280,8 @@ public class QuestManager : MonoBehaviour {
 		updateQuestButtons();
 	}
 
-	public void setWaypoint(Vector3 position) {
-		GameController.playerPathfind.setDestination(position);
+	public void setWaypoint(Vector3 target) {
+		GameController.playerPathfind.target = target;
 	}
 }
  

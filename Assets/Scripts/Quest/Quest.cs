@@ -149,7 +149,6 @@ public abstract class Quest {
 	
 	protected class GoTo : Stage {
 		private Vector3 objective;
-		private GameObject sentinel;
 
 		public GoTo(Vector3 pos) {
 			objective = pos;
@@ -157,7 +156,7 @@ public abstract class Quest {
 		
 		public override bool setup() {
 			// Create a sentinel to check whenever the player sets foot on the target
-			sentinel = Object.Instantiate(GameController.prefabManager.marker, objective, Quaternion.Euler(0, 0, 0)) as GameObject;
+			GameObject sentinel = Object.Instantiate(GameController.prefabManager.marker, objective, Quaternion.Euler(Vector3.zero)) as GameObject;
 			sentinel.GetComponent<PositionSentinel>().setup();
 
 			return false;
@@ -174,13 +173,8 @@ public abstract class Quest {
 			return false;
 		}
 		
-		public override void finish() {
-			// Destroy the sentinel when it is no longer needed
-			Object.Destroy(sentinel);
-		}
-		
 		public override string getText() {
-			return "Go to the indicated zone.";
+			return "Follow the marked line.";
 		}
 	}
 
