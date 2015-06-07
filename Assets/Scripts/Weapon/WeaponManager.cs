@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System;
 
 public class WeaponManager : MonoBehaviour {
+	private static WeaponManager INSTANCE;
+
 	public static Dictionary<string, Weapon> weapons;
 	public static Weapon[] weaponSlots = new Weapon[5];
 	public enum SLOT { SIDE = 0, MAIN = 1, KNIFE = 2, GRENADE = 3, EQUIPMENT = 4 };
@@ -34,6 +36,12 @@ public class WeaponManager : MonoBehaviour {
 	public static float maxRange;
 
 	void Awake() {
+		INSTANCE = this;
+
+		// Get the saved selected slot
+		// Needed to be loaded BEFORE the weapons. Because when a weapon is created, if it's equipped, it triggers loadWeaponIntoSlot() and if is the current slot, we show it.
+		currentSlot = PlayerPrefs.GetInt("weapon_slot", (int)SLOT.MAIN);
+
 		// Do this here because Awake() is called BEFORE Start(). So, if a script tried to get a weapon instance in the Awake() event... he whould receive a NULL object.
 		if(weapons == null) {
 			weapons = new Dictionary<string, Weapon>();
@@ -54,16 +62,8 @@ public class WeaponManager : MonoBehaviour {
 
 		isAimingLast = false; // Not aiming by default
 
-		// Get the saved selected slot
-		currentSlot = PlayerPrefs.GetInt("weapon_slot", (int) SLOT.MAIN);
-
 		// Update the weapon selection UI slot index
 		WeaponSelection.index = currentSlot;
-
-
-		// Show the equipped weapon model.
-		Weapon weapon = getCurrentWeapon();
-		if(weapon != null) weapon.show();
 	}
 
 	void Update() {
@@ -83,13 +83,6 @@ public class WeaponManager : MonoBehaviour {
 
 		// Check Fire controls
 		handleShoot();
-
-		// TODO: Udate label based on events (instead of updating constantly)
-		Weapon weapon = getCurrentWeapon();
-		if(weapon != null)
-			weaponInfo.text = weapon.ammunition + "/" + weapon.getAmmunitionPerMagazine() * (weapon.magazines - 1);
-		else
-			weaponInfo.text = "NO WEAPON";
 	}
 
 	private void handleAim() {
@@ -118,6 +111,8 @@ public class WeaponManager : MonoBehaviour {
 		if(Input.GetKeyUp(InputManager.getKey("reload"))) { // Only reload if the magazine is not full
 			Weapon weapon = getCurrentWeapon();
 			if(weapon != null) weapon.reload();
+
+			updateWeaponText();
 		}
 	}
 
@@ -132,6 +127,8 @@ public class WeaponManager : MonoBehaviour {
 					weapon.targetHit(hit);
 				else
 					weapon.targetMiss();
+
+				updateWeaponText();
 			}
 		}
 	}
@@ -145,8 +142,8 @@ public class WeaponManager : MonoBehaviour {
 	}
 
 	public static void switchSlot(int slot) {
-		if(slot < 0 || slot >= weaponSlots.Length) return;
-
+		if(slot < 0 || slot >= weaponSlots.Length)
+			return;
 		if(slot == currentSlot)
 			return;
 
@@ -163,6 +160,54 @@ public class WeaponManager : MonoBehaviour {
 		if(weapon != null) weapon.show();
 
 		Debug.Log("New slot selected, " + ((SLOT) currentSlot));
+
+		INSTANCE.updateWeaponText();
+	}
+
+	public static void loadWeaponIntoSlot(Weapon weapon, bool overrideExistingWeapon = false) {
+		if(weapon == null) {
+			Debug.Log("Tried to equip invalid weapon.");
+			return;
+		}
+
+		int slot = weapon.getSlot();
+
+		if(weaponSlots[slot] != null) {
+			if(overrideExistingWeapon) {
+				// Unequip the old weapon
+				weaponSlots[slot].unequip();
+			} else {
+				Debug.Log("Tried to equip weapon " + weapon.name + " into slot " + weapon.type + ", but the weapon " + weaponSlots[slot].name + " is already in that slot. Ignoring.");
+
+				weapon.unequip();
+				return;
+			}
+		}
+
+		weaponSlots[slot] = weapon;
+		weaponSlots[slot].equip();
+
+		// If the weapon is from the current slot, show it's instance
+		if(slot == currentSlot) {
+			weaponSlots[slot].show();
+
+			INSTANCE.updateWeaponText();
+		}
+
+		// Update the weapon icon in the selection wheel
+		WeaponSelection.updateIcon(weapon);
+
+		//Debug.Log("Loaded weapon " + weapon.name + " into slot " + weapon.type);
+    }
+
+	public void updateWeaponText() {
+		Weapon weapon = getCurrentWeapon();
+		if(weapon != null) {
+			weaponInfo.text = weapon.name;
+			if(!weapon.unlimitedAmmo)
+				weaponInfo.text += "\n" + weapon.ammunition + "/" + weapon.getAmmunitionPerMagazine() * (weapon.magazines - 1);
+		} else
+			weaponInfo.text = "";
 	}
 
 	public static Weapon getWeapon(string name) {
@@ -220,39 +265,5 @@ public class WeaponManager : MonoBehaviour {
 
 		if(weapon.range > maxRange)
 			maxRange = weapon.range;
-	}
-
-	public static void loadWeaponIntoSlot(Weapon weapon, bool overrideExistingWeapon = false) {
-		if(weapon == null) {
-			Debug.Log("Tried to equip invalid weapon.");
-			return;
-		}
-
-		int slot = weapon.getSlot();
-
-		if(weaponSlots[slot] != null) {
-			if(overrideExistingWeapon) {
-				// Unequip the old weapon
-				weaponSlots[slot].unequip();
-			} else {
-				Debug.Log("Tried to equip weapon " + weapon.name + " into slot " + weapon.type + ", but the weapon " + weaponSlots[slot].name + " is already in that slot. Ignoring.");
-
-				weapon.unequip();
-				weapon.hide();
-				return;
-			}
-		}
-
-		weaponSlots[slot] = weapon;
-		weaponSlots[slot].equip();
-
-		// If the weapon is from the current slot, show it's instance
-		if(slot == currentSlot)
-			weaponSlots[slot].show();
-
-		// Update the weapon icon in the selection wheel
-		WeaponSelection.updateIcon(weapon);
-
-		//Debug.Log("Loaded weapon " + weapon.name + " into slot " + weapon.type);
 	}
 }

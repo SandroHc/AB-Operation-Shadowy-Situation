@@ -15,7 +15,8 @@ public class RaycastShoot : MonoBehaviour {
 					shatter.Shatter(hit.point);
 				} else {*/
 
-				if(WeaponManager.getCurrentWeapon().spawnBulletDecal) {
+				Weapon weapon = WeaponManager.getCurrentWeapon();
+                if(weapon.spawnBulletDecal) {
 					Vector3 position = hit.point;
 					position += hit.normal * .0001f; // Lift the object a bit to prevent z-fighting
 
@@ -25,6 +26,8 @@ public class RaycastShoot : MonoBehaviour {
 
 					// Destroy the bullet hole after 10 seconds
 					Destroy(obj, 10);
+
+					weapon.triggerMuzzleEffect();
 				}
 			}
 		}

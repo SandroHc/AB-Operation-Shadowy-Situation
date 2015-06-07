@@ -13,7 +13,7 @@ public class GrenadeTimer : MonoBehaviour {
 
 	public void explode() {
 		// Make the grenade invisible
-		GetComponent<MeshRenderer>().enabled = false;
+		transform.Find("model").GetComponent<MeshRenderer>().enabled = false;
 
 		// Create a new insntance of the particles
 		GameObject particles = Instantiate(GameController.prefabManager.particles_explosion);

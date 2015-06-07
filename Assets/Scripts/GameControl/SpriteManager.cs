@@ -12,9 +12,12 @@ public class SpriteManager : MonoBehaviour {
 	public Sprite weaponM9;
 	public Sprite weaponM16;
 	public Sprite weaponRailgun;
+	public Sprite weaponGrenade;
 
 	public GameObject bulletPrefab;
 	private Renderer bulletMeshRenderer;
+
+	public Material[] muzzleFlash;
 
 	void Start() {
 		bulletMeshRenderer = bulletPrefab.GetComponent<MeshFilter>().GetComponent<Renderer>();
@@ -40,5 +43,9 @@ public class SpriteManager : MonoBehaviour {
 			bulletMeshRenderer.material = bulletTexBlood[Random.Range(0, bulletTexBlood.Length)];
 			return bulletPrefab;
 		}
+	}
+
+	public Material getMuzzle() {
+		return muzzleFlash[Random.Range(0, muzzleFlash.Length)];
 	}
 }

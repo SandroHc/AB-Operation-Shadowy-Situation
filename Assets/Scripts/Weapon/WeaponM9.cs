@@ -5,7 +5,7 @@ public class WeaponM9 : Weapon {
 
 	public WeaponM9() : base() {
 		this.name = "M9";
-		//this.icon = GameController.spriteManager.weaponM9;
+		this.icon = GameController.spriteManager.weaponM9;
 		this.weaponPrefab = GameController.prefabManager.weapon_M9;
 		this.type = Type.Pistol;
 

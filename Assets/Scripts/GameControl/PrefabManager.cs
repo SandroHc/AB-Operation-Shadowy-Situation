@@ -23,10 +23,20 @@ public class PrefabManager : MonoBehaviour {
 	public GameObject marker;
 
 	public GameObject lightningEmitter;
+	public GameObject muzzleMesh;
 
 	public GameObject interact;
 
 	public static GameObject createLightningEmitter() {
 		return Instantiate(GameController.prefabManager.lightningEmitter);
+	}
+
+	public static MuzzleEffect createMuzzleMesh(Transform gunTip) {
+		GameObject go = Instantiate(GameController.prefabManager.muzzleMesh) as GameObject;
+		go.transform.SetParent(gunTip);
+		go.transform.localPosition = new Vector3(0, 0, -18);
+		go.transform.localRotation = Quaternion.Euler(90, 270, 0);
+
+		return go.GetComponent<MuzzleEffect>();
 	}
 }

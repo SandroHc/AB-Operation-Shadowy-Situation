@@ -150,6 +150,8 @@ public abstract class Weapon {
 		PlayerPrefs.DeleteKey("weapon_" + name + "_equipped");
 
 		saveAmmoStatus();
+
+		hide();
 	}
 
 	public void show() {
@@ -280,5 +282,14 @@ public abstract class Weapon {
 			PlayerPrefs.SetInt("weapon_" + name + "_ammo", ammunition);
 		else
 			PlayerPrefs.DeleteKey("weapon_" + name + "_ammo");
+	}
+
+	public void triggerMuzzleEffect() {
+		if(gunMuzzle != null) {
+			MuzzleEffect effect = gunMuzzle.transform.GetComponentInChildren<MuzzleEffect>();
+			if(effect == null) effect = PrefabManager.createMuzzleMesh(gunMuzzle);
+
+			effect.triggerEffect();
+        }
 	}
 }
