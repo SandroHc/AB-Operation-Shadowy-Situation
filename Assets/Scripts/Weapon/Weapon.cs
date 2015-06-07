@@ -8,9 +8,9 @@ public abstract class Weapon {
 	public GameObject weaponInstance;
 	public Transform gunMuzzle;
 
-	public Image icon { get; protected set; }
+	public Sprite icon { get; protected set; }
 	
-	public enum Type { Pistol = 0, AssaultRifle = 1, Shotgun = 1, SniperRifle = 1, Knife = 2, Grenade = 3, Equipment = 4 };
+	public enum Type { Pistol, AssaultRifle, Shotgun, SniperRifle, Knife, Grenade, Equipment };
 	public Type type { get; protected set; }
 
 	public bool isUnlocked { get; protected set; }
@@ -55,9 +55,13 @@ public abstract class Weapon {
 	protected AudioClip[] sounds = new AudioClip[3];
 	protected enum SoundLabel { SHOOT, SHOOT_NO_AMMO, RELOAD };
 
+    public bool spawnBulletDecal { get; protected set; }
+
 	public Weapon() {
 		name = "";
-	}
+
+		spawnBulletDecal = true;
+    }
 
 	protected void populateCraftingStatus() {
 		isUnlocked = PlayerPrefs.GetInt("weapon_" + name + "_unlocked", 0) == 1;
@@ -251,7 +255,16 @@ public abstract class Weapon {
 	}
 
 	public int getSlot() {
-		return (int) type;
+		switch(type) {
+			case Type.Pistol:		return 0;
+			case Type.AssaultRifle:	return 1;
+			case Type.Shotgun:		return 1;
+			case Type.SniperRifle:	return 1;
+			case Type.Knife:		return 2;
+			case Type.Grenade:		return 3;
+			//case Type.Equipment:	return 4;
+			default:				return 4;
+		}
 	}
 
 	private void saveAmmoStatus() {

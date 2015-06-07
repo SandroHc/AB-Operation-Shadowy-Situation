@@ -15,7 +15,7 @@ public class EnemyManager : MonoBehaviour {
 	}
 
 	public void spawn(Vector3 pos) {
-		GameObject go = Instantiate(prefabGroup, pos, Quaternion.Euler(Vector3.zero)) as GameObject;
+		Instantiate(prefabGroup, pos, Quaternion.Euler(Vector3.zero));
 	}
 
 	public void kill() {

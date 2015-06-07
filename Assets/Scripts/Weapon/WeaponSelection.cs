@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class WeaponSelection : MonoBehaviour {
+	private static WeaponSelection INSTANCE;
+
 	public RectTransform weaponSelection;
 	private Vector3 scale;
 
@@ -18,6 +20,8 @@ public class WeaponSelection : MonoBehaviour {
 	private bool changed = false;
 
 	void Awake() {
+		INSTANCE = this;
+
 		// Get the initial rotation value for the Z axis
 		target = weaponSelection.localRotation.eulerAngles.z;
 
@@ -97,4 +101,8 @@ public class WeaponSelection : MonoBehaviour {
 	private void updateTarget() {
 		target = (270 - 43.6f * index) % 360;
 	}
+
+	public static void updateIcon(Weapon weapon) {
+		INSTANCE.pieces[weapon.getSlot()].Find("img").GetComponent<Image>().sprite = weapon.icon ?? GameController.spriteManager.weaponNoIcon;
+    }
 }

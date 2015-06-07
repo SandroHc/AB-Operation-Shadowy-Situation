@@ -3,9 +3,9 @@
 public class WeaponGrenade : Weapon {
 	public float throwForce = 500;
 
-	public WeaponGrenade() {
+	public WeaponGrenade() : base() {
 		this.name = "Grenade";
-		this.icon = GameController.spriteManager.weaponM9;
+		//this.icon = GameController.spriteManager.weaponM9;
 		this.weaponPrefab = GameController.prefabManager.weapon_grenade;
 		this.type = Type.Grenade;
 

@@ -1,25 +1,25 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
 public class WeaponRailgun : Weapon {
 	
-	public WeaponRailgun() {
+	public WeaponRailgun() : base() {
 		this.name = "Railgun";
-		this.icon = GameController.spriteManager.weaponM16;
+		this.icon = GameController.spriteManager.weaponRailgun;
 		this.weaponPrefab = GameController.prefabManager.weapon_Railgun;
 		this.type = Type.AssaultRifle;
 		
-		this.damage = .1f;
+		this.damage = 1;
 		this.range = 40;
 		this.recoil = 1;
 
 		this.cooldownShoot = .01f;
 
+		this.spawnBulletDecal = false;
 		this.unlimitedAmmo = true;
 
 		this.baseCost = 10000;
 		
-		populateSounds(null, GameController.audioManager.weapon_pistolShootNoAmmo, null);
+		//populateSounds(null);
 		populateCraftingStatus();
 	}
 
@@ -62,7 +62,15 @@ public class WeaponRailgun : Weapon {
 	public override void targetMiss() {
 		base.targetMiss();
 
-		//createLightning(Vector3.forward * 3);
+		// Create a empty GameObject
+		if(lightningPoint == null)
+			lightningPoint = new GameObject("lightningPoint");
+
+		// If the target point differs from the one of the object, update the object position
+		lightningPoint.transform.SetParent(GameController.playerController.transform);
+		lightningPoint.transform.localPosition = Vector3.forward * 3 + Vector3.up * 1.5f;
+
+		startLightning(lightningPoint.transform);
 	}
 
 	private void startLightning(Transform target) {

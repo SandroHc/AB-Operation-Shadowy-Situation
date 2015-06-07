@@ -3,8 +3,7 @@ using UnityEngine.UI;
 
 public class CraftingSlot : MonoBehaviour {
 
-	public string weaponName;
-	private Weapon weapon;
+	public Weapon weapon { get; set; }
 
 	private Image img;
 	private Text cost;
@@ -16,8 +15,8 @@ public class CraftingSlot : MonoBehaviour {
 	private Image rateOfFire;
 	private Image range;
 
-	public void setup() {
-		weapon = WeaponManager.getWeapon(weaponName);
+	public void setup(Weapon weapon) {
+		this.weapon = weapon;
 
 		img = transform.FindChild("img").GetComponent<Image>();
 		btn = transform.FindChild("btn").GetComponent<Button>();
@@ -31,9 +30,7 @@ public class CraftingSlot : MonoBehaviour {
 	}
 
 	public void show() {
-		if(weapon == null) return;
-
-		img = weapon.icon ?? GameController.spriteManager.weaponNoIcon;
+		img.sprite = weapon.icon ?? GameController.spriteManager.weaponNoIcon;
 
 		transform.FindChild("cost").GetComponent<Text>().text = weapon.cost.ToString();
 

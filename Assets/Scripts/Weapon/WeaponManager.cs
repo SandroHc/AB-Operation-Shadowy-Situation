@@ -238,12 +238,20 @@ public class WeaponManager : MonoBehaviour {
 				Debug.Log("Tried to equip weapon " + weapon.name + " into slot " + weapon.type + ", but the weapon " + weaponSlots[slot].name + " is already in that slot. Ignoring.");
 
 				weapon.unequip();
+				weapon.hide();
 				return;
 			}
 		}
 
 		weaponSlots[slot] = weapon;
 		weaponSlots[slot].equip();
+
+		// If the weapon is from the current slot, show it's instance
+		if(slot == currentSlot)
+			weaponSlots[slot].show();
+
+		// Update the weapon icon in the selection wheel
+		WeaponSelection.updateIcon(weapon);
 
 		//Debug.Log("Loaded weapon " + weapon.name + " into slot " + weapon.type);
 	}

@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 public class SpriteManager : MonoBehaviour {
 	public Material[] bulletTexConcrete;
@@ -9,9 +8,10 @@ public class SpriteManager : MonoBehaviour {
 	public Material[] bulletTexWood;
 	public Material[] bulletTexBlood;
 
-	public Image weaponNoIcon;
-	public Image weaponM9;
-	public Image weaponM16;
+	public Sprite weaponNoIcon;
+	public Sprite weaponM9;
+	public Sprite weaponM16;
+	public Sprite weaponRailgun;
 
 	public GameObject bulletPrefab;
 	private Renderer bulletMeshRenderer;

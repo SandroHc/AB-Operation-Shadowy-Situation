@@ -3,9 +3,9 @@ using System.Collections;
 
 public class WeaponM16 : Weapon {
 	
-	public WeaponM16() {
+	public WeaponM16() : base() {
 		this.name = "M16";
-		this.icon = GameController.spriteManager.weaponM16;
+		//this.icon = GameController.spriteManager.weaponM16;
 		this.weaponPrefab = GameController.prefabManager.weapon_M16;
 		this.type = Type.AssaultRifle;
 		

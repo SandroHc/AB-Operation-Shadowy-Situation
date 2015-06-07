@@ -9,11 +9,13 @@ public class RaycastShoot : MonoBehaviour {
 		if(Physics.Raycast(transform.position, transform.forward, out hit, range)) {
 			// Do not render bullet holes on enemies (because the bullet will be shown on the capsule collider, not the mesh)
 			if(hit.transform.gameObject.tag != Tags.enemy) {
-				ShatterGlass shatter = hit.transform.gameObject.GetComponent<ShatterGlass>();
+				/*ShatterGlass shatter = hit.transform.gameObject.GetComponent<ShatterGlass>();
 				if(shatter != null) {
 					Debug.Log ("BREAKING GLASS!");
 					shatter.Shatter(hit.point);
-				} else {
+				} else {*/
+
+				if(WeaponManager.getCurrentWeapon().spawnBulletDecal) {
 					Vector3 position = hit.point;
 					position += hit.normal * .0001f; // Lift the object a bit to prevent z-fighting
 

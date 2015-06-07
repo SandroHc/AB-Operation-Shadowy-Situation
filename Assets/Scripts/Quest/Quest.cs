@@ -217,7 +217,7 @@ public abstract class Quest {
 		}
 
 		public override bool setup() {
-			return weapon.isCrafted; // In case the weapon was already crafted, complete the stage
+			return weapon != null && weapon.isCrafted; // In case the weapon was already crafted, complete the stage
 		}
 		
 		public override bool update(QuestProgress progress) {
