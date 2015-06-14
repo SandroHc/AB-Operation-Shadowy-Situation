@@ -6,7 +6,7 @@ public class PanelSound : MonoBehaviour {
 	public Slider effectsVolume;
 	public Slider ambienceVolume;
 
-	void Start () {
+	void Start() {
 		masterVolume.value = PlayerPrefs.GetFloat("volume_master", 1);
 		effectsVolume.value = PlayerPrefs.GetFloat("volume_effects", .75f);
 		ambienceVolume.value = PlayerPrefs.GetFloat("volume_ambience", .25f);
@@ -16,13 +16,13 @@ public class PanelSound : MonoBehaviour {
 		PlayerPrefs.SetFloat("volume_master", masterVolume.value);
 
 		fireVolumeChangedEvents();
-    }
+	}
 
 	public void effectsVolumeChanged() {
 		PlayerPrefs.SetFloat("volume_effects", effectsVolume.value);
 
 		fireVolumeChangedEvents();
-    }
+	}
 
 	public void ambienceVolumeChanged() {
 		PlayerPrefs.SetFloat("volume_ambience", ambienceVolume.value);
@@ -36,5 +36,5 @@ public class PanelSound : MonoBehaviour {
 	private void fireVolumeChangedEvents() {
 		// Force the AudioManager class to reload all the volume settings
 		AudioManager.load();
-    }
+	}
 }

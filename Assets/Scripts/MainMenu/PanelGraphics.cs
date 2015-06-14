@@ -7,8 +7,10 @@ public class PanelGraphics : MonoBehaviour {
 	public ComboBox comboBoxQuality;
 
 	public Toggle fullscreen;
-
 	public Toggle postProcessEffects;
+
+	public Slider mouseSensitivity;
+	public Text mouseSensitivityText;
 
 	public void Start() {
 		// Populate resolution settings list
@@ -61,6 +63,9 @@ public class PanelGraphics : MonoBehaviour {
 
 		// Load the post-process effects value
 		postProcessEffects.isOn = PlayerPrefs.GetInt("settings_effects_enabled", 1) == 1;
+
+		mouseSensitivity.value = PlayerPrefs.GetFloat("mouse_sensitivity", 1);
+		mouseSensitivityText.text = 'x' + mouseSensitivity.value.ToString();
 	}
 
 	private void setResolution(Resolution res) {
@@ -81,5 +86,11 @@ public class PanelGraphics : MonoBehaviour {
 
 	public void setPostProcessEffects() {
 		PlayerPrefs.SetInt("settings_effects_enabled", postProcessEffects.isOn ? 1 : 0);
+	}
+
+	public void mouseSensitivityChanged() {
+		PlayerPrefs.SetFloat("mouse_sensitivity", mouseSensitivity.value);
+
+		mouseSensitivityText.text = 'x' + mouseSensitivity.value.ToString();
 	}
 }

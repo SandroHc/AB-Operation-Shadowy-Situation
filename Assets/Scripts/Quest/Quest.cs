@@ -222,7 +222,7 @@ public abstract class Quest {
 		
 		public override bool update(QuestProgress progress) {
 			if(progress.type == QuestProgress.Type.ITEM_CRAFT) {
-				if(progress.getStr().Equals(weapon.name)) {
+				if(weapon != null && progress.getStr().Equals(weapon.name)) {
 					GameController.questManager.stageUpdateEvent(this);
 					return true;
 				}
@@ -232,7 +232,8 @@ public abstract class Quest {
 		}
 		
 		public override string getText() {
-			return "Craft <b>" + weapon.name + "</b>.";
+			string name = weapon != null ? weapon.name : "UNKNOWN";
+			return "Craft <b>" + name + "</b>.";
 		}
 	}
 

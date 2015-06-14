@@ -116,11 +116,6 @@ public class GameController : MonoBehaviour {
 	
 		checkCancelInput();
 	}
-
-	void OnGUI() {
-		if(GUI.Button(new Rect(20, 100, 100, 25), "Spawn enemies"))
-			enemyManager.spawn(new Vector3(5, -24, 80));
-	}
 	
 	public void btnClickedMainMenu() {
 		fade = true;
@@ -128,6 +123,8 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void btnClickedExit() {
+		exitPause();
+
 		fade = true;
 		Application.Quit();
 	}

@@ -11,6 +11,8 @@ public class CameraController : MonoBehaviour {
 	public float lookSpeed;
 	private float rotationY;
 
+	private float sensitivity;
+
 	private CharacterController controller;
 
 	public Vector3 lastPos;
@@ -27,7 +29,9 @@ public class CameraController : MonoBehaviour {
 		effectsEnabled = PlayerPrefs.GetInt("settings_effects_enabled", 1) == 1;
 		if(!effectsEnabled) // Default is the effects are enabled. So, if this is false, apply the changes immediately
 			enableEffects(effectsEnabled);
-	}
+
+		sensitivity = PlayerPrefs.GetFloat("mouse_sensitivity", 1);
+    }
 	
 	void Awake() {
 		// Reset those variables, to prevent the camera from spinning when locking the cursor
@@ -54,7 +58,7 @@ public class CameraController : MonoBehaviour {
 
 	private void handleMouseLook() {
 		// Vertical rotation
-		float rot = Input.GetAxis("Mouse Y") * lookSpeed;
+		float rot = Input.GetAxis("Mouse Y") * (lookSpeed * sensitivity);
 		
 		if(isAiming)
 			rot *= aimPrecision;
@@ -67,7 +71,7 @@ public class CameraController : MonoBehaviour {
 		
 		
 		// Horizontal rotation
-		rot = Input.GetAxis("Mouse X") * lookSpeed;
+		rot = Input.GetAxis("Mouse X") * (lookSpeed * sensitivity);
 		
 		if(isAiming)
 			rot *= aimPrecision;

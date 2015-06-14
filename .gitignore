@@ -1,7 +1,6 @@
 Library/
 Temp/
-Build/
-Build_86/
+Builds/
 obj/
 
 *.pidb
@@ -11,5 +10,6 @@ obj/
 *.suo
 *.orig
 
-*Thumbs.db*
+Thumbs.db
+Thumbs.db.meta
 Assets/Scenes/MainGame/LightmapSnapshot.asset
