@@ -70,14 +70,14 @@ public class Interaction : MonoBehaviour {
 	}
 
 	public void doAction() {
-		GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.Type.INTERACTION).setStr(this.name).setPosition(gameObject.transform.position));
+		//GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.Type.INTERACTION).setStr(name).setPosition(gameObject.transform.position));
 
 		switch(type) {
 		case Type.Dialogue:
 			GameController.dialogueManager.showDialogue(System.Reflection.Assembly.GetExecutingAssembly().CreateInstance(dialogue) as Dialogue);
 			break;
 		case Type.ItemPickUp:
-			// Not yet implemented
+			GameController.questManager.fireProgressEvent(new QuestProgress(QuestProgress.Type.ITEM_PICKUP).setStr(name).setNumber(1).setPosition(gameObject.transform.position));
 			break;
 		case Type.MaterialPickUp:			
 			if(picksRemaining >= 1) {

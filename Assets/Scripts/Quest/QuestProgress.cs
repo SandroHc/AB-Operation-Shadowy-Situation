@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class QuestProgress {
-	public enum Type { MONSTER_KILL, INTERACTION, MATERIAL_PICKUP, DIALOGUE, CUTSCENE, POSITION, ITEM_CRAFT, ITEM_UNLOCK, ITEM_EQUIP };
+	public enum Type { MONSTER_KILL, INTERACTION, ITEM_PICKUP, ITEM_MATERIAL_PICKUP, DIALOGUE, CUTSCENE, POSITION, ITEM_CRAFT, ITEM_UNLOCK, ITEM_EQUIP };
 	public Type type;
 
 	private string str = "";

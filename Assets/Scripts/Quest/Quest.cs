@@ -253,7 +253,9 @@ public abstract class Quest {
 		}
 		
 		public override bool update(QuestProgress progress) {
-			Weapon weapon2 = WeaponManager.getWeapon(weapon.name);
+			// Failsafe check to prevent the player to be stuck in this stage
+			if(weapon == null || weapon.isCrafted)
+				return true;
 
 			if(progress.type == QuestProgress.Type.ITEM_CRAFT) {
 				if(weapon != null && progress.getStr().Equals(weapon.name)) {
@@ -271,13 +273,13 @@ public abstract class Quest {
 		}
 	}
 
-	protected class Collect : Stage {
+	protected class MaterialPick : Stage {
 		private int current;
 		private int ammount;
 
 		private string key;
 
-		public Collect(string key, int ammount) {
+		public MaterialPick(string key, int ammount) {
 			this.ammount = ammount;
 			this.key = key;
 		}
@@ -289,7 +291,7 @@ public abstract class Quest {
 		}
 		
 		public override bool update(QuestProgress progress) {
-			if(progress.type == QuestProgress.Type.MATERIAL_PICKUP) {
+			if(progress.type == QuestProgress.Type.ITEM_MATERIAL_PICKUP) {
 				current += (int) progress.getNumber();
 				
 				PlayerPrefs.SetInt(key, current);
@@ -310,6 +312,48 @@ public abstract class Quest {
 		
 		public override string getText() {
 			return string.Format("Gathered {0} of {1} materials.", current, ammount);
+		}
+	}
+
+	protected class ItemPick : Stage {
+		protected string key;
+		protected string itemName;
+
+		protected int current;
+		protected int ammount;
+
+		public ItemPick(string itemName, int ammount, string key) {
+			this.itemName = itemName;
+			this.ammount = ammount;
+			this.key = key;
+		}
+
+		public override bool setup() {
+			current = PlayerPrefs.GetInt(key, 0);
+
+			return current >= ammount; // Finish the stage incase the collected ammount is enough.
+		}
+
+		public override bool update(QuestProgress progress) {
+			if(progress.type == QuestProgress.Type.ITEM_PICKUP) {
+				if(progress.getStr().Equals(itemName)) {
+					current += (int)progress.getNumber();
+
+					PlayerPrefs.SetInt(key, current);
+
+
+					if(current >= ammount)
+						return true;
+
+					GameController.questManager.stageUpdateEvent(this);
+				}
+			}
+
+			return false;
+		}
+
+		public override string getText() {
+			return string.Format("Gathered {0} of {1} <b>{2}</b>.", current, ammount, itemName);
 		}
 	}
 }

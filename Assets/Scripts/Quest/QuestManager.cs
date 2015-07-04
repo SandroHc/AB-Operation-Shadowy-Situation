@@ -272,12 +272,16 @@ public class QuestManager : MonoBehaviour {
 		Debug.Log ("Quest started: " + quest.name + " (" + quest.id + ")");
 		updateCheckpoints();
 		updateQuestButtons();
+
+		NoticeManager.addNotice("<b>" + quest.name + "</b> started");
 	}
 
 	public void questFinishedEvent(Quest quest) {
 		Debug.Log ("Quest finished: " + quest.name + " (" + quest.id + ")");
 		updateCheckpoints();
 		updateQuestButtons();
+
+		NoticeManager.addNotice("<b>" + quest.name + "</b> finished");
 	}
 
 	public void setWaypoint(Vector3 target) {

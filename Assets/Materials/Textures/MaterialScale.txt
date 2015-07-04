@@ -3,6 +3,7 @@ Concrete_01		0.50
 Walls_01			1.50
 Tile_01				0.75
 Bricks_01			1.00
+Dirt_01				0.35
 
 
 ---

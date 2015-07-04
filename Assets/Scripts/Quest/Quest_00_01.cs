@@ -7,7 +7,7 @@ public class Quest_00_01 : Quest {
 	public override void initStages() {
 		stages.Add(new GoTo(LocationManager.npc_Yurippe));
 		stages.Add(new TalkTo(GameController.npcManager.npc_Yurippe, "DialogueQ_00_01_1"));
-		stages.Add(new Collect("quest-" + id + "-collect", 10));
+		stages.Add(new MaterialPick("quest-" + id + "-collect", 10));
 
 		Weapon obj = WeaponManager.getWeapon("M9"); // Weapon: Scissors
 		stages.Add(new TalkTo_Craft(GameController.npcManager.npc_Yurippe, "DialogueQ_00_01_2", obj));
@@ -17,7 +17,8 @@ public class Quest_00_01 : Quest {
 	public override void complete() {
 		base.complete();
 
-		QuestManager.getQuest("01_01").start();
+		Quest quest = QuestManager.getQuest("01_01");
+        quest.start();
 	}
 
 	/* After the dialogue is finished, unlock the specified weapon */
