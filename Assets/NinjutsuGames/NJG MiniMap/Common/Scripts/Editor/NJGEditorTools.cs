@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NJG MiniMap (NGUI)
-// Copyright © 2014 Ninjutsu Games LTD.
+// Copyright Â© 2014 Ninjutsu Games LTD.
 //----------------------------------------------
 
 using NJG;
@@ -272,7 +272,7 @@ public class NJGEditorTools : MonoBehaviour
 		AssetDatabase.Refresh();
 
 		string newPath = "Assets/" + contentFolder + "/_Generated Content/" + fileName;
-		Texture2D tx = (Texture2D)Resources.LoadAssetAtPath(newPath, typeof(Texture2D));
+		Texture2D tx = (Texture2D)AssetDatabase.LoadAssetAtPath(newPath, typeof(Texture2D));
 		if (NJGMapBase.instance.optimize) 
 			EditorUtility.CompressTexture(tx, (TextureFormat)NJGMapBase.instance.textureFormat, NJGMapBase.instance.compressQuality);
 
@@ -285,7 +285,7 @@ public class NJGEditorTools : MonoBehaviour
 		string[] arr = EditorApplication.currentScene.Split('/');
 		string scene = arr[arr.Length - 1].Replace(".unity", string.Empty);
 		string fileName = scene + ".png";
-		return (Texture2D)Resources.LoadAssetAtPath("Assets/"+contentFolder + "/_Generated Content/" + fileName, typeof(Texture2D));
+		return (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/"+contentFolder + "/_Generated Content/" + fileName, typeof(Texture2D));
 	}
 
 	static public Vector2 GetGameViewSize()

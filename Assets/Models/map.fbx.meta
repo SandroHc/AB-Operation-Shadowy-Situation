@@ -67,6 +67,7 @@ ModelImporter:
     100122: school_bc_ground
     100124: school_bc_walls
     100126: school_block_c
+    100128: river
     400000: Camera
     400002: //RootNode
     400004: school
@@ -131,6 +132,7 @@ ModelImporter:
     400122: school_bc_ground
     400124: school_bc_walls
     400126: school_block_c
+    400128: river
     2300000: school
     2300002: teacher_zone
     2300004: walkroad
@@ -186,6 +188,7 @@ ModelImporter:
     2300104: Bushes_02
     2300106: school_bc_ground
     2300108: school_bc_walls
+    2300110: river
     3300000: school
     3300002: teacher_zone
     3300004: walkroad
@@ -241,6 +244,7 @@ ModelImporter:
     3300104: Bushes_02
     3300106: school_bc_ground
     3300108: school_bc_walls
+    3300110: river
     4300000: teacher_zone
     4300002: walkroad
     4300004: school
@@ -296,6 +300,7 @@ ModelImporter:
     4300104: Bushes_01
     4300106: school_bc_ground
     4300108: school_bc_walls
+    4300110: river
     6400000: director_building
     6400002: school_door_001
     6400004: school_door_002
@@ -344,6 +349,7 @@ ModelImporter:
     6400090: Bushes_02
     6400092: school_bc_ground
     6400094: school_bc_walls
+    6400096: river
     7400000: Default Take
     9500000: //RootNode
   materials:
@@ -355,6 +361,10 @@ ModelImporter:
     bakeSimulation: 0
     optimizeGameObjects: 0
     motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
     animationCompression: 3
     animationRotationError: .5
     animationPositionError: .5

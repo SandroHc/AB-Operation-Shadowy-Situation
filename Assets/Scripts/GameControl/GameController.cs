@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour {
 	public static AudioManager audioManager;
 	public static SpriteManager spriteManager;
 	public static PrefabManager prefabManager;
+	public static NPCManager npcManager;
 
 	public static QuestManager questManager;
 	public static CutsceneManager cutsceneManager;
@@ -48,6 +49,7 @@ public class GameController : MonoBehaviour {
 		audioManager = gameObject.GetComponent<AudioManager>();
 		spriteManager = gameObject.GetComponent<SpriteManager>();
 		prefabManager = gameObject.GetComponent<PrefabManager>();
+		npcManager = gameObject.GetComponent<NPCManager>();
 
 		questManager = gameObject.GetComponent<QuestManager>();
 		cutsceneManager = gameObject.GetComponent<CutsceneManager>();

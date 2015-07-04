@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 public abstract class Dialogue {
@@ -9,7 +8,8 @@ public abstract class Dialogue {
 
 	public Dialogue(DialogueAbstract startingDialogue, string npcName = "") {
 		name = npcName;
-		currentDialogue = startingDialogue;
+		//currentDialogue = startingDialogue;
+		showDialogue(startingDialogue);
 	}
 
 	public void show() {
@@ -38,15 +38,29 @@ public abstract class Dialogue {
 
 	public void close() { }
 
+	protected void next(string str) {
+		// Add the nested class name
+		str = GetType().Name + "+" + str;
+
+		DialogueAbstract dialogue = System.Reflection.Assembly.GetExecutingAssembly().CreateInstance(str) as DialogueAbstract;
+
+		if(dialogue != null) {
+			dialogue.super = this;
+			showDialogue(dialogue);
+		} else
+			Debug.Log("Error while creating an instance for \"" + str + "\"");
+	}
+
 	public void showDialogue(Dialogue.DialogueAbstract dialogue) {
 		currentDialogue = dialogue;
-		dialogue.show();
+		currentDialogue.super = this;
+		currentDialogue.show();
 	}
 
 	public enum DialogueType { TALK, SELECTION } 
 
 	public abstract class DialogueAbstract {
-	//	protected Dialogue super;
+		public Dialogue super;
 
 		private DialogueType type;
 
@@ -54,8 +68,6 @@ public abstract class Dialogue {
 
 		public DialogueAbstract(DialogueType type) {
 			this.type = type;
-
-		//	this.super = DialogueManager.currentDialogue;
 		}
 
 		abstract public void show();
@@ -73,20 +85,16 @@ public abstract class Dialogue {
 		 **/
 		public virtual bool selected(int index) {
 			if(!nextDialogue.Equals("")) { // If a nextDialogue is provived, pass on to the next one!
-				next(nextDialogue);
+				super.next(nextDialogue);
 				return false;
 			} else { // Else, close the dialogue box
 				return true;
 			}
 		}
 
-		protected void next(string str) {
-			DialogueAbstract dialogue = System.Reflection.Assembly.GetExecutingAssembly().CreateInstance(str) as DialogueAbstract;
-			if(dialogue != null)
-				DialogueManager.currentDialogue.showDialogue(dialogue);
-			else
-				Debug.Log("Error while creating an instance for \"" + str + "\"");
-		}
+		protected void setDialogue(string str) {
+			nextDialogue = str;
+        }
 
 		public DialogueType getType() {
 			return type;
@@ -148,17 +156,19 @@ public abstract class Dialogue {
 		protected string text;
 
 		public DialogueTalk() : base(DialogueType.TALK) {
-			// NO-OP
-		}
+			dialogue();
+        }
+
+		abstract protected void dialogue();
 
 		public override void update() {
 			if(Input.GetKeyDown(KeyCode.Space))
-				DialogueManager.currentDialogue.selected(0);
+				super.selected(0);
 		}
 		
 		public override void show() {
 			// If a title is available, use it. Else, use the Dialogue name (usually the NPC name)
-			GameController.dialogueManager.showTalk(type, title ?? DialogueManager.currentDialogue.name, text);
+			GameController.dialogueManager.showTalk(type, title ?? super.name, text);
 		}
 	}
 }

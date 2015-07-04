@@ -16,24 +16,36 @@ public abstract class Quest {
 	public List<Stage> stages { get; protected set; }
 	public int currentStage { get; protected set; }
 
-	public Quest(string id, string name, string description) {
-		this.id = id;
+	public Quest(string name, string description) {
 		this.name = name;
 		this.description = description;
 
-		this.status = (STATUS) PlayerPrefs.GetInt("quest-" + id + "-status", (int) STATUS.INACTIVE);
-		this.currentStage = PlayerPrefs.GetInt("quest-" + id + "-stage", 0);
+		generateId();
 
-		this.stages = new List<Stage>();
+		status = (STATUS) PlayerPrefs.GetInt("quest-" + id + "-status", (int) STATUS.INACTIVE);
+		currentStage = PlayerPrefs.GetInt("quest-" + id + "-stage", 0);
+
+		stages = new List<Stage>();
 		initStages();
 
 		if(status == STATUS.ACTIVE) {
-			// Check if the current stage is bigger than the last stage ID.
+			// Check if the current stage is bigger than the last stage ID on this quest.
 			// In that case, mark the quest as COMPLETED
 			if(currentStage >= stages.Count)
 				complete();
 			else if(stages[currentStage] != null && stages[currentStage].setup()) // In case the stage was already completed on startup, to to the next one
 				nextStage();
+		}
+	}
+
+	private void generateId() {
+		string className = GetType().Name;
+		int index = className.IndexOf('_');
+		if(index != -1) {
+			id = className.Substring(index + 1);
+		} else {
+			Debug.Log("Unable to get quest ID from class name \"" + className + "\"");
+			id = "UNKNOWN";
 		}
 	}
 
@@ -71,12 +83,20 @@ public abstract class Quest {
 		}
 	}
 
-	public void complete() {
+	public virtual void complete() {
 		// Update the status to COMPLETED
 		setStatus(STATUS.COMPLETED);
 
 		// Fire the quest finished event
 		GameController.questManager.questFinishedEvent(this);
+	}
+
+	/**
+	 * Used to start the quest.
+	 * Virtually the same as the reset() method.
+	 */
+	public void start() {
+		reset();
 	}
 
 	/**
@@ -88,7 +108,7 @@ public abstract class Quest {
 		currentStage = 0;
 		PlayerPrefs.SetInt("quest-" + id + "-stage", currentStage);
 
-		if(stages[currentStage] != null)
+		if(currentStage + 1 <= stages.Count && stages[currentStage] != null)
 			stages[currentStage].setup();
 
 		GameController.questManager.questStartedEvent(this);
@@ -149,9 +169,11 @@ public abstract class Quest {
 	
 	protected class GoTo : Stage {
 		private Vector3 objective;
+		private string text;
 
-		public GoTo(Vector3 pos) {
+		public GoTo(Vector3 pos, string text = null) {
 			objective = pos;
+			this.text = text;
 		}
 		
 		public override bool setup() {
@@ -174,21 +196,26 @@ public abstract class Quest {
 		}
 		
 		public override string getText() {
-			return "Follow the marked line.";
+			return text ?? "Follow the marked line.";
 		}
 	}
 
 	protected class TalkTo : Stage {
-		Interaction npc;
-		string dialogue;
+		private Interaction npc;
+		private string dialogue;
+		private string dialoguePre; // Stores the last dialogue for that NPC (before this stage)
+		private string text;
 
-		public TalkTo(Interaction npcScript, string dialogueClass) {
+		public TalkTo(Interaction npcScript, string dialogueClass, string text = null) {
 			this.npc = npcScript;
 			this.dialogue = dialogueClass;
+			this.text = text;
 		}
 		
 		public override bool setup() {
-			npc.dialogue = dialogue;
+			// Save the previous dialogue
+			dialoguePre = npc.dialogue;
+            npc.dialogue = dialogue;
 
 			return false;
 		}
@@ -203,9 +230,14 @@ public abstract class Quest {
 			
 			return false;
 		}
-		
+
+		public override void finish() {
+			// Restore the previous dialogue
+			npc.dialogue = dialoguePre;
+		}
+
 		public override string getText() {
-			return "Talk to <b>" + npc.name + "</b>.";
+			return string.Format(text ?? "Talk to <b>{0}</b>.", npc.name);
 		}
 	}
 
@@ -221,6 +253,8 @@ public abstract class Quest {
 		}
 		
 		public override bool update(QuestProgress progress) {
+			Weapon weapon2 = WeaponManager.getWeapon(weapon.name);
+
 			if(progress.type == QuestProgress.Type.ITEM_CRAFT) {
 				if(weapon != null && progress.getStr().Equals(weapon.name)) {
 					GameController.questManager.stageUpdateEvent(this);
