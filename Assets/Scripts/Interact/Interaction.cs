@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Interaction : MonoBehaviour {
-	public enum Type { Dialogue, ItemPickUp, MaterialPickUp }
+	public enum Type { Dialogue, ItemPickUp, MaterialPickUp, DoorInteract }
 	public Type type;			// Type of the interaction
 
 	public new string name;		// Name of the final object of the interaction (like Door, NPC, ...)
@@ -20,6 +20,9 @@ public class Interaction : MonoBehaviour {
 	private float currentStage = 3;
 	
 	private MeshFilter meshFilter;
+
+	/** Door interact **/
+	public DoorHandler[] doorScripts = { null };
 
 	void Awake() {
 		switch(type) {
@@ -84,6 +87,10 @@ public class Interaction : MonoBehaviour {
 				picksRemaining--;
 				GameController.materialManager.pickUp();
 			}
+			break;
+		case Type.DoorInteract:
+			foreach(DoorHandler script in doorScripts)
+				script.toggle();
 			break;
 		}
 

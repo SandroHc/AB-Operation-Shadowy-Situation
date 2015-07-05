@@ -18,6 +18,10 @@ public class InteractDistance : MonoBehaviour {
 
 
 		control = gameObject.GetComponent<InteractControl>();
+
+		// Hide the interaction canvas by default
+		control.active = false;
+		control.background.GetComponentInParent<Canvas>().enabled = false;
 	}
 
 	void Update() {

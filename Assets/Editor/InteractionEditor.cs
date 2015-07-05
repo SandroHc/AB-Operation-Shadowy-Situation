@@ -15,6 +15,9 @@ public class PropertyHolderEditor : Editor {
 	/* Material pick up */
 	public SerializedProperty picksMax_prop;
 
+	/* Door interact */
+	public SerializedProperty doorScripts_prop;
+
 	void OnEnable() {
 //		instance = (Interaction) target;
 
@@ -26,7 +29,10 @@ public class PropertyHolderEditor : Editor {
 		dialogue_prop = serializedObject.FindProperty("dialogue");
 
 		/* Material pick up */
-		picksMax_prop = serializedObject.FindProperty("picksMax");    
+		picksMax_prop = serializedObject.FindProperty("picksMax");
+
+		/* Door interact */
+		doorScripts_prop = serializedObject.FindProperty("doorScripts");
 	}
 	
 	public override void OnInspectorGUI() {
@@ -39,10 +45,13 @@ public class PropertyHolderEditor : Editor {
 		case Interaction.Type.Dialogue:
 			EditorGUILayout.PropertyField(dialogue_prop);
 			break;
-		case Interaction.Type.ItemPickUp: // Not yet implemented
+		case Interaction.Type.ItemPickUp: // No operation
 			break;
 		case Interaction.Type.MaterialPickUp:
 			EditorGUILayout.IntSlider(picksMax_prop, 0, 10, new GUIContent("Maximum Picks"));
+			break;
+		case Interaction.Type.DoorInteract:
+			EditorGUILayout.PropertyField(doorScripts_prop, true);
 			break;
 		}
 		

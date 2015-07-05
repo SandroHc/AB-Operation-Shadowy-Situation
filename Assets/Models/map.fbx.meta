@@ -72,6 +72,10 @@ ModelImporter:
     100132: gym_floor
     100134: walkroad.001
     100136: bridge_b
+    100138: lib_entrance_door_left
+    100140: lib_entrance_door_right
+    100142: lib_door_left_pivot
+    100144: lib_door_right_pivot
     400000: Camera
     400002: //RootNode
     400004: school
@@ -141,6 +145,10 @@ ModelImporter:
     400132: gym_floor
     400134: walkroad.001
     400136: bridge_b
+    400138: lib_entrance_door_left
+    400140: lib_entrance_door_right
+    400142: lib_door_left_pivot
+    400144: lib_door_right_pivot
     2300000: school
     2300002: teacher_zone
     2300004: walkroad
@@ -201,6 +209,8 @@ ModelImporter:
     2300114: gym_floor
     2300116: walkroad.001
     2300118: bridge_b
+    2300120: lib_entrance_door_left
+    2300122: lib_entrance_door_right
     3300000: school
     3300002: teacher_zone
     3300004: walkroad
@@ -261,6 +271,8 @@ ModelImporter:
     3300114: gym_floor
     3300116: walkroad.001
     3300118: bridge_b
+    3300120: lib_entrance_door_left
+    3300122: lib_entrance_door_right
     4300000: teacher_zone
     4300002: walkroad
     4300004: school
@@ -321,6 +333,8 @@ ModelImporter:
     4300114: gym_floor
     4300116: walkroad.001
     4300118: bridge_b
+    4300120: lib_entrance_door_left
+    4300122: lib_entrance_door_right
     6400000: director_building
     6400002: school_door_001
     6400004: school_door_002
@@ -374,6 +388,8 @@ ModelImporter:
     6400100: gym_floor
     6400102: walkroad.001
     6400104: bridge_b
+    6400106: lib_entrance_door_left
+    6400108: lib_entrance_door_right
     7400000: Default Take
     9500000: //RootNode
   materials:
