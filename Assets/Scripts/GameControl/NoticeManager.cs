@@ -13,7 +13,8 @@ public class NoticeManager : MonoBehaviour {
 
 	void Awake() {
 		INSTANCE = this;
-	}
+		updateUI();
+    }
 
 	void Update() {
 		// Is the fist notice expired, update the UI
@@ -26,7 +27,9 @@ public class NoticeManager : MonoBehaviour {
 			return;
 
 		list.Enqueue(new NoticeDetail(notice));
-		INSTANCE.updateUI();
+
+		if(INSTANCE != null)
+			INSTANCE.updateUI();
 
 		// TODO: Play sound
 	}

@@ -258,11 +258,16 @@ public class GameController : MonoBehaviour {
 		if(!PlayerPrefs.HasKey("first-run")) {
 			// Initialize the quest list first, because the GameController script is called before the QuestManager one.
 			QuestManager.initQuests();
-			// And start the forst quest
-			QuestManager.getQuest("00_LEARN").reset();
 
-			// Set anything in the first run preference to lock this method from being called in future game launches.
-			PlayerPrefs.SetInt("first-run", 0);
+			// And start the forst quest
+			Quest quest = QuestManager.getQuest("00_01");
+			if(quest != null) {
+				quest.start();
+
+				// Set anything in the first run preference to lock this method from being called in future game launches.
+				// One exception whould be if the first quest was not found...
+				PlayerPrefs.SetInt("first-run", 0);
+			}
         }
 	}
 }
