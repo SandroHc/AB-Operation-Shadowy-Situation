@@ -76,6 +76,23 @@ ModelImporter:
     100140: lib_entrance_door_right
     100142: lib_door_left_pivot
     100144: lib_door_right_pivot
+    100146: classroom_a1.000
+    100148: classroom_a1.005
+    100150: classroom_a1.006
+    100152: classroom_a1.007
+    100154: classroom_a1.01
+    100156: classroom_a1.02
+    100158: classroom_a1.03
+    100160: classroom_a1.04
+    100162: classrooms
+    100164: classroom_a2.01
+    100166: classroom_a2.02
+    100168: classroom_a2.03
+    100170: classroom_a2.04
+    100172: classroom_a3.01
+    100174: classroom_a3.02
+    100176: classroom_a3.03
+    100178: classroom_a3.04
     400000: Camera
     400002: //RootNode
     400004: school
@@ -149,6 +166,23 @@ ModelImporter:
     400140: lib_entrance_door_right
     400142: lib_door_left_pivot
     400144: lib_door_right_pivot
+    400146: classroom_a1.000
+    400148: classroom_a1.005
+    400150: classroom_a1.006
+    400152: classroom_a1.007
+    400154: classroom_a1.01
+    400156: classroom_a1.02
+    400158: classroom_a1.03
+    400160: classroom_a1.04
+    400162: classrooms
+    400164: classroom_a2.01
+    400166: classroom_a2.02
+    400168: classroom_a2.03
+    400170: classroom_a2.04
+    400172: classroom_a3.01
+    400174: classroom_a3.02
+    400176: classroom_a3.03
+    400178: classroom_a3.04
     2300000: school
     2300002: teacher_zone
     2300004: walkroad
@@ -211,6 +245,22 @@ ModelImporter:
     2300118: bridge_b
     2300120: lib_entrance_door_left
     2300122: lib_entrance_door_right
+    2300124: classroom_a1.000
+    2300126: classroom_a1.005
+    2300128: classroom_a1.006
+    2300130: classroom_a1.007
+    2300132: classroom_a1.01
+    2300134: classroom_a1.02
+    2300136: classroom_a1.03
+    2300138: classroom_a1.04
+    2300140: classroom_a2.01
+    2300142: classroom_a2.02
+    2300144: classroom_a2.03
+    2300146: classroom_a2.04
+    2300148: classroom_a3.01
+    2300150: classroom_a3.02
+    2300152: classroom_a3.03
+    2300154: classroom_a3.04
     3300000: school
     3300002: teacher_zone
     3300004: walkroad
@@ -273,6 +323,22 @@ ModelImporter:
     3300118: bridge_b
     3300120: lib_entrance_door_left
     3300122: lib_entrance_door_right
+    3300124: classroom_a1.000
+    3300126: classroom_a1.005
+    3300128: classroom_a1.006
+    3300130: classroom_a1.007
+    3300132: classroom_a1.01
+    3300134: classroom_a1.02
+    3300136: classroom_a1.03
+    3300138: classroom_a1.04
+    3300140: classroom_a2.01
+    3300142: classroom_a2.02
+    3300144: classroom_a2.03
+    3300146: classroom_a2.04
+    3300148: classroom_a3.01
+    3300150: classroom_a3.02
+    3300152: classroom_a3.03
+    3300154: classroom_a3.04
     4300000: teacher_zone
     4300002: walkroad
     4300004: school
@@ -335,6 +401,22 @@ ModelImporter:
     4300118: bridge_b
     4300120: lib_entrance_door_left
     4300122: lib_entrance_door_right
+    4300124: classroom_a1.007
+    4300126: classroom_a1.006
+    4300128: classroom_a1.005
+    4300130: classroom_a1.000
+    4300132: classroom_a1.01
+    4300134: classroom_a1.04
+    4300136: classroom_a1.02
+    4300138: classroom_a1.03
+    4300140: classroom_a3.01
+    4300142: classroom_a3.04
+    4300144: classroom_a3.02
+    4300146: classroom_a3.03
+    4300148: classroom_a2.03
+    4300150: classroom_a2.02
+    4300152: classroom_a2.04
+    4300154: classroom_a2.01
     6400000: director_building
     6400002: school_door_001
     6400004: school_door_002
@@ -390,6 +472,22 @@ ModelImporter:
     6400104: bridge_b
     6400106: lib_entrance_door_left
     6400108: lib_entrance_door_right
+    6400110: classroom_a1.000
+    6400112: classroom_a1.005
+    6400114: classroom_a1.006
+    6400116: classroom_a1.007
+    6400118: classroom_a1.01
+    6400120: classroom_a1.02
+    6400122: classroom_a1.03
+    6400124: classroom_a1.04
+    6400126: classroom_a2.01
+    6400128: classroom_a2.02
+    6400130: classroom_a2.03
+    6400132: classroom_a2.04
+    6400134: classroom_a3.01
+    6400136: classroom_a3.02
+    6400138: classroom_a3.03
+    6400140: classroom_a3.04
     7400000: Default Take
     9500000: //RootNode
   materials:
