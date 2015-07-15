@@ -1,24 +1,22 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class DoorHandler : MonoBehaviour {
 
 	public float angle;
 	public float initialAngle;
 
-	public float multiplier = 2f;
+	public float speed = 4f;
 
-	// TODO: temp
 	public bool open = false;
 
 	void Awake() {
+		// Store the initial angle
 		initialAngle = transform.localRotation.z;
     }
 	
-	// Update is called once per frame
 	void FixedUpdate() {
 		Vector3 temp = transform.localRotation.eulerAngles;
-		temp.z = Mathf.LerpAngle(temp.z, open ? angle : initialAngle, Time.fixedDeltaTime * multiplier);
+		temp.z = Mathf.LerpAngle(temp.z, open ? angle : initialAngle, Time.fixedDeltaTime * speed);
         transform.localRotation = Quaternion.Euler(temp);
 	}
 

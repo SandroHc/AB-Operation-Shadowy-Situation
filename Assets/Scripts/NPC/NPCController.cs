@@ -12,12 +12,12 @@ public class NPCController : MonoBehaviour {
 		uiName.text = name;
 	}
 
-	void Update() {
-		if(Camera.main != null && Camera.main.transform.hasChanged) { // When in cutscenes, the main camera is disabled
-			// gameObject.transform.forward = Camera.main.transform.forward; // Keeps the text facing the player
+	//void Update() {
+	//	if(Camera.main != null && Camera.main.transform.hasChanged) { // When in cutscenes, the main camera is disabled
+	//		gameObject.transform.forward = Camera.main.transform.forward; // Keeps the text facing the player
 
-			Quaternion rotation = Quaternion.Euler(0, Camera.main.transform.localRotation.y, 0);
-			gameObject.transform.localRotation = rotation;
-		}
-	}
+	//		Quaternion rotation = Quaternion.Euler(0, Camera.main.transform.localRotation.y, 0);
+	//		gameObject.transform.localRotation = rotation;
+	//	}
+	//}
 }

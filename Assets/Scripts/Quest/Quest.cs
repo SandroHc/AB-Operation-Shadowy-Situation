@@ -214,7 +214,7 @@ public abstract class Quest {
 		
 		public override bool setup() {
 			// Save the previous dialogue
-			dialoguePre = npc.dialogue;
+			//dialoguePre = npc.dialogue;
             npc.dialogue = dialogue;
 
 			return false;
@@ -233,7 +233,7 @@ public abstract class Quest {
 
 		public override void finish() {
 			// Restore the previous dialogue
-			npc.dialogue = dialoguePre;
+			//npc.dialogue = dialoguePre;
 		}
 
 		public override string getText() {
